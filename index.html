@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ENG4101C Digital Twin — Hybrid Drone & Cable-Suspended Inspection Robot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Standalone browser theme tokens (default dark industrial SCADA, toggleable to .light) */
+    :root {
+      --background: #0b1120;
+      --card: #111827;
+      --content: #1e293b;
+      --border: #334155;
+      --card-border: #1e293b;
+      --foreground: #f8fafc;
+      --muted-foreground: #94a3b8;
+      --primary: #3b82f6;
+      --primary-foreground: #ffffff;
+      --secondary: #1e293b;
+      --secondary-foreground: #e2e8f0;
+      --accent: #334155;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+    }
+    html.light {
+      --background: #f1f5f9;
+      --card: #ffffff;
+      --content: #f8fafc;
+      --border: #cbd5e1;
+      --card-border: #e2e8f0;
+      --foreground: #0f172a;
+      --muted-foreground: #475569;
+      --primary: #2563eb;
+      --primary-foreground: #ffffff;
+      --secondary: #e2e8f0;
+      --secondary-foreground: #0f172a;
+      --accent: #e2e8f0;
+      --success: #059669;
+      --warning: #d97706;
+      --error: #dc2626;
+    }
+    .tab-btn[aria-selected="true"] {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
+    }
+    .mode-btn[aria-pressed="true"] {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border-color: var(--primary);
+    }
+    .fault-btn[aria-pressed="true"] {
+      background-color: var(--error);
+      color: #ffffff;
+      border-color: var(--error);
+    }
+    canvas {
+      touch-action: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased m-0 p-3 md:p-4 text-sm font-sans">
+  <div class="max-w-[1600px] mx-auto space-y-3">
+    <!-- Header Bar -->
+    <header class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="space-y-0.5">
+        <div class="flex flex-wrap items-center gap-2">
+          <h1 class="text-base font-bold tracking-tight">ENG4101C 3D Robot Digital Twin &amp; SCADA Dashboard</h1>
+          <span id="hdr-state-badge" class="px-2 py-0.5 rounded-full text-xs font-mono font-semibold border border-[var(--border)] bg-[var(--secondary)] text-[var(--secondary-foreground)]">IDLE</span>
+          <span id="hdr-interlock-badge" class="px-2 py-0.5 rounded-full text-xs font-mono border border-[var(--border)] text-[var(--success)]">H15: DRONE STOWED</span>
+        </div>
+        <p class="text-xs text-[var(--muted-foreground)]">
+          28 kg Dual-Winch Cable Platform &middot; Dual 55 N Ducted Fans &middot; 2-DOF SCARA (L<sub>1</sub>=L<sub>2</sub>=0.35 m) + 50 mm Z-Compliance Tapping Head &middot; DJI M350 RTK (P1+H30T)
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-1.5">
+        <button data-scene="scara" class="mode-btn px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium bg-[var(--content)] hover:bg-[var(--accent)] transition" aria-pressed="true">3D SCARA Close-Up</button>
+        <button data-scene="side" class="mode-btn px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium bg-[var(--content)] hover:bg-[var(--accent)] transition" aria-pressed="false">Side Z-Compliance &amp; Wind</button>
+        <button data-scene="building" class="mode-btn px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium bg-[var(--content)] hover:bg-[var(--accent)] transition" aria-pressed="false">20-Storey System Integration</button>
+        <button id="btn-theme-toggle" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium bg-[var(--content)] hover:bg-[var(--accent)] transition" title="Switch Light/Dark Presentation Theme">Light / Dark</button>
+      </div>
+    </header>
+
+    <!-- Main 12-Col Layout -->
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-3 items-start">
+      <!-- Left/Center 8 Columns: 3D Canvas + 9-Step Handshake + Dual Oscilloscopes -->
+      <div class="xl:col-span-8 space-y-3">
+        <!-- 3D Viewport Card -->
+        <section class="bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden">
+          <div class="px-3 py-2 border-b border-[var(--card-border)] flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="font-semibold">Interactive 3D Viewport</span>
+              <span class="text-[var(--muted-foreground)]">Drag to orbit &middot; Scroll to zoom</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <label class="inline-flex items-center gap-1 text-[var(--muted-foreground)] cursor-pointer px-1.5 py-0.5 rounded border border-[var(--card-border)]">
+                <input id="chk-workspace" type="checkbox" checked class="accent-[var(--primary)]" />
+                <span>Reach Rings (0.122–0.70 m)</span>
+              </label>
+              <label class="inline-flex items-center gap-1 text-[var(--muted-foreground)] cursor-pointer px-1.5 py-0.5 rounded border border-[var(--card-border)]">
+                <input id="chk-fov" type="checkbox" checked class="accent-[var(--primary)]" />
+                <span>Sensor FOV</span>
+              </label>
+              <label class="inline-flex items-center gap-1 text-[var(--muted-foreground)] cursor-pointer px-1.5 py-0.5 rounded border border-[var(--card-border)]">
+                <input id="chk-autorotate" type="checkbox" class="accent-[var(--primary)]" />
+                <span>Orbit</span>
+              </label>
+              <button id="btn-cam-iso" class="px-2 py-0.5 rounded border border-[var(--border)] hover:bg-[var(--accent)]">Iso</button>
+              <button id="btn-cam-front" class="px-2 py-0.5 rounded border border-[var(--border)] hover:bg-[var(--accent)]">Front</button>
+              <button id="btn-cam-side" class="px-2 py-0.5 rounded border border-[var(--border)] hover:bg-[var(--accent)]">Side</button>
+              <button id="btn-cam-top" class="px-2 py-0.5 rounded border border-[var(--border)] hover:bg-[var(--accent)]">Top</button>
+            </div>
+          </div>
+
+          <div class="relative w-full h-[460px] md:h-[510px]">
+            <canvas id="canvas3d" class="w-full h-full block"></canvas>
+
+            <!-- Top-Left Live HUD -->
+            <div class="pointer-events-none absolute top-2.5 left-2.5 rounded-lg border border-[var(--border)] bg-[var(--card)]/85 backdrop-blur px-2.5 py-1.5 text-xs font-mono space-y-0.5">
+              <div id="hud-target" class="font-semibold">Target: R1C1 (-300, +300 mm) | r = 424 mm</div>
+              <div id="hud-joints" class="text-[var(--muted-foreground)]">&theta;1 = +0.0&deg; &middot; &theta;2 = +90.0&deg; &middot; d3 = 0.0 mm &middot; |det(J)| = 0.122 m&sup2;</div>
+              <div id="hud-forces" class="text-[var(--muted-foreground)]">Fans: 110 N &middot; Drag: 49.0 N &middot; Net Preload: 61.0 N</div>
+            </div>
+
+            <!-- Bottom-Right Zoom & Wind Gauge -->
+            <div class="absolute bottom-2.5 right-2.5 flex items-center gap-1.5">
+              <div class="pointer-events-none rounded-lg border border-[var(--border)] bg-[var(--card)]/85 backdrop-blur px-2.5 py-1 text-xs font-mono">
+                Wind: <span id="hud-wind" class="font-semibold">4.5 m/s</span> / 8.0 m/s limit
+              </div>
+              <button id="btn-zoom-in" class="w-7 h-7 rounded-lg border border-[var(--border)] bg-[var(--card)]/90 hover:bg-[var(--accent)] font-bold text-xs">+</button>
+              <button id="btn-zoom-out" class="w-7 h-7 rounded-lg border border-[var(--border)] bg-[var(--card)]/90 hover:bg-[var(--accent)] font-bold text-xs">&minus;</button>
+            </div>
+
+            <!-- Fault Banner if Active -->
+            <div id="hud-fault-banner" class="hidden pointer-events-none absolute top-2.5 right-2.5 max-w-xs rounded-lg border border-[var(--error)] bg-[var(--error)]/90 text-white px-2.5 py-1.5 text-xs font-semibold">
+              SAFETY INTERLOCK TRIGGERED
+            </div>
+          </div>
+        </section>
+
+        <!-- 9-Step Handshake Pipeline Card -->
+        <section class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span class="font-semibold">9-Step PLC/SCADA Tap Handshake &amp; Interface Protocol</span>
+            <span id="hs-interface-detail" class="font-mono text-[var(--muted-foreground)]">I0/H15 &middot; PLC %QX0.0 Interlock &middot; 10 ms scan</span>
+          </div>
+          <div id="hs-steps" class="grid grid-cols-3 sm:grid-cols-9 gap-1 text-xs font-mono"></div>
+        </section>
+
+        <!-- Dual Oscilloscope Panel -->
+        <section class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span class="font-semibold">Live Sensor Oscilloscopes — Load Cell (1 kHz) &amp; Acoustic Mic (48 kHz + FFT)</span>
+            <div class="flex flex-wrap items-center gap-3 font-mono text-[var(--muted-foreground)]">
+              <span id="scope-force-readout">Shroud: 0.0 N | Peak: 0.0 N</span>
+              <span id="scope-acoustic-readout">Centroid: -- Hz | Decay: -- ms</span>
+            </div>
+          </div>
+          <div class="w-full h-[210px]">
+            <canvas id="canvasScope" class="w-full h-full block rounded-lg border border-[var(--card-border)]"></canvas>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right 4 Columns: Playback, 4x4 Interactive Patch Grid & Tabbed Telemetry -->
+      <aside class="xl:col-span-4 space-y-3">
+        <!-- Mission Playback & 4x4 Tap Grid -->
+        <section class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h2 class="text-sm font-semibold">Mission Control &amp; 0.8&times;0.8 m Patch</h2>
+            <span id="patch-progress" class="text-xs font-mono text-[var(--muted-foreground)]">0 / 16 tapped</span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-2 gap-1.5 text-xs">
+            <button id="btn-autocycle" class="px-2.5 py-1.5 rounded-lg font-medium bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 transition">Auto-Cycle Patch</button>
+            <button id="btn-single-tap" class="px-2.5 py-1.5 rounded-lg font-medium border border-[var(--border)] bg-[var(--content)] hover:bg-[var(--accent)] transition">Tap Selected Tile</button>
+            <button id="btn-pause" class="px-2.5 py-1.5 rounded-lg font-medium border border-[var(--border)] bg-[var(--content)] hover:bg-[var(--accent)] transition">Pause</button>
+            <button id="btn-reset" class="px-2.5 py-1.5 rounded-lg font-medium border border-[var(--border)] bg-[var(--content)] hover:bg-[var(--accent)] transition">Reset Patch</button>
+          </div>
+
+          <!-- Speed & Selected Tile Condition -->
+          <div class="grid grid-cols-2 gap-2 pt-1 border-t border-[var(--card-border)] text-xs">
+            <label class="space-y-1">
+              <span class="text-[var(--muted-foreground)] flex justify-between">
+                <span>Sim Speed</span>
+                <span id="lbl-speed" class="font-mono">1.0&times;</span>
+              </span>
+              <input id="rng-speed" type="range" min="0.4" max="2.5" step="0.1" value="1.0" class="w-full accent-[var(--primary)]" />
+            </label>
+            <label class="space-y-1">
+              <span class="text-[var(--muted-foreground)] block">Selected Tile Ground Truth</span>
+              <select id="sel-tile-truth" class="w-full px-2 py-1 rounded border border-[var(--border)] bg-[var(--content)] text-[var(--foreground)]">
+                <option value="SOLID">Solid Concrete/Tile</option>
+                <option value="HOLLOW">Hollow (Delaminated)</option>
+                <option value="UNCERTAIN">Uncertain (CP Audit)</option>
+                <option value="CRACKED">Visibly Cracked (H9 Skip)</option>
+              </select>
+            </label>
+          </div>
+
+          <!-- Interactive 4x4 Tap Grid -->
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-xs text-[var(--muted-foreground)]">
+              <span>Click tile to slew SCARA arm (200 mm pitch)</span>
+              <span class="font-mono">r<sub>min</sub>=122 mm</span>
+            </div>
+            <div id="grid-4x4" class="grid grid-cols-4 gap-1.5"></div>
+          </div>
+
+          <!-- Environment Sliders -->
+          <div class="space-y-2 pt-2 border-t border-[var(--card-border)] text-xs">
+            <label class="block space-y-0.5">
+              <span class="flex justify-between text-[var(--muted-foreground)]">
+                <span>Mean Wind Speed (Robot max 8 m/s &middot; M350 max 12 m/s)</span>
+                <span id="lbl-wind" class="font-mono font-semibold text-[var(--foreground)]">4.5 m/s</span>
+              </span>
+              <input id="rng-wind" type="range" min="0" max="12" step="0.5" value="4.5" class="w-full accent-[var(--primary)]" />
+            </label>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="block space-y-0.5">
+                <span class="flex justify-between text-[var(--muted-foreground)]">
+                  <span>Elevation Y</span>
+                  <span id="lbl-elev" class="font-mono">34 m (L11)</span>
+                </span>
+                <input id="rng-elev" type="range" min="5" max="55" step="1" value="34" class="w-full accent-[var(--primary)]" />
+              </label>
+              <label class="block space-y-0.5">
+                <span class="flex justify-between text-[var(--muted-foreground)]">
+                  <span>Drop Strip X</span>
+                  <span id="lbl-drop" class="font-mono">15.0 m (#10)</span>
+                </span>
+                <input id="rng-drop" type="range" min="2" max="28" step="0.5" value="15" class="w-full accent-[var(--primary)]" />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tabbed Deep Engineering Inspector -->
+        <section class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3 space-y-3">
+          <div class="grid grid-cols-3 gap-1 text-xs">
+            <button data-tab="kinematics" class="tab-btn px-2 py-1.5 rounded-lg border border-[var(--border)] font-medium transition" aria-selected="true">Kinematics &amp; Power</button>
+            <button data-tab="plc" class="tab-btn px-2 py-1.5 rounded-lg border border-[var(--border)] font-medium transition" aria-selected="false">PLC I/O &amp; Faults</button>
+            <button data-tab="system" class="tab-btn px-2 py-1.5 rounded-lg border border-[var(--border)] font-medium transition" aria-selected="false">7-Element Spec</button>
+          </div>
+
+          <!-- TAB 1: Kinematics, Cable Statics & 48V Umbilical Power -->
+          <div id="tab-kinematics" class="space-y-2.5 text-xs">
+            <div class="grid grid-cols-2 gap-1.5 font-mono">
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="text-[var(--muted-foreground)]">Joint Angles (&theta;1, &theta;2)</div>
+                <div id="tel-joints" class="font-semibold mt-0.5">+0.0&deg; / +90.0&deg;</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="text-[var(--muted-foreground)]">Z-Slide &amp; Shroud</div>
+                <div id="tel-zslide" class="font-semibold mt-0.5">0.0 mm &middot; 0.0 N</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="text-[var(--muted-foreground)]">Inner Fold Clearance</div>
+                <div id="tel-clearance" class="font-semibold mt-0.5">302 mm (r - 122)</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="text-[var(--muted-foreground)]">Jacobian |det(J)|</div>
+                <div id="tel-jacobian" class="font-semibold mt-0.5">0.122 m&sup2; (&ge;0.042)</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="text-[var(--muted-foreground)]">Wire Ropes (T_L / T_R)</div>
+                <div id="tel-tensions" class="font-semibold mt-0.5">144 N / 144 N</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="text-[var(--muted-foreground)]">Rope SF (vs 1,000 N)</div>
+                <div id="tel-sf" class="font-semibold mt-0.5 text-[var(--success)]">6.94&times; (EN 12385)</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="text-[var(--muted-foreground)]">65 m Umbilical (48 V)</div>
+                <div id="tel-umbilical" class="font-semibold mt-0.5">25.0 A &middot; &Delta;V 14.0 V</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="text-[var(--muted-foreground)]">Cam Offset &amp; 5% Audit</div>
+                <div id="tel-cam-audit" class="font-semibold mt-0.5">4.2 mm (&le;15 mm)</div>
+              </div>
+            </div>
+
+            <!-- Manual SCARA Override (active when paused) -->
+            <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)] space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold">Manual SCARA Pose (Pause to test)</span>
+                <span class="text-[var(--muted-foreground)] font-mono">L1=L2=0.35 m</span>
+              </div>
+              <label class="flex items-center gap-2">
+                <span class="w-10 font-mono text-[var(--muted-foreground)]">&theta;1</span>
+                <input id="rng-th1" type="range" min="-135" max="135" step="1" value="0" class="flex-1 accent-[var(--primary)]" />
+                <span id="lbl-th1" class="w-12 text-right font-mono">0&deg;</span>
+              </label>
+              <label class="flex items-center gap-2">
+                <span class="w-10 font-mono text-[var(--muted-foreground)]">&theta;2</span>
+                <input id="rng-th2" type="range" min="25" max="160" step="1" value="90" class="flex-1 accent-[var(--primary)]" />
+                <span id="lbl-th2" class="w-12 text-right font-mono">90&deg;</span>
+              </label>
+              <label class="flex items-center gap-2">
+                <span class="w-10 font-mono text-[var(--muted-foreground)]">d3</span>
+                <input id="rng-d3" type="range" min="0" max="50" step="1" value="0" class="flex-1 accent-[var(--primary)]" />
+                <span id="lbl-d3" class="w-12 text-right font-mono">0 mm</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- TAB 2: Live PLC I/O & Hardware Fault Injection -->
+          <div id="tab-plc" class="hidden space-y-2.5 text-xs">
+            <div class="space-y-1">
+              <div class="font-semibold">Hardware Fault Injection (Verification Matrix)</div>
+              <div class="grid grid-cols-1 gap-1.5">
+                <button data-fault="wind" class="fault-btn px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-left flex justify-between items-center bg-[var(--content)] hover:bg-[var(--accent)]" aria-pressed="false">
+                  <span>H2: Squall Wind Gust (&gt; 8 m/s hold limit)</span>
+                  <span class="font-mono">OFF</span>
+                </button>
+                <button data-fault="fan" class="fault-btn px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-left flex justify-between items-center bg-[var(--content)] hover:bg-[var(--accent)]" aria-pressed="false">
+                  <span>H10: Ducted Fan Thrust Drop (&lt; 80 N)</span>
+                  <span class="font-mono">OFF</span>
+                </button>
+                <button data-fault="wire" class="fault-btn px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-left flex justify-between items-center bg-[var(--content)] hover:bg-[var(--accent)]" aria-pressed="false">
+                  <span>H8: Load Cell NAMUR NE43 (&lt; 3.6 mA)</span>
+                  <span class="font-mono">OFF</span>
+                </button>
+                <button data-fault="cam" class="fault-btn px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-left flex justify-between items-center bg-[var(--content)] hover:bg-[var(--accent)]" aria-pressed="false">
+                  <span>V3: Arm Camera Sway (&gt; 15 mm residual)</span>
+                  <span class="font-mono">OFF</span>
+                </button>
+                <button data-fault="drone" class="fault-btn px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-left flex justify-between items-center bg-[var(--content)] hover:bg-[var(--accent)]" aria-pressed="false">
+                  <span>H15: Drone Airborne (Winch Interlock)</span>
+                  <span class="font-mono">OFF</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-1 pt-1 border-t border-[var(--card-border)]">
+              <div class="font-semibold">Live PLC Channel States (L1 &middot; 10 ms Scan)</div>
+              <div id="plc-table" class="space-y-1 font-mono"></div>
+            </div>
+          </div>
+
+          <!-- TAB 3: 7 Integrated Elements Summary -->
+          <div id="tab-system" class="hidden space-y-2 text-xs">
+            <div class="space-y-1.5">
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="font-semibold">1. Drone Survey (DJI M350 RTK &middot; ENG4100C)</div>
+                <div class="text-[var(--muted-foreground)]">8.5 kg AUW (&le;9.2 kg MTOW), Zenmuse P1 (1.32 mm/px @ 15 m) + H30T LRF, dual-antenna RTK, Simplex Processor B monitor (50 Hz UART, 20 ms MUX override).</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="font-semibold">2. Cable Platform &amp; Roof Rigging</div>
+                <div class="text-[var(--muted-foreground)]">28 kg frame, two 1.5 kN winches, EN 12385 1.0 kN ropes (SF 6.9), 48 V DC 65 m umbilical (4 mm&sup2; Cu, 14 V drop @ 1.2 kW) + STP Cat6A.</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="font-semibold">3. SCARA Arm &amp; Compliance Striker</div>
+                <div class="text-[var(--muted-foreground)]">2-DOF (0.35+0.35 m) + 50 mm Z-slide, 16 taps on 0.8&times;0.8 m grid, 19 mm inner fold clearance, 15–20 N shroud preload, 5–15 N (&lt;2 ms) strike.</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="font-semibold">4. Control, Sensing, Data &amp; CP Decision</div>
+                <div class="text-[var(--muted-foreground)]">ISA-95 L0–L4, PostGIS unified façade frame, TR 78-2 / SAC FI 01 masking, plus mandatory 5% random solid-tap CP audit &amp; BCA_BR_PFI01 filing.</div>
+              </div>
+              <div class="p-2 rounded-lg bg-[var(--content)] border border-[var(--card-border)]">
+                <div class="font-semibold">5. Lifecycle Economics (Section 3.6)</div>
+                <div class="text-[var(--muted-foreground)]">7-yr TCO S$3.49M @ 25 jobs/yr (P=S$250k); break-even 18 jobs/yr vs S$21,700 manual; RaaS ceiling S$3,650/site day below 18 blocks/yr.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      // =========================================================================
+      // 1. VERIFIED ENGINEERING CONSTANTS & 4x4 GRID DEFINITION (FROM v7 REPORT)
+      // =========================================================================
+      const L1 = 0.35; // m
+      const L2 = 0.35; // m
+      const R_MAX = L1 + L2; // 0.70 m
+      const THETA2_MIN_DEG = 25;
+      const THETA2_MAX_DEG = 160;
+      const R_MIN = Math.sqrt(L1 * L1 + L2 * L2 + 2 * L1 * L2 * Math.cos((THETA2_MAX_DEG * Math.PI) / 180)); // 0.12155 m
+      const ROBOT_MASS_KG = 28;
+      const G = 9.81;
+      const ROPE_BREAKING_N = 1000;
+      const FAN_NOMINAL_N = 110; // Dual 55 N fans
+      const WIND_LIMIT_ROBOT = 8.0; // m/s
+      const WIND_LIMIT_DRONE = 12.0; // m/s
+      const CAM_OFFSET_LIMIT_MM = 15.0; // V3 / SCARA inner clearance constraint
+      const UMBILICAL_LOOP_OHM = 0.56; // 65 m x 2 (4 mm^2 Cu)
+      const UMBILICAL_SUPPLY_V = 48.0;
+
+      const STEP_DEFS = [
+        { id: 'IDLE', label: '1. IDLE', iface: 'I0 / H15', proto: 'PLC %QX0.0 Interlock', rate: '10 ms scan', rule: 'Drone Landed & Stowed verified' },
+        { id: 'DESCENDING', label: '2. DESCEND', iface: 'I1 & I2', proto: 'Winch VFD + RS-485 Anem.', rate: '10 kHz enc', rule: '0.15 m/s; stop if <3.6 mA (NE43)' },
+        { id: 'FANS_ON', label: '3. FANS ON', iface: 'I3', proto: 'CAN / PWM Dual ESC (48V)', rate: '100 Hz', rule: 'Ramp to 110 N; abort if <80 N' },
+        { id: 'LOCKED', label: '4. LOCKED', iface: 'I4 & I1', proto: 'Bumper %IX0.2 + Brake %QX0.2', rate: '10 ms', rule: 'Wall lock confirmed; wind <= 8 m/s' },
+        { id: 'ALIGNING', label: '5. ALIGN', iface: 'I5 & I6', proto: 'EtherCAT Servos + GigE 1080p', rate: '1 kHz / 30 fps', rule: 'Offset <= 15 mm; check cracks (H9)' },
+        { id: 'EXTENDING', label: '6. EXTEND', iface: 'I7', proto: 'Z-Slide Stepper + %IW68', rate: '1 kHz', rule: 'Compress foam shroud 15–20 N' },
+        { id: 'TAPPING', label: '7. TAP', iface: 'I7', proto: 'Solenoid + 1 kHz LC + 48 kHz Mic', rate: '48 kHz', rule: '5–15 N (<2 ms) or SKIP if cracked' },
+        { id: 'CLASSIFYING', label: '8. CLASSIFY', iface: 'I8', proto: 'Edge IPC FFT + SCADA API', rate: 'Per tap', rule: 'Solid vs Hollow vs Uncertain; retract' },
+        { id: 'COMPLETE', label: '9. LOG', iface: 'I8 -> L2/L3', proto: 'HTTPS / PostGIS Geo-Tag', rate: 'Per tile', rule: '5% random solid-tap CP audit flag' }
+      ];
+
+      // Build 4x4 tap matrix: x in {-0.30,-0.10,0.10,0.30}, y in {0.30,0.10,-0.10,-0.30}
+      const COORDS_X = [-0.30, -0.10, 0.10, 0.30];
+      const COORDS_Y = [0.30, 0.10, -0.10, -0.30];
+      const DEFAULT_TRUTHS = [
+        'SOLID', 'SOLID', 'HOLLOW', 'SOLID',
+        'SOLID', 'HOLLOW', 'HOLLOW', 'UNCERTAIN',
+        'SOLID', 'SOLID', 'CRACKED', 'SOLID',
+        'SOLID', 'UNCERTAIN', 'SOLID', 'SOLID'
+      ];
+
+      const tiles = [];
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          const idx = r * 4 + c;
+          tiles.push({
+            idx,
+            row: r,
+            col: c,
+            code: `R${r + 1}C${c + 1}`,
+            x: COORDS_X[c],
+            y: COORDS_Y[r],
+            truth: DEFAULT_TRUTHS[idx],
+            result: null,
+            peakN: 0,
+            centroidHz: 0,
+            audited: false
+          });
+        }
+      }
+
+      // =========================================================================
+      // 2. SIMULATION STATE
+      // =========================================================================
+      const state = {
+        scene: 'scara',
+        autoCycle: true,
+        paused: false,
+        speed: 1.0,
+        stepIndex: 1,
+        stepTimer: 0,
+        selectedTileIdx: 0,
+        prevBranch: 1,
+
+        theta1: 0,
+        theta2: Math.PI / 2,
+        targetTheta1: 0,
+        targetTheta2: Math.PI / 2,
+        eeX: 0.35,
+        eeY: 0.35,
+        d3_mm: 0,
+        shroudPreloadN: 0,
+        hammerImpulseN: 0,
+        fanFraction: 0.25,
+        winchBrakeLocked: false,
+        bumperContact: false,
+        camOffsetMm: 4.2,
+
+        windMs: 4.5,
+        elevY: 34,
+        dropX: 15.0,
+        droneAngle: 0,
+        droneActiveSweep: false,
+
+        faults: {
+          wind: false,
+          fan: false,
+          wire: false,
+          cam: false,
+          drone: false
+        },
+        camRetries: 0,
+        faultMessage: '',
+
+        strikePulse: 0,
+        strikeX: -0.30,
+        strikeY: 0.30,
+        strikeColor: '#10b981',
+        particles: [],
+
+        forceTrace: new Array(120).fill(0),
+        audioTrace: new Array(120).fill(0),
+        fftBins: new Array(24).fill(0.05),
+        lastPeakN: 0,
+        lastCentroidHz: 0,
+        lastDecayMs: 0,
+
+        showWorkspace: true,
+        showFov: true,
+        autoRotate: false
+      };
+
+      for (let i = 0; i < 40; i++) {
+        state.particles.push({
+          side: i % 2 === 0 ? -1 : 1,
+          phase: Math.random(),
+          jitterY: (Math.random() - 0.5) * 0.06,
+          jitterX: (Math.random() - 0.5) * 0.06
+        });
+      }
+
+      // =========================================================================
+      // 3. ANALYTICAL 2-LINK SCARA IK & KINEMATICS
+      // =========================================================================
+      function solveScaraIK(x, y, preferredBranch = 1) {
+        const r = Math.hypot(x, y);
+        const clampedR = Math.max(R_MIN, Math.min(R_MAX - 0.005, r));
+        let cosT2 = (clampedR * clampedR - L1 * L1 - L2 * L2) / (2 * L1 * L2);
+        cosT2 = Math.max(-1, Math.min(1, cosT2));
+        const absT2 = Math.acos(cosT2);
+        const phi = Math.atan2(y, x);
+        const limit1 = (135 * Math.PI) / 180;
+
+        const t2Pos = absT2;
+        const t1Pos = normAngle(phi - Math.atan2(L2 * Math.sin(t2Pos), L1 + L2 * Math.cos(t2Pos)));
+        const t2Neg = -absT2;
+        const t1Neg = normAngle(phi - Math.atan2(L2 * Math.sin(t2Neg), L1 + L2 * Math.cos(t2Neg)));
+
+        const posValid = Math.abs(t1Pos) <= limit1 + 0.001;
+        const negValid = Math.abs(t1Neg) <= limit1 + 0.001;
+
+        let chosenBranch = preferredBranch;
+        if (chosenBranch === 1 && !posValid && negValid) chosenBranch = -1;
+        if (chosenBranch === -1 && !negValid && posValid) chosenBranch = 1;
+        if (posValid && negValid) {
+          const curDiffPos = Math.abs(t1Pos - state.theta1);
+          const curDiffNeg = Math.abs(t1Neg - state.theta1);
+          if (Math.abs(t1Pos) > (120 * Math.PI) / 180) chosenBranch = -1;
+          else if (Math.abs(t1Neg) > (120 * Math.PI) / 180) chosenBranch = 1;
+          else chosenBranch = curDiffPos <= curDiffNeg ? 1 : -1;
+        }
+
+        const th1 = chosenBranch === 1 ? t1Pos : t1Neg;
+        const th2 = chosenBranch === 1 ? t2Pos : t2Neg;
+        const fk = forwardScara(th1, th2);
+        const detJ = L1 * L2 * Math.sin(th2);
+        const innerClearanceMm = (clampedR - R_MIN) * 1000;
+
+        return {
+          th1,
+          th2,
+          branch: chosenBranch,
+          r: clampedR,
+          detJ,
+          innerClearanceMm,
+          x: fk.x,
+          y: fk.y,
+          elbowX: fk.elbowX,
+          elbowY: fk.elbowY
+        };
+      }
+
+      function forwardScara(th1, th2) {
+        const elbowX = L1 * Math.cos(th1);
+        const elbowY = L1 * Math.sin(th1);
+        const x = elbowX + L2 * Math.cos(th1 + th2);
+        const y = elbowY + L2 * Math.sin(th1 + th2);
+        return { elbowX, elbowY, x, y };
+      }
+
+      function normAngle(a) {
+        while (a > Math.PI) a -= 2 * Math.PI;
+        while (a < -Math.PI) a += 2 * Math.PI;
+        return a;
+      }
+
+      function computeCableAndPowerTelemetry() {
+        const effWind = state.faults.wind ? Math.max(state.windMs, 9.2) : state.windMs;
+        const windDragN = 0.5 * 1.2 * effWind * effWind * 1.276;
+        const fanPreloadN = state.faults.fan
+          ? 72 * state.fanFraction
+          : FAN_NOMINAL_N * state.fanFraction;
+        const netPreloadN = fanPreloadN - windDragN;
+
+        const dropDepth = Math.max(2, 60 - state.elevY);
+        const totalMassKg = ROBOT_MASS_KG + 0.08 * dropDepth + 0.4;
+        const totalWeightN = totalMassKg * G;
+        const asym = (windDragN / 400) * 0.12 + ((state.dropX - 15) / 15) * 0.04;
+        const tL = totalWeightN * (0.5 + asym);
+        const tR = totalWeightN * (0.5 - asym);
+        const maxT = Math.max(tL, tR);
+        const sf = ROPE_BREAKING_N / maxT;
+
+        const fanPowerW = state.fanFraction > 0.1 ? 900 * Math.pow(state.fanFraction, 1.4) : 45;
+        const armPowerW = state.stepIndex >= 4 && state.stepIndex <= 7 ? 300 : 110;
+        const totalPowerW = fanPowerW + armPowerW;
+        const currentA = totalPowerW / UMBILICAL_SUPPLY_V;
+        const voltDropV = currentA * UMBILICAL_LOOP_OHM;
+
+        const mAL = state.faults.wire ? 2.4 : 4.0 + tL * 0.016;
+        const mAR = 4.0 + tR * 0.016;
+
+        return {
+          effWind,
+          windDragN,
+          fanPreloadN,
+          netPreloadN,
+          tL,
+          tR,
+          sf,
+          totalPowerW,
+          currentA,
+          voltDropV,
+          mAL,
+          mAR
+        };
+      }
+
+      // =========================================================================
+      // 4. WAVEFORM SYNTHESIS (1 kHz FORCE LOAD CELL & 48 kHz ACOUSTIC + FFT)
+      // =========================================================================
+      function generateTapWaveforms(truth) {
+        const force = new Array(120);
+        const audio = new Array(120);
+        const fft = new Array(24).fill(0.04);
+
+        if (truth === 'CRACKED') {
+          for (let i = 0; i < 120; i++) {
+            force[i] = 0.2 * Math.sin(i * 0.4);
+            audio[i] = 0.04 * (Math.random() - 0.5);
+          }
+          state.lastPeakN = 0.0;
+          state.lastCentroidHz = 0;
+          state.lastDecayMs = 0;
+          state.forceTrace = force;
+          state.audioTrace = audio;
+          state.fftBins = fft;
+          return 'CRACK_SKIP';
+        }
+
+        const isHollow = truth === 'HOLLOW';
+        const isUncertain = truth === 'UNCERTAIN';
+        const preload = 17.5 + (Math.random() - 0.5) * 1.4;
+        const peakImpulse = isHollow ? 9.4 : isUncertain ? 10.6 : 12.2;
+
+        for (let i = 0; i < 120; i++) {
+          const tMs = i * 0.15;
+          const strikeDt = tMs - 3.0;
+          const impulse = strikeDt >= 0 && strikeDt <= 2.1
+            ? peakImpulse * Math.sin((Math.PI * strikeDt) / 2.1)
+            : 0;
+          force[i] = preload + impulse + (Math.random() - 0.5) * 0.35;
+
+          if (tMs < 3.0) {
+            audio[i] = 0.06 * (Math.random() - 0.5);
+          } else {
+            const tau = isHollow ? 6.2 : isUncertain ? 3.2 : 1.7;
+            const env = Math.exp(-(tMs - 3.0) / tau);
+            const f1 = isHollow ? 0.95 : isUncertain ? 1.65 : 2.85;
+            const f2 = isHollow ? 1.45 : isUncertain ? 2.40 : 4.10;
+            audio[i] = env * (0.85 * Math.sin(2 * Math.PI * f1 * (tMs - 3.0)) + 0.3 * Math.sin(2 * Math.PI * f2 * (tMs - 3.0))) + 0.04 * (Math.random() - 0.5);
+          }
+        }
+
+        for (let b = 0; b < 24; b++) {
+          const freqKHz = (b + 0.5) * 0.2;
+          const peakCenter = isHollow ? 0.95 : isUncertain ? 1.65 : 2.85;
+          const bw = isHollow ? 0.35 : 0.65;
+          fft[b] = Math.min(1, 0.05 + 0.92 * Math.exp(-Math.pow((freqKHz - peakCenter) / bw, 2)) + 0.05 * Math.random());
+        }
+
+        state.lastPeakN = Number((preload + peakImpulse).toFixed(1));
+        state.lastCentroidHz = isHollow ? 950 : isUncertain ? 1650 : 2840;
+        state.lastDecayMs = isHollow ? 14.8 : isUncertain ? 7.6 : 3.9;
+        state.forceTrace = force;
+        state.audioTrace = audio;
+        state.fftBins = fft;
+        return truth;
+      }
+
+      // =========================================================================
+      // 5. STATE MACHINE ENGINE (9-STEP TAP HANDSHAKE)
+      // =========================================================================
+      function startSingleTileTap(tileIdx) {
+        state.selectedTileIdx = tileIdx;
+        state.paused = false;
+        updatePlayPauseButton();
+        if (state.stepIndex === 0 || state.stepIndex >= 8) {
+          state.stepIndex = state.bumperContact ? 4 : 1;
+        } else {
+          state.stepIndex = 4;
+        }
+        state.stepTimer = 0;
+        state.camRetries = 0;
+        syncTileTruthDropdown();
+      }
+
+      function stepSimulation(dt) {
+        if (state.paused) return;
+
+        const tele = computeCableAndPowerTelemetry();
+        const activeFaults = [];
+        if (state.faults.drone) activeFaults.push('H15: Drone airborne — Winch Enable %QX0.0 blocked');
+        if (tele.effWind > WIND_LIMIT_ROBOT) activeFaults.push(`H2: Wind ${tele.effWind.toFixed(1)} m/s > 8.0 m/s abort limit`);
+        if (state.faults.wire) activeFaults.push('H8: Rope load cell %IW64 < 3.6 mA (NAMUR NE43 open circuit)');
+        if (state.faults.fan && state.stepIndex >= 3) activeFaults.push('H10: Fan thrust dropped < 80 N — aborting tap & retracting');
+
+        if (activeFaults.length > 0) {
+          state.faultMessage = activeFaults[0];
+          state.d3_mm = Math.max(0, state.d3_mm - 80 * dt);
+          state.shroudPreloadN = 0;
+          state.hammerImpulseN = 0;
+          if (state.faults.wire || state.faults.drone) {
+            state.winchBrakeLocked = true;
+            state.stepIndex = 0;
+            state.autoCycle = false;
+          } else if (tele.effWind > WIND_LIMIT_ROBOT || state.faults.fan) {
+            state.stepIndex = 0;
+            state.bumperContact = false;
+          }
+        } else {
+          state.faultMessage = '';
+        }
+
+        state.droneAngle += dt * 0.45 * state.speed;
+
+        for (const p of state.particles) {
+          p.phase += dt * (0.6 + 2.2 * state.fanFraction) * state.speed;
+          if (p.phase > 1) p.phase -= 1;
+        }
+
+        if (state.strikePulse > 0) {
+          state.strikePulse = Math.max(0, state.strikePulse - dt * 1.6);
+        }
+
+        if (state.stepIndex === 0 && !state.autoCycle) {
+          state.fanFraction += (0.25 - state.fanFraction) * Math.min(1, dt * 4);
+          return;
+        }
+
+        if (activeFaults.length > 0) return;
+
+        const targetTile = tiles[state.selectedTileIdx];
+        const ik = solveScaraIK(targetTile.x, targetTile.y, state.prevBranch);
+        state.targetTheta1 = ik.th1;
+        state.targetTheta2 = ik.th2;
+
+        state.stepTimer += dt * state.speed;
+
+        switch (state.stepIndex) {
+          case 0:
+            state.d3_mm = 0;
+            state.shroudPreloadN = 0;
+            state.winchBrakeLocked = false;
+            if (state.autoCycle && state.stepTimer > 0.35) advanceStep(1);
+            break;
+
+          case 1:
+            state.fanFraction += (0.35 - state.fanFraction) * Math.min(1, dt * 4);
+            state.bumperContact = false;
+            state.winchBrakeLocked = false;
+            if (state.stepTimer > 0.75) advanceStep(2);
+            break;
+
+          case 2:
+            state.fanFraction = Math.min(1.0, state.fanFraction + dt * 1.4 * state.speed);
+            if (state.fanFraction >= 0.98 && state.stepTimer > 0.65) advanceStep(3);
+            break;
+
+          case 3:
+            state.fanFraction = 1.0;
+            state.bumperContact = true;
+            state.winchBrakeLocked = true;
+            if (state.stepTimer > 0.5) advanceStep(4);
+            break;
+
+          case 4: {
+            state.bumperContact = true;
+            state.winchBrakeLocked = true;
+            state.fanFraction = 1.0;
+            state.d3_mm = Math.max(0, state.d3_mm - 90 * dt);
+            state.shroudPreloadN = 0;
+
+            const kSlew = Math.min(1, dt * 5.2 * state.speed);
+            state.theta1 += normAngle(state.targetTheta1 - state.theta1) * kSlew;
+            state.theta2 += (state.targetTheta2 - state.theta2) * kSlew;
+            const fk = forwardScara(state.theta1, state.theta2);
+            state.eeX = fk.x;
+            state.eeY = fk.y;
+
+            const distErrMm = Math.hypot(state.eeX - targetTile.x, state.eeY - targetTile.y) * 1000;
+            if (state.faults.cam) {
+              state.camOffsetMm = 18.5 + 3.0 * Math.sin(state.stepTimer * 6);
+              state.faultMessage = `V3 RETRY: Cam residual ${state.camOffsetMm.toFixed(1)} mm > 15.0 mm limit`;
+            } else {
+              state.camOffsetMm = 3.2 + 1.4 * Math.sin(state.stepTimer * 4);
+            }
+
+            if (distErrMm < 4.5 && !state.faults.cam && state.stepTimer > 0.55) {
+              state.prevBranch = ik.branch;
+              state.theta1 = state.targetTheta1;
+              state.theta2 = state.targetTheta2;
+              state.eeX = targetTile.x;
+              state.eeY = targetTile.y;
+              if (targetTile.truth === 'CRACKED') {
+                advanceStep(6);
+              } else {
+                advanceStep(5);
+              }
+            }
+            break;
+          }
+
+          case 5:
+            state.d3_mm = Math.min(42, (state.stepTimer / 0.55) * 42);
+            state.shroudPreloadN = Math.min(18.0, (state.d3_mm / 42) * 18.0);
+            if (state.stepTimer > 0.65) advanceStep(6);
+            break;
+
+          case 6:
+            if (targetTile.truth === 'CRACKED') {
+              state.d3_mm = 0;
+              state.shroudPreloadN = 0;
+              state.hammerImpulseN = 0;
+              if (state.stepTimer > 0.55) {
+                targetTile.result = generateTapWaveforms('CRACKED');
+                targetTile.peakN = 0;
+                targetTile.centroidHz = 0;
+                state.strikeX = targetTile.x;
+                state.strikeY = targetTile.y;
+                state.strikeColor = '#f59e0b';
+                state.strikePulse = 1.0;
+                advanceStep(7);
+              }
+            } else {
+              state.d3_mm = 42;
+              state.shroudPreloadN = 18.0;
+              state.hammerImpulseN = state.stepTimer < 0.25 ? 12.2 : 0;
+              if (state.stepTimer > 0.5) {
+                targetTile.result = generateTapWaveforms(targetTile.truth);
+                targetTile.peakN = state.lastPeakN;
+                targetTile.centroidHz = state.lastCentroidHz;
+                targetTile.audited = targetTile.result === 'SOLID' && targetTile.idx === 9;
+                state.strikeX = targetTile.x;
+                state.strikeY = targetTile.y;
+                state.strikeColor = targetTile.result === 'HOLLOW' ? '#ef4444' : targetTile.result === 'UNCERTAIN' ? '#f59e0b' : '#10b981';
+                state.strikePulse = 1.0;
+                advanceStep(7);
+              }
+            }
+            break;
+
+          case 7:
+            state.hammerImpulseN = 0;
+            state.d3_mm = Math.max(0, 42 * (1 - state.stepTimer / 0.45));
+            state.shroudPreloadN = Math.max(0, 18.0 * (1 - state.stepTimer / 0.45));
+            if (state.stepTimer > 0.55) advanceStep(8);
+            break;
+
+          case 8:
+            state.d3_mm = 0;
+            state.shroudPreloadN = 0;
+            if (state.stepTimer > 0.45) {
+              if (state.autoCycle) {
+                const nextIdx = state.selectedTileIdx + 1;
+                if (nextIdx < tiles.length) {
+                  state.selectedTileIdx = nextIdx;
+                  syncTileTruthDropdown();
+                  advanceStep(4);
+                } else {
+                  state.autoCycle = false;
+                  state.bumperContact = false;
+                  state.winchBrakeLocked = false;
+                  advanceStep(0);
+                }
+              } else {
+                advanceStep(0);
+              }
+            }
+            break;
+        }
+      }
+
+      function advanceStep(next) {
+        state.stepIndex = next;
+        state.stepTimer = 0;
+      }
+
+      // =========================================================================
+      // 6. CUSTOM 3D PERSPECTIVE RENDERER
+      // =========================================================================
+      const cam = {
+        yaw: -0.52,
+        pitch: 0.24,
+        dist: 2.35,
+        tx: 0,
+        ty: 0,
+        tz: 0.14
+      };
+
+      function setCameraPreset(preset) {
+        if (state.scene === 'building') {
+          cam.tx = 0; cam.ty = 26; cam.tz = 0;
+          if (preset === 'iso') { cam.yaw = -0.68; cam.pitch = 0.28; cam.dist = 92; }
+          if (preset === 'front') { cam.yaw = 0.0; cam.pitch = 0.08; cam.dist = 88; }
+          if (preset === 'side') { cam.yaw = -1.52; cam.pitch = 0.12; cam.dist = 88; }
+          if (preset === 'top') { cam.yaw = -0.25; cam.pitch = 1.15; cam.dist = 96; }
+          return;
+        }
+        if (state.scene === 'side') {
+          cam.tx = 0; cam.ty = 0; cam.tz = 0.16;
+          if (preset === 'iso') { cam.yaw = -1.24; cam.pitch = 0.16; cam.dist = 1.95; }
+          if (preset === 'front') { cam.yaw = 0.0; cam.pitch = 0.08; cam.dist = 2.1; }
+          if (preset === 'side') { cam.yaw = -1.32; cam.pitch = 0.06; cam.dist = 1.85; }
+          if (preset === 'top') { cam.yaw = 0; cam.pitch = 1.25; cam.dist = 2.2; }
+          return;
+        }
+        cam.tx = 0; cam.ty = 0; cam.tz = 0.14;
+        if (preset === 'iso') { cam.yaw = -0.52; cam.pitch = 0.24; cam.dist = 2.25; }
+        if (preset === 'front') { cam.yaw = 0.0; cam.pitch = 0.06; cam.dist = 2.15; }
+        if (preset === 'side') { cam.yaw = -1.32; cam.pitch = 0.08; cam.dist = 2.05; }
+        if (preset === 'top') { cam.yaw = 0.0; cam.pitch = 1.15; cam.dist = 2.35; }
+      }
+
+      const vSub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+      const vAdd = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+      const vScale = (a, s) => [a[0] * s, a[1] * s, a[2] * s];
+      const vDot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+      const vCross = (a, b) => [
+        a[1] * b[2] - a[2] * b[1],
+        a[2] * b[0] - a[0] * b[2],
+        a[0] * b[1] - a[1] * b[0]
+      ];
+      const vNorm = (a) => {
+        const l = Math.hypot(a[0], a[1], a[2]) || 1;
+        return [a[0] / l, a[1] / l, a[2] / l];
+      };
+
+      function getThemeColors() {
+        const isLight = document.documentElement.classList.contains('light');
+        return {
+          isLight,
+          skyTop: isLight ? '#e8eef5' : '#0b1120',
+          skyBot: isLight ? '#f4f7fb' : '#111827',
+          wallTile: isLight ? '#cbd5e1' : '#334155',
+          wallGrout: isLight ? '#94a3b8' : '#1e293b',
+          windowGlass: isLight ? '#60a5fa' : '#1d4ed8',
+          aluFrame: isLight ? '#64748b' : '#94a3b8',
+          aluDark: isLight ? '#475569' : '#475569',
+          scaraLink1: '#2563eb',
+          scaraLink2: '#0891b2',
+          servoBody: '#1e293b',
+          servoAccent: '#f59e0b',
+          fanShroud: '#334155',
+          fanBlade: '#38bdf8',
+          rope: '#e2e8f0',
+          umbilical: '#f97316',
+          labelText: isLight ? '#0f172a' : '#f8fafc',
+          subLabel: isLight ? '#475569' : '#94a3b8'
+        };
+      }
+
+      function hexToRgb(hex) {
+        const clean = hex.replace('#', '');
+        const num = parseInt(clean, 16);
+        return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+      }
+
+      function shadeColor(hex, intensity) {
+        const [r, g, b] = hexToRgb(hex);
+        const k = Math.max(0.28, Math.min(1.22, intensity));
+        return `rgb(${Math.min(255, Math.round(r * k))}, ${Math.min(255, Math.round(g * k))}, ${Math.min(255, Math.round(b * k))})`;
+      }
+
+      function createSceneRenderer(canvas) {
+        const ctx = canvas.getContext('2d');
+        const lightDir = vNorm([0.45, 0.72, 0.55]);
+
+        return function renderFrame() {
+          const rect = canvas.getBoundingClientRect();
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const w = Math.max(200, Math.floor(rect.width));
+          const h = Math.max(200, Math.floor(rect.height));
+          if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+          }
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+          const pal = getThemeColors();
+          const grad = ctx.createLinearGradient(0, 0, 0, h);
+          grad.addColorStop(0, pal.skyTop);
+          grad.addColorStop(1, pal.skyBot);
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, w, h);
+
+          const cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+          const cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+          const eye = [
+            cam.tx + cam.dist * cp * sy,
+            cam.ty + cam.dist * sp,
+            cam.tz + cam.dist * cp * cy
+          ];
+          const forward = vNorm(vSub([cam.tx, cam.ty, cam.tz], eye));
+          const right = vNorm(vCross(forward, [0, 1, 0]));
+          const up = vCross(right, forward);
+          const fovPx = Math.min(w, h) * 1.15;
+
+          const project = (pt) => {
+            const rel = vSub(pt, eye);
+            const cz = vDot(rel, forward);
+            if (cz <= 0.08) return { x: 0, y: 0, z: cz, visible: false };
+            const cx = vDot(rel, right);
+            const cyy = vDot(rel, up);
+            return {
+              x: w * 0.5 + (cx / cz) * fovPx,
+              y: h * 0.5 - (cyy / cz) * fovPx,
+              z: cz,
+              visible: true
+            };
+          };
+
+          const drawList = [];
+
+          const pushQuad = (pts, hex, alpha = 1.0, strokeHex = null, doubleSided = false, depthBias = 0) => {
+            const p0 = project(pts[0]), p1 = project(pts[1]), p2 = project(pts[2]), p3 = project(pts[3]);
+            if (!p0.visible || !p1.visible || !p2.visible || !p3.visible) return;
+            const n = vNorm(vCross(vSub(pts[1], pts[0]), vSub(pts[2], pts[0])));
+            const toCam = vNorm(vSub(eye, pts[0]));
+            const facing = vDot(n, toCam);
+            if (!doubleSided && facing < -0.02) return;
+            const ndl = Math.abs(vDot(n, lightDir));
+            const lit = 0.52 + 0.55 * ndl;
+            const depth = (p0.z + p1.z + p2.z + p3.z) * 0.25 + depthBias;
+            drawList.push({
+              type: 'poly',
+              depth,
+              pts: [p0, p1, p2, p3],
+              fill: shadeColor(hex, lit),
+              alpha,
+              stroke: strokeHex
+            });
+          };
+
+          const pushBox = (cx, cy0, cz, sx, sy0, sz, hex, strokeHex = null, yawZ = 0, depthBias = 0) => {
+            const hx = sx * 0.5, hy = sy0 * 0.5, hz = sz * 0.5;
+            const c = Math.cos(yawZ), s = Math.sin(yawZ);
+            const rot = (lx, ly, lz) => [
+              cx + lx * c - ly * s,
+              cy0 + lx * s + ly * c,
+              cz + lz
+            ];
+            const v = [
+              rot(-hx, -hy, -hz), rot(hx, -hy, -hz), rot(hx, hy, -hz), rot(-hx, hy, -hz),
+              rot(-hx, -hy, hz),  rot(hx, -hy, hz),  rot(hx, hy, hz),  rot(-hx, hy, hz)
+            ];
+            const faces = [
+              [4, 5, 6, 7],
+              [1, 0, 3, 2],
+              [5, 1, 2, 6],
+              [0, 4, 7, 3],
+              [7, 6, 2, 3],
+              [0, 1, 5, 4]
+            ];
+            for (const f of faces) {
+              pushQuad([v[f[0]], v[f[1]], v[f[2]], v[f[3]]], hex, 1.0, strokeHex, false, depthBias);
+            }
+          };
+
+          const pushCylinder = (a, b, radius, segs, hex, strokeHex = null, depthBias = 0) => {
+            const axis = vSub(b, a);
+            const len = Math.hypot(axis[0], axis[1], axis[2]);
+            if (len < 1e-5) return;
+            const dir = vScale(axis, 1 / len);
+            const ref = Math.abs(dir[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];
+            const u = vNorm(vCross(dir, ref));
+            const v = vCross(dir, u);
+            const ringA = [], ringB = [];
+            for (let i = 0; i < segs; i++) {
+              const ang = (i / segs) * Math.PI * 2;
+              const off = vAdd(vScale(u, Math.cos(ang) * radius), vScale(v, Math.sin(ang) * radius));
+              ringA.push(vAdd(a, off));
+              ringB.push(vAdd(b, off));
+            }
+            for (let i = 0; i < segs; i++) {
+              const j = (i + 1) % segs;
+              pushQuad([ringA[i], ringA[j], ringB[j], ringB[i]], hex, 1.0, strokeHex, true, depthBias);
+            }
+          };
+
+          const pushLine = (a, b, color, width = 2, dashed = false, alpha = 1, depthBias = 0) => {
+            const pa = project(a), pb = project(b);
+            if (!pa.visible || !pb.visible) return;
+            drawList.push({
+              type: 'line',
+              depth: (pa.z + pb.z) * 0.5 + depthBias,
+              pa, pb, color, width, dashed, alpha
+            });
+          };
+
+          const pushCircleWall = (cx, cy0, cz, radius, segs, color, width = 1.6, dashed = false, alpha = 0.9) => {
+            let prev = null;
+            for (let i = 0; i <= segs; i++) {
+              const th = (i / segs) * Math.PI * 2;
+              const pt = [cx + radius * Math.cos(th), cy0 + radius * Math.sin(th), cz];
+              if (prev) pushLine(prev, pt, color, width, dashed, alpha, -0.01);
+              prev = pt;
+            }
+          };
+
+          const pushLabel = (pt, text, color, font = '600 11px monospace') => {
+            const p = project(pt);
+            if (!p.visible) return;
+            drawList.push({ type: 'text', depth: p.z - 0.05, p, text, color, font });
+          };
+
+          if (state.scene === 'building') {
+            buildBuildingScene(pushBox, pushCylinder, pushQuad, pushLine, pushCircleWall, pushLabel, pal);
+          } else {
+            buildCloseUpScene(pushBox, pushCylinder, pushQuad, pushLine, pushCircleWall, pushLabel, pal);
+          }
+
+          drawList.sort((a, b) => b.depth - a.depth);
+
+          for (const item of drawList) {
+            if (item.type === 'poly') {
+              ctx.save();
+              ctx.globalAlpha = item.alpha;
+              ctx.beginPath();
+              ctx.moveTo(item.pts[0].x, item.pts[0].y);
+              ctx.lineTo(item.pts[1].x, item.pts[1].y);
+              ctx.lineTo(item.pts[2].x, item.pts[2].y);
+              ctx.lineTo(item.pts[3].x, item.pts[3].y);
+              ctx.closePath();
+              ctx.fillStyle = item.fill;
+              ctx.fill();
+              if (item.stroke) {
+                ctx.strokeStyle = item.stroke;
+                ctx.lineWidth = 0.85;
+                ctx.stroke();
+              }
+              ctx.restore();
+            } else if (item.type === 'line') {
+              ctx.save();
+              ctx.globalAlpha = item.alpha;
+              ctx.strokeStyle = item.color;
+              ctx.lineWidth = item.width;
+              if (item.dashed) ctx.setLineDash([5, 4]);
+              ctx.beginPath();
+              ctx.moveTo(item.pa.x, item.pa.y);
+              ctx.lineTo(item.pb.x, item.pb.y);
+              ctx.stroke();
+              ctx.restore();
+            } else if (item.type === 'text') {
+              ctx.save();
+              ctx.font = item.font;
+              ctx.fillStyle = item.color;
+              ctx.textAlign = 'center';
+              ctx.fillText(item.text, item.p.x, item.p.y);
+              ctx.restore();
+            }
+          }
+        };
+      }
+
+      function buildCloseUpScene(pushBox, pushCylinder, pushQuad, pushLine, pushCircleWall, pushLabel, pal) {
+        const frameZ = state.bumperContact ? 0.235 : 0.29;
+
+        pushBox(0, 0, -0.05, 1.85, 1.65, 0.10, pal.wallTile, pal.wallGrout);
+        pushBox(0.76, 0.05, -0.004, 0.28, 0.85, 0.012, pal.windowGlass, pal.aluDark);
+        pushLabel([0.76, 0.53, 0.02], 'GLAZED WINDOW', pal.subLabel, '600 10px sans-serif');
+
+        for (const t of tiles) {
+          let tileCol = '#64748b';
+          if (t.result === 'SOLID') tileCol = '#10b981';
+          else if (t.result === 'HOLLOW') tileCol = '#ef4444';
+          else if (t.result === 'UNCERTAIN') tileCol = '#f59e0b';
+          else if (t.result === 'CRACK_SKIP') tileCol = '#fbbf24';
+          else if (t.truth === 'CRACKED') tileCol = '#78350f';
+
+          const isSelected = t.idx === state.selectedTileIdx;
+          const stroke = isSelected ? '#38bdf8' : pal.wallGrout;
+          pushQuad(
+            [
+              [t.x - 0.088, t.y - 0.088, 0.002],
+              [t.x + 0.088, t.y - 0.088, 0.002],
+              [t.x + 0.088, t.y + 0.088, 0.002],
+              [t.x - 0.088, t.y + 0.088, 0.002]
+            ],
+            tileCol,
+            t.result ? 0.92 : 0.55,
+            stroke,
+            false,
+            0.002
+          );
+
+          if (t.truth === 'CRACKED') {
+            pushLine([t.x - 0.055, t.y - 0.05, 0.005], [t.x - 0.01, t.y + 0.01, 0.005], '#fbbf24', 2);
+            pushLine([t.x - 0.01, t.y + 0.01, 0.005], [t.x + 0.05, t.y + 0.055, 0.005], '#fbbf24', 2);
+          }
+
+          if (isSelected) {
+            pushCircleWall(t.x, t.y, 0.006, 0.072, 20, '#38bdf8', 2.0, false, 0.95);
+          }
+        }
+
+        if (state.showWorkspace) {
+          pushCircleWall(0, 0, 0.008, R_MAX, 56, '#3b82f6', 1.7, true, 0.82);
+          pushCircleWall(0, 0, 0.009, R_MIN, 32, '#ef4444', 1.8, false, 0.88);
+          pushLabel([0, R_MAX + 0.05, 0.02], 'r_max = 0.70 m (276 mm corner margin)', '#60a5fa', '600 10px monospace');
+          pushLabel([0, R_MIN + 0.03, 0.02], 'θ2=160° limit r_min=0.122 m (19 mm clr)', '#f87171', '600 10px monospace');
+        }
+
+        if (state.strikePulse > 0) {
+          const rad = 0.02 + (1 - state.strikePulse) * 0.11;
+          pushCircleWall(state.strikeX, state.strikeY, 0.01, rad, 24, state.strikeColor, 2.5, false, state.strikePulse);
+        }
+
+        const ropeColor = state.faults.wire ? '#ef4444' : pal.rope;
+        pushLine([-0.38, 0.45, frameZ], [-0.46, 1.45, frameZ - 0.03], ropeColor, 2.5);
+        pushLine([0.38, 0.45, frameZ], [0.46, 1.45, frameZ - 0.03], ropeColor, 2.5);
+        pushLine([-0.08, 0.45, frameZ + 0.02], [-0.08, 1.45, frameZ + 0.02], pal.umbilical, 3.0);
+        pushLabel([-0.42, 0.86, frameZ], 'EN 12385 Rope (1.0 kN)', pal.subLabel, '600 10px monospace');
+        pushLabel([0.08, 0.94, frameZ], '48 V DC + Cat6A Umbilical', pal.umbilical, '600 10px monospace');
+
+        const fz = frameZ;
+        pushBox(0, 0.43, fz, 0.92, 0.045, 0.045, pal.aluFrame, pal.aluDark);
+        pushBox(0, -0.43, fz, 0.92, 0.045, 0.045, pal.aluFrame, pal.aluDark);
+        pushBox(-0.43, 0, fz, 0.045, 0.86, 0.045, pal.aluFrame, pal.aluDark);
+        pushBox(0.43, 0, fz, 0.045, 0.86, 0.045, pal.aluFrame, pal.aluDark);
+        pushBox(0, 0.0, fz + 0.055, 0.14, 0.86, 0.028, pal.aluDark, pal.servoBody);
+
+        const corners = [[-0.41, 0.41], [0.41, 0.41], [-0.41, -0.41], [0.41, -0.41]];
+        const padCol = state.bumperContact ? '#10b981' : '#f59e0b';
+        for (const [cx, cy0] of corners) {
+          pushCylinder([cx, cy0, fz], [cx, cy0, 0.015], 0.022, 10, '#334155', '#0f172a');
+          pushCylinder([cx, cy0, 0.015], [cx, cy0, 0.002], 0.036, 12, padCol, '#0f172a');
+        }
+
+        pushBox(-0.26, 0.42, fz + 0.055, 0.24, 0.12, 0.08, '#1e293b', '#475569');
+        pushLabel([-0.26, 0.52, fz + 0.08], 'PLC L1 + 48V/24V DC-DC', pal.subLabel, '600 10px monospace');
+
+        const fanPositions = [[-0.35, -0.28], [0.35, -0.28]];
+        for (let fi = 0; fi < fanPositions.length; fi++) {
+          const [fx, fy] = fanPositions[fi];
+          const fanCol = state.faults.fan ? '#ef4444' : pal.fanShroud;
+          pushCylinder([fx, fy, fz - 0.02], [fx, fy, fz + 0.12], 0.082, 16, fanCol, '#0f172a');
+          const rot = state.droneAngle * (8 + 26 * state.fanFraction) + fi * 1.1;
+          for (let b = 0; b < 3; b++) {
+            const ang = rot + (b * Math.PI * 2) / 3;
+            pushLine(
+              [fx, fy, fz + 0.05],
+              [fx + 0.068 * Math.cos(ang), fy + 0.068 * Math.sin(ang), fz + 0.05],
+              pal.fanBlade,
+              3
+            );
+          }
+          if (state.fanFraction > 0.35) {
+            const side = fi === 0 ? -1 : 1;
+            for (const p of state.particles) {
+              if (p.side !== side) continue;
+              const pz = fz + 0.13 + p.phase * 0.32;
+              pushLine(
+                [fx + p.jitterX, fy + p.jitterY, pz],
+                [fx + p.jitterX, fy + p.jitterY, pz + 0.05],
+                '#38bdf8',
+                1.6,
+                false,
+                (1 - p.phase) * 0.85
+              );
+            }
+          }
+        }
+        pushLabel([0.35, -0.41, fz + 0.12], `Dual 55 N Fans (${(state.faults.fan ? 72 : 110 * state.fanFraction).toFixed(0)} N)`, '#38bdf8', '600 10px monospace');
+
+        const armZ = fz - 0.035;
+        const th1 = state.theta1;
+        const th2 = state.theta2;
+        const shoulder = [0, 0, armZ];
+        const elbow = [L1 * Math.cos(th1), L1 * Math.sin(th1), armZ - 0.025];
+        const wrist = [
+          elbow[0] + L2 * Math.cos(th1 + th2),
+          elbow[1] + L2 * Math.sin(th1 + th2),
+          armZ - 0.045
+        ];
+
+        pushCylinder([0, 0, armZ + 0.075], [0, 0, armZ - 0.02], 0.055, 14, pal.servoBody, pal.servoAccent);
+        const mid1 = vScale(vAdd(shoulder, elbow), 0.5);
+        pushBox(mid1[0], mid1[1], armZ - 0.015, L1, 0.055, 0.035, pal.scaraLink1, '#1e3a8a', th1);
+        pushCylinder([elbow[0], elbow[1], armZ + 0.025], [elbow[0], elbow[1], armZ - 0.045], 0.044, 14, pal.servoBody, pal.servoAccent);
+        const mid2 = vScale(vAdd(elbow, wrist), 0.5);
+        pushBox(mid2[0], mid2[1], armZ - 0.035, L2, 0.046, 0.030, pal.scaraLink2, '#164e63', th1 + th2);
+
+        const zExtM = (state.d3_mm / 1000) * 1.45;
+        const eeBaseZ = wrist[2];
+        const eeTipZ = Math.max(0.015, eeBaseZ - 0.08 - zExtM);
+
+        pushCylinder([wrist[0], wrist[1], eeBaseZ + 0.035], [wrist[0], wrist[1], eeBaseZ - 0.07], 0.028, 12, '#475569', '#0f172a');
+        pushCylinder([wrist[0], wrist[1], eeBaseZ - 0.06], [wrist[0], wrist[1], eeTipZ + 0.018], 0.015, 10, '#cbd5e1', '#334155');
+        const shroudCol = state.shroudPreloadN > 10 ? '#10b981' : '#f59e0b';
+        pushCylinder([wrist[0], wrist[1], eeTipZ + 0.028], [wrist[0], wrist[1], eeTipZ], 0.042, 16, shroudCol, '#0f172a');
+        const hammerOff = state.hammerImpulseN > 1 ? -0.012 : 0;
+        pushCylinder([wrist[0], wrist[1], eeTipZ + 0.018], [wrist[0], wrist[1], eeTipZ - 0.005 + hammerOff], 0.009, 8, '#f8fafc', '#0f172a');
+
+        const camOrigin = [wrist[0], wrist[1] + 0.055, eeBaseZ - 0.035];
+        pushBox(camOrigin[0], camOrigin[1], camOrigin[2], 0.035, 0.035, 0.032, '#0f172a', '#38bdf8');
+        if (state.showFov) {
+          const fovCol = state.faults.cam ? '#ef4444' : '#38bdf8';
+          const fovSpread = 0.07;
+          const pts = [
+            [wrist[0] - fovSpread, wrist[1] - fovSpread, 0.006],
+            [wrist[0] + fovSpread, wrist[1] - fovSpread, 0.006],
+            [wrist[0] + fovSpread, wrist[1] + fovSpread, 0.006],
+            [wrist[0] - fovSpread, wrist[1] + fovSpread, 0.006]
+          ];
+          for (const pt of pts) {
+            pushLine(camOrigin, pt, fovCol, 1.2, true, 0.75);
+          }
+        }
+
+        if (state.scene === 'side') {
+          const tele = computeCableAndPowerTelemetry();
+          pushLine([0, -0.28, fz + 0.35], [0, -0.28, fz + 0.14], '#10b981', 3.5);
+          pushLabel([0, -0.22, fz + 0.32], `FAN PRELOAD: ${tele.fanPreloadN.toFixed(0)} N (-Z)`, '#10b981', '700 11px monospace');
+          pushLine([0, 0.25, fz + 0.12], [0, 0.25, fz + 0.12 + Math.min(0.45, tele.windDragN / 130)], '#ef4444', 3.5);
+          pushLabel([0, 0.33, fz + 0.28], `WIND DRAG (${tele.effWind.toFixed(1)} m/s): ${tele.windDragN.toFixed(1)} N`, '#ef4444', '700 11px monospace');
+          pushLabel([wrist[0], wrist[1] + 0.12, eeTipZ], `Z-Slide d3=${state.d3_mm.toFixed(1)} mm | Shroud=${state.shroudPreloadN.toFixed(1)} N`, '#38bdf8', '700 11px monospace');
+        }
+      }
+
+      function buildBuildingScene(pushBox, pushCylinder, pushQuad, pushLine, pushCircleWall, pushLabel, pal) {
+        pushQuad([[-34, 0, -28], [34, 0, -28], [34, 0, 36], [-34, 0, 36]], pal.isLight ? '#cbd5e1' : '#1e293b', 0.9, pal.wallGrout, true);
+        let prev = null;
+        for (let i = 0; i <= 32; i++) {
+          const a = (i / 32) * Math.PI;
+          const pt = [Math.cos(a) * 28, 0.08, Math.sin(a) * 24];
+          if (prev) pushLine(prev, pt, '#f59e0b', 2.5, true, 0.9);
+          prev = pt;
+        }
+        pushLabel([0, 0.5, 25], '30 m CORDONED DROP ZONE (17.6 m Drift + 5 m Buffer)', '#f59e0b', '700 11px monospace');
+
+        pushBox(0, 30, -10, 30, 60, 20, pal.wallTile, pal.wallGrout);
+        for (let s = 1; s < 20; s++) {
+          const yy = s * 3;
+          pushLine([-15, yy, 0.08], [15, yy, 0.08], pal.wallGrout, 1.0, false, 0.75);
+        }
+        for (let x = -13.5; x <= 13.5; x += 3.0) {
+          pushLine([x, 0.5, 0.12], [x, 60, 0.12], '#3b82f6', 0.9, true, 0.35);
+        }
+
+        const robX = state.dropX - 15.0;
+        const robY = state.elevY;
+        pushBox(robX, 60.8, 0.3, 3.2, 1.4, 2.2, '#475569', '#0f172a');
+        pushLabel([robX, 63.2, 0.5], 'ROOFTOP CARRIER & 1.5 kN WINCHES (1.5x Proof-Tested)', pal.labelText, '600 10px monospace');
+
+        pushLine([robX - 0.5, 60.2, 0.85], [robX - 0.5, robY + 0.9, 0.85], pal.rope, 2);
+        pushLine([robX + 0.5, 60.2, 0.85], [robX + 0.5, robY + 0.9, 0.85], pal.rope, 2);
+        pushLine([robX, 60.2, 0.9], [robX, robY + 0.9, 0.9], pal.umbilical, 2);
+
+        pushBox(robX, robY, 0.9, 1.8, 1.8, 0.6, '#0891b2', '#38bdf8');
+        pushLabel([robX + 4.2, robY, 1.2], `CABLE ROBOT (Drop @ Y=${robY.toFixed(0)} m, X=${state.dropX.toFixed(1)} m)`, '#38bdf8', '700 11px monospace');
+
+        pushBox(-12, 0.8, 12, 3.5, 1.5, 2.2, '#1e293b', '#10b981');
+        pushLabel([-12, 2.8, 12], 'GROUND SCADA (L2/L3) + CP REVIEW', '#10b981', '600 10px monospace');
+
+        const droneFlying = state.faults.drone || state.stepIndex === 0;
+        const dx = droneFlying ? Math.sin(state.droneAngle) * 11.5 : -12;
+        const dy = droneFlying ? 32 + Math.cos(state.droneAngle * 2) * 8 : 2.1;
+        const dz = droneFlying ? 15.0 : 12.0;
+
+        pushBox(dx, dy, dz, 1.4, 0.6, 1.4, '#0f172a', '#f59e0b');
+        const rotors = [[-1.1, -1.1], [1.1, -1.1], [-1.1, 1.1], [1.1, 1.1]];
+        for (const [rx, rz] of rotors) {
+          pushLine([dx, dy, dz], [dx + rx, dy + 0.2, dz + rz], '#64748b', 2.5);
+          pushCircleWall(dx + rx, dy + 0.25, dz + rz, 0.75, 12, '#38bdf8', 1.8, false, 0.85);
+        }
+        pushLabel([dx, dy + 2.2, dz], droneFlying ? 'DJI M350 RTK (P1+H30T @ 15 m Standoff)' : 'M350 RTK LANDED (H15 Interlock Met)', droneFlying ? '#f59e0b' : '#10b981', '700 11px monospace');
+
+        if (droneFlying && state.showFov) {
+          const hitW = 5.2, hitH = 3.5;
+          const wallPts = [
+            [dx - hitW, dy - hitH, 0.15],
+            [dx + hitW, dy - hitH, 0.15],
+            [dx + hitW, dy + hitH, 0.15],
+            [dx - hitW, dy + hitH, 0.15]
+          ];
+          for (const p of wallPts) {
+            pushLine([dx, dy - 0.2, dz], p, '#f59e0b', 1.3, true, 0.75);
+          }
+          pushQuad(wallPts, '#f59e0b', 0.18, '#f59e0b', true);
+        }
+      }
+
+      // =========================================================================
+      // 7. DUAL OSCILLOSCOPE RENDERER
+      // =========================================================================
+      function renderScopes() {
+        const canvas = document.getElementById('canvasScope');
+        const ctx = canvas.getContext('2d');
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.max(300, Math.floor(rect.width));
+        const h = Math.max(180, Math.floor(rect.height));
+        if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
+          canvas.width = w * dpr;
+          canvas.height = h * dpr;
+        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const isLight = document.documentElement.classList.contains('light');
+        const bg = isLight ? '#f8fafc' : '#0b1120';
+        const grid = isLight ? '#e2e8f0' : '#1e293b';
+        const txt = isLight ? '#334155' : '#94a3b8';
+
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, w, h);
+
+        const splitX = Math.floor(w * 0.64);
+        const midY = Math.floor(h * 0.5);
+
+        ctx.strokeStyle = grid;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, midY); ctx.lineTo(splitX, midY);
+        ctx.moveTo(splitX, 0); ctx.lineTo(splitX, h);
+        ctx.stroke();
+
+        const preloadMinY = midY - (15 / 35) * (midY - 18);
+        const preloadMaxY = midY - (20 / 35) * (midY - 18);
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.12)';
+        ctx.fillRect(8, preloadMaxY, splitX - 16, preloadMinY - preloadMaxY);
+
+        ctx.fillStyle = txt;
+        ctx.font = '600 10px monospace';
+        ctx.fillText('1 kHz Load Cell (%IW68) | Shroud 15-20 N band', 8, 12);
+
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let i = 0; i < state.forceTrace.length; i++) {
+          const x = 8 + (i / (state.forceTrace.length - 1)) * (splitX - 16);
+          const v = Math.max(0, Math.min(35, state.forceTrace[i]));
+          const y = midY - 6 - (v / 35) * (midY - 22);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        ctx.fillStyle = txt;
+        ctx.fillText('48 kHz Condenser Mic Ringdown (+/- 1.0 V norm)', 8, midY + 13);
+
+        const audioMidY = midY + (h - midY) * 0.55;
+        ctx.strokeStyle = state.lastCentroidHz > 0 && state.lastCentroidHz < 1300 ? '#ef4444' : '#10b981';
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        for (let i = 0; i < state.audioTrace.length; i++) {
+          const x = 8 + (i / (state.audioTrace.length - 1)) * (splitX - 16);
+          const y = audioMidY - state.audioTrace[i] * ((h - midY) * 0.34);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        ctx.fillStyle = txt;
+        ctx.fillText('FFT Spectrum (0 - 4.8 kHz)', splitX + 10, 12);
+        ctx.fillText('0.95 kHz Hollow | 2.8 kHz Solid', splitX + 10, h - 6);
+
+        const fftW = w - splitX - 20;
+        const fftH = h - 42;
+        const barW = fftW / state.fftBins.length;
+        for (let b = 0; b < state.fftBins.length; b++) {
+          const val = state.fftBins[b];
+          const bh = val * fftH;
+          const bx = splitX + 10 + b * barW;
+          const by = h - 22 - bh;
+          ctx.fillStyle = b < 7 ? '#ef4444' : b < 11 ? '#f59e0b' : '#10b981';
+          ctx.fillRect(bx + 1, by, Math.max(2, barW - 2), bh);
+        }
+      }
+
+      // =========================================================================
+      // 8. DOM SYNCHRONIZATION & INTERACTIVE BINDINGS
+      // =========================================================================
+      function buildHandshakeDom() {
+        const container = document.getElementById('hs-steps');
+        container.innerHTML = '';
+        STEP_DEFS.forEach((s, idx) => {
+          const div = document.createElement('div');
+          div.id = `hs-pill-${idx}`;
+          div.className = 'px-1.5 py-1 rounded border border-[var(--card-border)] bg-[var(--content)] text-center truncate transition';
+          div.textContent = s.label;
+          container.appendChild(div);
+        });
+      }
+
+      function build4x4GridDom() {
+        const grid = document.getElementById('grid-4x4');
+        grid.innerHTML = '';
+        tiles.forEach((t) => {
+          const btn = document.createElement('button');
+          btn.id = `tile-btn-${t.idx}`;
+          btn.className = 'p-1.5 rounded-lg border text-xs font-mono text-left transition hover:opacity-90';
+          btn.addEventListener('click', () => startSingleTileTap(t.idx));
+          grid.appendChild(btn);
+        });
+      }
+
+      function syncTileTruthDropdown() {
+        document.getElementById('sel-tile-truth').value = tiles[state.selectedTileIdx].truth;
+      }
+
+      function updatePlayPauseButton() {
+        document.getElementById('btn-pause').textContent = state.paused ? 'Resume' : 'Pause';
+      }
+
+      function updateDashboardUI() {
+        const curStep = STEP_DEFS[state.stepIndex];
+        const targetTile = tiles[state.selectedTileIdx];
+        const tele = computeCableAndPowerTelemetry();
+        const r = Math.hypot(state.eeX, state.eeY);
+        const detJ = L1 * L2 * Math.sin(state.theta2);
+        const clearanceMm = (r - R_MIN) * 1000;
+
+        const badge = document.getElementById('hdr-state-badge');
+        badge.textContent = curStep.id;
+        badge.className = `px-2 py-0.5 rounded-full text-xs font-mono font-semibold border border-[var(--border)] ${
+          state.faultMessage
+            ? 'bg-[var(--error)] text-white'
+            : state.stepIndex === 6
+              ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
+              : 'bg-[var(--secondary)] text-[var(--secondary-foreground)]'
+        }`;
+
+        const interlock = document.getElementById('hdr-interlock-badge');
+        interlock.textContent = state.faults.drone ? 'H15 BLOCKED: DRONE FLYING' : 'H15: DRONE STOWED';
+        interlock.className = `px-2 py-0.5 rounded-full text-xs font-mono border border-[var(--border)] ${
+          state.faults.drone ? 'text-[var(--error)] font-bold' : 'text-[var(--success)]'
+        }`;
+
+        const fBanner = document.getElementById('hud-fault-banner');
+        if (state.faultMessage) {
+          fBanner.textContent = state.faultMessage;
+          fBanner.classList.remove('hidden');
+        } else {
+          fBanner.classList.add('hidden');
+        }
+
+        const deg = 180 / Math.PI;
+        document.getElementById('hud-target').textContent = `Target: ${targetTile.code} (${(targetTile.x * 1000).toFixed(0)}, ${(targetTile.y * 1000).toFixed(0)} mm) | r = ${(r * 1000).toFixed(0)} mm`;
+        document.getElementById('hud-joints').textContent = `θ1 = ${(state.theta1 * deg).toFixed(1)}° · θ2 = ${(state.theta2 * deg).toFixed(1)}° · d3 = ${state.d3_mm.toFixed(1)} mm · |det(J)| = ${Math.abs(detJ).toFixed(3)} m²`;
+        document.getElementById('hud-forces').textContent = `Fans: ${tele.fanPreloadN.toFixed(0)} N · Drag: ${tele.windDragN.toFixed(1)} N · Net Preload: ${tele.netPreloadN.toFixed(1)} N`;
+        document.getElementById('hud-wind').textContent = `${tele.effWind.toFixed(1)} m/s`;
+        document.getElementById('hud-wind').className = tele.effWind > WIND_LIMIT_ROBOT ? 'font-semibold text-[var(--error)]' : 'font-semibold';
+
+        document.getElementById('hs-interface-detail').textContent = `${curStep.iface} · ${curStep.proto} (${curStep.rate}) — ${curStep.rule}`;
+        STEP_DEFS.forEach((_, idx) => {
+          const pill = document.getElementById(`hs-pill-${idx}`);
+          if (idx === state.stepIndex) {
+            pill.className = 'px-1.5 py-1 rounded border border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] font-bold text-center truncate transition';
+          } else if (idx < state.stepIndex) {
+            pill.className = 'px-1.5 py-1 rounded border border-[var(--card-border)] bg-[var(--secondary)] text-[var(--success)] text-center truncate transition';
+          } else {
+            pill.className = 'px-1.5 py-1 rounded border border-[var(--card-border)] bg-[var(--content)] text-[var(--muted-foreground)] text-center truncate transition';
+          }
+        });
+
+        let doneCount = 0;
+        tiles.forEach((t) => {
+          if (t.result) doneCount++;
+          const btn = document.getElementById(`tile-btn-${t.idx}`);
+          const isSel = t.idx === state.selectedTileIdx;
+          let tag = 'WAIT';
+          let colStyle = 'border-[var(--card-border)] bg-[var(--content)] text-[var(--foreground)]';
+          if (t.result === 'SOLID') {
+            tag = t.audited ? 'AUDIT' : 'SOLID';
+            colStyle = 'border-[var(--success)] bg-[var(--success)]/15 text-[var(--success)]';
+          } else if (t.result === 'HOLLOW') {
+            tag = 'HOLLOW';
+            colStyle = 'border-[var(--error)] bg-[var(--error)]/15 text-[var(--error)]';
+          } else if (t.result === 'UNCERTAIN') {
+            tag = 'REVIEW';
+            colStyle = 'border-[var(--warning)] bg-[var(--warning)]/15 text-[var(--warning)]';
+          } else if (t.result === 'CRACK_SKIP') {
+            tag = 'SKIP-H9';
+            colStyle = 'border-[var(--warning)] bg-[var(--warning)]/15 text-[var(--warning)]';
+          } else if (t.truth === 'CRACKED') {
+            tag = 'CRACK?';
+          }
+          btn.className = `p-1.5 rounded-lg border text-xs font-mono text-left transition ${colStyle} ${isSel ? 'ring-2 ring-[var(--primary)]' : ''}`;
+          btn.innerHTML = `<div class="flex justify-between"><span>${t.code}</span><span class="font-bold">${tag}</span></div><div class="text-[11px] opacity-75">${(t.x * 1000).toFixed(0)},${(t.y * 1000).toFixed(0)}</div>`;
+        });
+        document.getElementById('patch-progress').textContent = `${doneCount} / 16 tapped`;
+
+        document.getElementById('tel-joints').textContent = `${(state.theta1 * deg).toFixed(1)}° / ${(state.theta2 * deg).toFixed(1)}°`;
+        document.getElementById('tel-zslide').textContent = `${state.d3_mm.toFixed(1)} mm · ${state.shroudPreloadN.toFixed(1)} N`;
+        document.getElementById('tel-clearance').textContent = `${clearanceMm.toFixed(1)} mm (r - 122)`;
+        document.getElementById('tel-clearance').className = `font-semibold mt-0.5 ${clearanceMm < 15 ? 'text-[var(--error)]' : ''}`;
+        document.getElementById('tel-jacobian').textContent = `${Math.abs(detJ).toFixed(3)} m² (${Math.abs(detJ) >= 0.042 ? 'OK ≥0.042' : 'NEAR SING'})`;
+        document.getElementById('tel-tensions').textContent = `${tele.tL.toFixed(1)} N / ${tele.tR.toFixed(1)} N`;
+        document.getElementById('tel-sf').textContent = `${tele.sf.toFixed(2)}× (vs 1,000 N)`;
+        document.getElementById('tel-umbilical').textContent = `${tele.currentA.toFixed(1)} A · ΔV ${tele.voltDropV.toFixed(1)} V`;
+        document.getElementById('tel-cam-audit').textContent = `${state.camOffsetMm.toFixed(1)} mm (${state.camOffsetMm <= CAM_OFFSET_LIMIT_MM ? '≤15 mm PASS' : '>15 mm RETRY'})`;
+        document.getElementById('tel-cam-audit').className = `font-semibold mt-0.5 ${state.camOffsetMm > CAM_OFFSET_LIMIT_MM ? 'text-[var(--error)]' : 'text-[var(--success)]'}`;
+
+        if (!state.paused) {
+          const t1d = Math.round(state.theta1 * deg);
+          const t2d = Math.round(state.theta2 * deg);
+          const d3v = Math.round(state.d3_mm);
+          document.getElementById('rng-th1').value = String(Math.max(-135, Math.min(135, t1d)));
+          document.getElementById('rng-th2').value = String(Math.max(25, Math.min(160, Math.abs(t2d))));
+          document.getElementById('rng-d3').value = String(Math.max(0, Math.min(50, d3v)));
+          document.getElementById('lbl-th1').textContent = `${t1d}°`;
+          document.getElementById('lbl-th2').textContent = `${t2d}°`;
+          document.getElementById('lbl-d3').textContent = `${d3v} mm`;
+        }
+
+        document.getElementById('scope-force-readout').textContent = `Shroud: ${state.shroudPreloadN.toFixed(1)} N | Peak: ${state.lastPeakN.toFixed(1)} N`;
+        document.getElementById('scope-acoustic-readout').textContent = `Centroid: ${state.lastCentroidHz > 0 ? state.lastCentroidHz + ' Hz' : '--'} | τ: ${state.lastDecayMs > 0 ? state.lastDecayMs + ' ms' : '--'}`;
+
+        const plcRows = [
+          { ch: '%IX0.0/%IX0.1', desc: 'E-Stop & OSSD Safe Loop', val: state.faults.drone ? 'INTERLOCK' : 'OK (24 V)', bad: state.faults.drone },
+          { ch: '%IX0.2/%IX0.3', desc: 'Wall Contact Limit Sw', val: state.bumperContact ? 'CLOSED (WALL)' : 'OPEN', bad: false },
+          { ch: '%IW64', desc: 'Left Rope Load Cell', val: `${tele.mAL.toFixed(2)} mA (${state.faults.wire ? 'NE43 FAULT' : tele.tL.toFixed(0) + ' N'})`, bad: state.faults.wire },
+          { ch: '%IW66', desc: 'Right Rope Load Cell', val: `${tele.mAR.toFixed(2)} mA (${tele.tR.toFixed(0) + ' N'})`, bad: false },
+          { ch: '%IW68', desc: 'Hammer/Shroud Cell (1kHz)', val: `${(4 + (state.shroudPreloadN + state.hammerImpulseN) * 0.4).toFixed(2)} mA`, bad: false },
+          { ch: '%ID100/%ID104', desc: '10 kHz Winch Encoders', val: `Y=${state.elevY.toFixed(1)} m (${((60 - state.elevY) * 1200).toFixed(0)} cts)`, bad: false },
+          { ch: '%QX0.0', desc: 'Winch/Servo Contactor', val: state.faults.drone || state.faults.wire ? 'DE-ENERGISED' : 'ENERGISED', bad: state.faults.drone || state.faults.wire },
+          { ch: '%QX0.2', desc: 'Spring Brake Release', val: state.winchBrakeLocked ? 'BRAKE LOCKED' : 'RELEASED', bad: false }
+        ];
+        const plcEl = document.getElementById('plc-table');
+        plcEl.innerHTML = plcRows.map(r => `
+          <div class="px-2 py-1 rounded border border-[var(--card-border)] bg-[var(--content)] flex justify-between gap-2">
+            <span><strong class="text-[var(--primary)]">${r.ch}</strong> ${r.desc}</span>
+            <span class="${r.bad ? 'text-[var(--error)] font-bold' : 'text-[var(--success)]'}">${r.val}</span>
+          </div>
+        `).join('');
+      }
+
+      // =========================================================================
+      // 9. EVENT LISTENERS & LOOP INITIALIZATION
+      // =========================================================================
+      function bindEvents() {
+        document.getElementById('btn-theme-toggle').addEventListener('click', () => {
+          document.documentElement.classList.toggle('light');
+          window.dispatchEvent(new Event('themechange'));
+        });
+
+        document.querySelectorAll('.mode-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            state.scene = btn.dataset.scene;
+            document.querySelectorAll('.mode-btn').forEach((b) => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
+            setCameraPreset('iso');
+          });
+        });
+
+        document.querySelectorAll('.tab-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const target = btn.dataset.tab;
+            document.querySelectorAll('.tab-btn').forEach((b) => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+            ['kinematics', 'plc', 'system'].forEach((id) => {
+              document.getElementById(`tab-${id}`).classList.toggle('hidden', id !== target);
+            });
+          });
+        });
+
+        document.getElementById('btn-autocycle').addEventListener('click', () => {
+          state.paused = false;
+          state.autoCycle = true;
+          updatePlayPauseButton();
+          const firstPending = tiles.findIndex((t) => !t.result);
+          state.selectedTileIdx = firstPending >= 0 ? firstPending : 0;
+          syncTileTruthDropdown();
+          advanceStep(state.bumperContact ? 4 : 1);
+        });
+
+        document.getElementById('btn-single-tap').addEventListener('click', () => {
+          state.autoCycle = false;
+          startSingleTileTap(state.selectedTileIdx);
+        });
+
+        document.getElementById('btn-pause').addEventListener('click', () => {
+          state.paused = !state.paused;
+          updatePlayPauseButton();
+        });
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+          state.autoCycle = false;
+          state.paused = false;
+          Object.keys(state.faults).forEach((k) => (state.faults[k] = false));
+          document.querySelectorAll('.fault-btn').forEach((b) => {
+            b.setAttribute('aria-pressed', 'false');
+            b.querySelector('.font-mono').textContent = 'OFF';
+          });
+          state.faultMessage = '';
+          updatePlayPauseButton();
+          tiles.forEach((t, i) => {
+            t.truth = DEFAULT_TRUTHS[i];
+            t.result = null;
+            t.peakN = 0;
+            t.centroidHz = 0;
+            t.audited = false;
+          });
+          state.selectedTileIdx = 0;
+          state.stepIndex = 0;
+          state.stepTimer = 0;
+          state.d3_mm = 0;
+          state.shroudPreloadN = 0;
+          state.bumperContact = false;
+          state.winchBrakeLocked = false;
+          state.forceTrace.fill(0);
+          state.audioTrace.fill(0);
+          state.fftBins.fill(0.05);
+          syncTileTruthDropdown();
+        });
+
+        document.getElementById('rng-speed').addEventListener('input', (e) => {
+          state.speed = parseFloat(e.target.value);
+          document.getElementById('lbl-speed').textContent = `${state.speed.toFixed(1)}×`;
+        });
+
+        document.getElementById('sel-tile-truth').addEventListener('change', (e) => {
+          tiles[state.selectedTileIdx].truth = e.target.value;
+          tiles[state.selectedTileIdx].result = null;
+        });
+
+        document.getElementById('rng-wind').addEventListener('input', (e) => {
+          state.windMs = parseFloat(e.target.value);
+          document.getElementById('lbl-wind').textContent = `${state.windMs.toFixed(1)} m/s`;
+        });
+        document.getElementById('rng-elev').addEventListener('input', (e) => {
+          state.elevY = parseFloat(e.target.value);
+          const fl = Math.max(1, Math.min(20, Math.round(state.elevY / 3)));
+          document.getElementById('lbl-elev').textContent = `${state.elevY.toFixed(0)} m (L${fl})`;
+        });
+        document.getElementById('rng-drop').addEventListener('input', (e) => {
+          state.dropX = parseFloat(e.target.value);
+          const dropIdx = Math.max(1, Math.min(19, Math.round(state.dropX / 1.5)));
+          document.getElementById('lbl-drop').textContent = `${state.dropX.toFixed(1)} m (#${dropIdx})`;
+        });
+
+        const applyManualPose = () => {
+          state.paused = true;
+          state.autoCycle = false;
+          updatePlayPauseButton();
+          const th1Deg = parseFloat(document.getElementById('rng-th1').value);
+          const th2Deg = parseFloat(document.getElementById('rng-th2').value);
+          state.d3_mm = parseFloat(document.getElementById('rng-d3').value);
+          document.getElementById('lbl-th1').textContent = `${th1Deg}°`;
+          document.getElementById('lbl-th2').textContent = `${th2Deg}°`;
+          document.getElementById('lbl-d3').textContent = `${state.d3_mm.toFixed(0)} mm`;
+          state.theta1 = (th1Deg * Math.PI) / 180;
+          state.theta2 = (th2Deg * Math.PI) / 180;
+          const fk = forwardScara(state.theta1, state.theta2);
+          state.eeX = fk.x;
+          state.eeY = fk.y;
+          state.shroudPreloadN = state.d3_mm > 28 ? ((state.d3_mm - 28) / 22) * 18 : 0;
+        };
+        ['rng-th1', 'rng-th2', 'rng-d3'].forEach((id) => {
+          document.getElementById(id).addEventListener('input', applyManualPose);
+        });
+
+        document.querySelectorAll('.fault-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const key = btn.dataset.fault;
+            state.faults[key] = !state.faults[key];
+            btn.setAttribute('aria-pressed', state.faults[key] ? 'true' : 'false');
+            btn.querySelector('.font-mono').textContent = state.faults[key] ? 'ACTIVE' : 'OFF';
+          });
+        });
+
+        document.getElementById('chk-workspace').addEventListener('change', (e) => (state.showWorkspace = e.target.checked));
+        document.getElementById('chk-fov').addEventListener('change', (e) => (state.showFov = e.target.checked));
+        document.getElementById('chk-autorotate').addEventListener('change', (e) => (state.autoRotate = e.target.checked));
+        document.getElementById('btn-cam-iso').addEventListener('click', () => setCameraPreset('iso'));
+        document.getElementById('btn-cam-front').addEventListener('click', () => setCameraPreset('front'));
+        document.getElementById('btn-cam-side').addEventListener('click', () => setCameraPreset('side'));
+        document.getElementById('btn-cam-top').addEventListener('click', () => setCameraPreset('top'));
+        document.getElementById('btn-zoom-in').addEventListener('click', () => (cam.dist *= 0.85));
+        document.getElementById('btn-zoom-out').addEventListener('click', () => (cam.dist *= 1.18));
+
+        const c3d = document.getElementById('canvas3d');
+        let dragging = false, lx = 0, ly = 0;
+        c3d.addEventListener('pointerdown', (e) => {
+          dragging = true;
+          lx = e.clientX;
+          ly = e.clientY;
+          c3d.setPointerCapture(e.pointerId);
+        });
+        c3d.addEventListener('pointermove', (e) => {
+          if (!dragging) return;
+          const dx = e.clientX - lx;
+          const dy = e.clientY - ly;
+          lx = e.clientX;
+          ly = e.clientY;
+          cam.yaw -= dx * 0.008;
+          cam.pitch = Math.max(-1.25, Math.min(1.35, cam.pitch + dy * 0.008));
+        });
+        c3d.addEventListener('pointerup', () => (dragging = false));
+        c3d.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          const minD = state.scene === 'building' ? 30 : 0.9;
+          const maxD = state.scene === 'building' ? 160 : 5.5;
+          cam.dist = Math.max(minD, Math.min(maxD, cam.dist * (e.deltaY > 0 ? 1.09 : 0.92)));
+        }, { passive: false });
+      }
+
+      buildHandshakeDom();
+      build4x4GridDom();
+      const initialIK = solveScaraIK(tiles[0].x, tiles[0].y, 1);
+      state.theta1 = initialIK.th1;
+      state.theta2 = initialIK.th2;
+      state.eeX = tiles[0].x;
+      state.eeY = tiles[0].y;
+      bindEvents();
+      setCameraPreset('iso');
+
+      const render3D = createSceneRenderer(document.getElementById('canvas3d'));
+      window.addEventListener('themechange', () => {
+        render3D();
+        renderScopes();
+      });
+
+      let lastTs = performance.now();
+      function frameLoop(ts) {
+        const dt = Math.min(0.05, (ts - lastTs) / 1000);
+        lastTs = ts;
+        if (state.autoRotate) cam.yaw += dt * 0.35;
+        stepSimulation(dt);
+        render3D();
+        renderScopes();
+        updateDashboardUI();
+        requestAnimationFrame(frameLoop);
+      }
+      requestAnimationFrame(frameLoop);
+    })();
+  </script>
+</body>
+</html>

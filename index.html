@@ -74,24 +74,25 @@
     .hs-pill.on { color: var(--primary-foreground); background: var(--primary); border-color: var(--primary); }
     .hs-pill.hold { background: var(--error); border-color: var(--error); color: #fff; }
     /* Embedded in Presentation.html: only the 3D view, plus an optional strip */
-    html.embed, html.embed body { height: 100%; margin: 0 !important; padding: 0 !important; background: #0a1220; overflow: hidden; font-family: system-ui, "Segoe UI", sans-serif; font-size: 13px; color: #e2e8f0; }
+    html.embed, html.embed body { height: 100%; margin: 0 !important; padding: 0 !important; background: var(--background); overflow: hidden; font-family: system-ui, "Segoe UI", sans-serif; font-size: 13px; color: var(--foreground); }
     html.embed #app-header, html.embed #side-panel, html.embed #vp-toolbar, html.embed #hud-br { display: none !important; }
     html.embed #app-root, html.embed #main-grid, html.embed #main-col { display: block !important; max-width: none !important; margin: 0 !important; }
     html.embed #app-root > *, html.embed #main-col > * { margin: 0 !important; }
     html.embed #vp-card { border: 0 !important; border-radius: 0 !important; }
     html.embed #vp-box { height: 100vh !important; }
-    html.embed #card-hs, html.embed #card-scope { display: none; border: 0 !important; border-radius: 0 !important; padding: 6px 10px !important; background: #0d1626; }
+    html.embed #card-hs, html.embed #card-scope { display: none; border: 0 !important; border-radius: 0 !important; padding: 6px 10px !important; background: var(--card); }
     html.embed.strip #card-hs, html.embed.strip #card-scope { display: block; }
     html.embed.strip #vp-box { height: calc(100vh - 252px) !important; }
     html.embed.strip #scope-box { height: 132px; }
     html.embed.strip-hs #card-hs { display: block; }
     html.embed.strip-hs #vp-box { height: calc(100vh - 86px) !important; }
-    html.embed #hs-interface-detail { font-family: ui-monospace, Consolas, monospace; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    html.embed #hs-interface-detail { font-family: ui-monospace, Consolas, monospace; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     html.embed #hs-steps { font-size: 12px; }
     html.embed #card-hs > div:first-child, html.embed #card-scope > div:first-child { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; margin-bottom: 4px; }
     html.embed #hud-box { font: 12px ui-monospace, Consolas, monospace; background: rgba(8,14,24,.8); border: 1px solid rgba(148,163,184,.35); border-radius: 6px; padding: 6px 10px; line-height: 1.5; }
     html.embed #hud-fault-banner { background: rgba(220,38,38,.93); color: #fff; border-radius: 6px; padding: 8px 12px; font-weight: 600; font-size: 13px; }
     html.embed #hud-fault-banner.hidden { display: none; }
+    html.light.embed #hud-box { background: rgba(255,255,255,.88); color: #0f172a; border-color: rgba(71,85,105,.4); }
     html.nohud #hud-box { display: none !important; }
   </style>
 </head>

@@ -4,21 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Robotic Façade Inspection · ENG4101C Group 5</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&display=swap">
 <style>
 /* A 1280x720 stage scaled to the window, built like the ENG4100C deck.
    Each presenter has a colour; red, amber and green inside slides keep their safety meaning.
    The 3D twin (index.html?embed=1) is one iframe laid over the stage and driven by postMessage. */
 :root {
-  --bg: #070d16; --stage: #0a111c; --panel: #0f1928; --panel-2: #0c1522; --line: #213049; --line-2: #2c3e5c;
-  --fg: #e3ebf6; --muted: #8b9bb5; --faint: #5d6e8a;
-  --cyan: #48c6ec; --amber: #f2b54b; --red: #ff6464; --green: #58d39c; --violet: #b59cff;
-  --p1: #48c6ec; --p2: #f2b54b; --p3: #58d39c; --p4: #b59cff;
-  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --cond: "IBM Plex Sans Condensed", "IBM Plex Sans", system-ui, sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-  color-scheme: dark;
+  --ink: #14213a; --hot: #d9480f;
+  --bg: #1a2233; --stage: #f4f1ea; --panel: #fbf9f4; --panel-2: #efebe1; --line: #cfc9bb; --line-2: #14213a;
+  --fg: #14213a; --muted: #4c5a73; --faint: #8a93a3;
+  --cyan: #1565b0; --amber: #a86400; --red: #c62828; --green: #1a7f55; --violet: #6a45c4;
+  --p1: #1565b0; --p2: #c2410c; --p3: #1a7f55; --p4: #6a45c4;
+  --sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --cond: Bahnschrift, "Segoe UI Semibold", "Segoe UI", system-ui, sans-serif;
+  --mono: Consolas, "Cascadia Mono", ui-monospace, monospace;
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font-family: var(--sans); overflow: hidden; }
@@ -161,6 +160,41 @@ table.t td { padding: 7px 10px; border-bottom: 1px solid var(--line); color: var
 .names { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; align-items: center; font-size: 14px; } .names select { background: var(--panel-2); border: 1px solid var(--line-2); border-radius: 4px; padding: 3px 6px; }
 #dashModal .in { width: 96vw; height: 92vh; max-width: none; padding: 10px; } #dashModal iframe { flex: 1; border: 0; border-radius: 6px; background: #0b1120; }
 
+
+/* ===== Theme: site drawing. Light paper, ink lines, a title block, one hi-vis orange. System fonts only. ===== */
+#stage { background-color: var(--stage); background-image: linear-gradient(rgba(20,33,58,.065) 1px, transparent 1px), linear-gradient(90deg, rgba(20,33,58,.065) 1px, transparent 1px); background-size: 32px 32px; border-radius: 0; box-shadow: 0 0 0 1px #0b1220, 0 10px 40px rgba(0,0,0,.45); }
+.slide::before { left: 10px; top: 10px; right: 10px; bottom: 10px; width: auto; background: none; border: 1.5px solid var(--ink); border-left: 7px solid var(--pc); pointer-events: none; }
+.slide::after { content: attr(data-sheet); position: absolute; right: 10px; bottom: 10px; border: 1.5px solid var(--ink); padding: 4px 12px; font: 11px var(--mono); letter-spacing: .08em; background: var(--stage); color: var(--ink); text-transform: uppercase; }
+.slide .who { top: 26px; font-weight: 600; } .slide .num { top: 26px; right: 36px; }
+.slide h1, .slide h2 { color: var(--ink); letter-spacing: 0; }
+.box, .node, .pain, .rung, .cu, .rail { border-radius: 0; border-color: var(--ink); border-width: 1.5px; }
+.cu { border-left-width: 6px; } .takes .box { border-top-width: 5px; }
+.rail { background: var(--panel); } .node.gate { background: #f1ecfb; border-color: var(--violet); }
+.tag { color: var(--hot); font-weight: 600; letter-spacing: .08em; }
+.btn { border-radius: 0; border: 1.5px solid var(--ink); background: var(--panel); color: var(--ink); } .btn:hover { background: #ece7db; border-color: var(--ink); }
+.btn.pri { color: #fff; border-color: var(--pc); } .btn.pri:hover { background: var(--pc); filter: brightness(.93); } .btn.act, .btn.act:hover { background: var(--red); border-color: var(--red); color: #fff; }
+.ask { border-radius: 0; border: 1.5px dashed var(--pc); background: var(--panel); }
+table.t th { border-bottom: 1.5px solid var(--ink); color: var(--muted); } table.t td { border-bottom-color: #cfc9bb; }
+.cu1 { background: #dff3ea; } .cu2 { background: #dcebf8; } .cu3 { background: #f8ecd4; }
+.pain .v { color: #a9a395; }
+.bar .tr { background: #e4dfd3; border-radius: 0; } .bar .tr i { border-radius: 0; }
+#pad { border-radius: 0; border: 1.5px solid var(--ink); background: var(--panel); } #pad button { background: #fff; border: 1.5px solid var(--ink); }
+#g1c { border-radius: 0; border: 1.5px solid var(--ink); background: #fff; }
+.hz { background: #fffdf7; color: var(--ink); border-width: 1.5px; border-radius: 0; }
+#rm .cell { border-color: rgba(20,33,58,.22); }
+.lamp { background: #b9b3a4; }
+#twinWrap { border-radius: 0; border: 1.5px solid var(--ink); background: #dde6f0; } #twinWrap .cap { color: #64748b; }
+#bar { background: var(--ink); border-top: 0; color: #aeb8cc; } #bar .chipw { color: #fff; } #clock b { color: #fff; }
+#bar button { border-color: #46557a; color: #cdd5e4; border-radius: 0; } #bar button:hover { color: #fff; }
+#track { background: #27344f; border-radius: 0; } #track .pt { opacity: .8; } #track .plan { background: #fff; }
+#delta.ahead { color: #6fe0ae; } #delta.behind { color: #ff8f8f; }
+#notes { background: #fffdf7; border-top: 3px solid var(--cur, var(--ink)); color: var(--ink); box-shadow: 0 -10px 30px rgba(0,0,0,.25); } #notes h4 { color: var(--muted); }
+.cue { color: var(--hot); }
+.modal { background: rgba(11,18,32,.7); } .modal .in { border-radius: 0; border: 1.5px solid var(--ink); } .names select { background: #fff; border: 1.5px solid var(--ink); border-radius: 0; }
+#dashModal iframe { border-radius: 0; }
+body.pv { background: var(--stage); } #pvNext { border-top-color: var(--ink); } #pvNext button { background: #fff; border: 1.5px solid var(--ink); border-radius: 0; color: var(--ink); } #pvHead { color: var(--muted); }
+input[type=range] { accent-color: var(--pc); }
+
 /* presenter view (Presentation.html#presenter in a second window) */
 body.pv #viewport, body.pv #bar, body.pv #notes { display: none !important; }
 #pv { display: none; position: fixed; inset: 0; padding: 22px 28px; flex-direction: column; gap: 14px; }
@@ -177,7 +211,7 @@ body.pv #pv { display: flex; }
 <div id="viewport"><div id="stage">
 
 <!-- ================= PART 1: THE PROBLEM ================= -->
-<section class="slide" data-part="1" data-sec="25" data-title="Title" data-twin="700,0,580,720" id="s-title">
+<section class="slide" data-part="1" data-sec="25" data-title="Title" data-twin="700,26,554,650" id="s-title">
   <div class="title-wrap">
     <span class="k">ENG4101C ROBOTICS AUTOMATION INTEGRATION · GROUP 5</span>
     <h1>Robotic façade inspection for high-rise homes</h1>
@@ -532,7 +566,7 @@ body.pv #pv { display: flex; }
 (() => {
 'use strict';
 const $ = (id) => document.getElementById(id);
-const PCOL = ['#2c3e5c', '#48c6ec', '#f2b54b', '#58d39c', '#b59cff'];
+const PCOL = ['#8a93a3', '#1565b0', '#c2410c', '#1a7f55', '#6a45c4'];
 const DEFAULT_NAMES = ['', 'Brandon Ng', 'Tan Kim Song', 'Wong Pann', 'Tay Chay Yong'];
 const PART_TOPIC = ['', 'The problem and our targets', 'The integrated system', 'Engineering reasoning', 'Cost, risk and close'];
 const ROSTER = DEFAULT_NAMES.slice(1), TBC = 'TBC';
@@ -552,7 +586,7 @@ const money = (v) => 'S$' + Math.round(v).toLocaleString('en-SG');
 function fillNames() {
   const row = (el) => { if (!el) return; el.replaceChildren(); for (let p = 1; p <= 4; p++) { const d = document.createElement('div'); d.style.setProperty('--c', PCOL[p]); const b = document.createElement('b'); b.textContent = names[p]; const s = document.createElement('span'); s.textContent = 'Part ' + p + ' · ' + PART_TOPIC[p]; d.append(b, s); el.appendChild(d); } };
   row($('teamRow')); row($('teamRow2'));
-  slides.forEach((s, i) => { const p = +s.dataset.part; let w = s.querySelector('.who'); if (!w) { w = document.createElement('span'); w.className = 'who'; s.prepend(w); const n = document.createElement('span'); n.className = 'num'; n.textContent = (i + 1) + ' / ' + slides.length; s.prepend(n); } w.textContent = p ? 'Part ' + p + ' · ' + names[p] : ''; });
+  slides.forEach((s, i) => { const p = +s.dataset.part; let w = s.querySelector('.who'); if (!w) { w = document.createElement('span'); w.className = 'who'; s.prepend(w); const n = document.createElement('span'); n.className = 'num'; n.textContent = (i + 1) + ' / ' + slides.length; s.prepend(n); } w.textContent = p ? 'Part ' + p + ' · ' + names[p] : ''; s.dataset.sheet = 'ENG4101C · Group 5 · Sheet ' + String(i + 1).padStart(2, '0') + ' of ' + slides.length + ' · ' + s.dataset.title; });
   const ed = $('nameEdit'); ed.replaceChildren();
   for (let p = 1; p <= 4; p++) {
     const l = document.createElement('label'); l.textContent = 'Part ' + p + ' · ' + PART_TOPIC[p]; l.style.color = PCOL[p];
@@ -573,7 +607,7 @@ window.addEventListener('resize', fit);
 /* ---------- the twin ---------- */
 const twinWrap = $('twinWrap'), twinFrame = $('twin');
 let tw = {}, twinReady = false, lastCmd = null;
-const BASE = { reset: true, clearFaults: true, theme: 'dark', strip: false, hud: false, speed: 1, orbit: false, wind: 4.5, show: { showWorkspace: false, showFov: true, showLabels: true } };
+const BASE = { reset: true, clearFaults: true, theme: 'light', strip: false, hud: false, speed: 1, orbit: false, wind: 4.5, show: { showWorkspace: false, showFov: true, showLabels: true } };
 function send(cmd, remember) {
   if (remember) lastCmd = cmd;
   if (isPresenter || !twinFrame.contentWindow) return;
@@ -736,8 +770,8 @@ S('s-drone')._tick = () => { const t = Math.max(0, Math.min(1, tw.surveyT || 0))
     x.fillStyle = '#d9d4c7'; x.fillRect(0, 0, c.width, c.height);
     for (let s = 1; s < 20; s++) for (let b = 0; b < 10; b++) { x.fillStyle = (s * 31 + b * 17) % 9 === 2 ? '#c9b876' : '#3d5874'; x.fillRect(px(-15 + b * 3 + 0.7), py(s * 3 + 2.2), 1.6 * K, 1.5 * K); }
     x.fillStyle = '#8e8a80'; x.fillRect(0, py(3), c.width, 3 * K);
-    strips.forEach((sx) => { x.fillStyle = approved ? 'rgba(88,211,156,.55)' : 'rgba(72,198,236,.5)'; x.fillRect(px(sx - 0.4), 0, 0.8 * K, py(3)); x.strokeStyle = approved ? '#58d39c' : '#48c6ec'; x.lineWidth = 1.5; x.strokeRect(px(sx - 0.4), 0, 0.8 * K, py(3)); });
-    FLAGS.forEach(([fx, fy]) => { const inS = [...strips].some((sx) => Math.abs(sx - fx) <= 0.6); x.beginPath(); x.arc(px(fx), py(fy), 7, 0, 7); x.lineWidth = 3; x.strokeStyle = inS ? '#f2b54b' : '#ff6464'; x.stroke(); });
+    strips.forEach((sx) => { x.fillStyle = approved ? 'rgba(26,127,85,.5)' : 'rgba(21,101,176,.45)'; x.fillRect(px(sx - 0.4), 0, 0.8 * K, py(3)); x.strokeStyle = approved ? '#1a7f55' : '#1565b0'; x.lineWidth = 1.5; x.strokeRect(px(sx - 0.4), 0, 0.8 * K, py(3)); });
+    FLAGS.forEach(([fx, fy]) => { const inS = [...strips].some((sx) => Math.abs(sx - fx) <= 0.6); x.beginPath(); x.arc(px(fx), py(fy), 7, 0, 7); x.lineWidth = 3; x.strokeStyle = inS ? '#d9480f' : '#c62828'; x.stroke(); });
     const cov = strips.size * 0.8 / 30 * 100, fl = FLAGS.filter(([fx]) => [...strips].some((sx) => Math.abs(sx - fx) <= 0.6)).length;
     $('g1cov').textContent = cov.toFixed(1) + '%'; $('g1cov').className = 'big ' + (cov >= 10 ? 'ok' : 'warn');
     $('g1flags').textContent = fl + ' of 6'; $('g1drops').textContent = strips.size;
@@ -839,7 +873,7 @@ S('s-drone')._tick = () => { const t = Math.max(0, Math.min(1, tw.surveyT || 0))
     ['H6', 'Residents’ privacy', 4, 3, 2, 3], ['H7', 'Cyber attack or spoofing', 2, 4, 1, 4], ['H8', 'Image AI misses a defect', 3, 4, 2, 4], ['H9', 'Operator error', 3, 4, 2, 4], ['H10', 'Rain damage', 3, 2, 1, 2],
     ['H11', 'Platform falls', 2, 5, 1, 5], ['H12', 'Attendant falls at the roof edge', 2, 5, 1, 5], ['H13', 'Tap dislodges a tile', 3, 4, 2, 4], ['H14', 'Arm strikes a window', 3, 3, 2, 2], ['H15', 'Classifier misses a hollow tile', 3, 4, 2, 4]];
   const rm = $('rm'), X0 = 44, Y0 = 6, CW = 102, CH = 76;
-  const band = (v) => v >= 15 ? 'rgba(255,100,100,.26)' : v >= 8 ? 'rgba(242,181,75,.2)' : 'rgba(88,211,156,.16)';
+  const band = (v) => v >= 15 ? 'rgba(198,40,40,.26)' : v >= 8 ? 'rgba(217,150,20,.24)' : 'rgba(26,127,85,.16)';
   for (let L = 1; L <= 5; L++) for (let Sv = 1; Sv <= 5; Sv++) { const d = document.createElement('div'); d.className = 'cell'; Object.assign(d.style, { left: X0 + (Sv - 1) * CW + 'px', top: Y0 + (5 - L) * CH + 'px', width: CW + 'px', height: CH + 'px', background: band(L * Sv) }); rm.appendChild(d); }
   for (let i = 1; i <= 5; i++) { const a = document.createElement('div'); a.className = 'ax'; a.textContent = i; a.style.left = '26px'; a.style.top = Y0 + (5 - i) * CH + CH / 2 - 8 + 'px'; rm.appendChild(a); const b = document.createElement('div'); b.className = 'ax'; b.textContent = i; b.style.left = X0 + (i - 1) * CW + CW / 2 - 4 + 'px'; b.style.top = Y0 + 5 * CH + 6 + 'px'; rm.appendChild(b); }
   const lx = document.createElement('div'); lx.className = 'ax'; lx.textContent = 'SEVERITY →'; lx.style.left = X0 + 'px'; lx.style.top = Y0 + 5 * CH + 22 + 'px'; rm.appendChild(lx);

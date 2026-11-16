@@ -1,22 +1,47 @@
-# ENG4101C — Hybrid Drone & Cable-Suspended Façade Inspection Robot (Group 5)
+# ENG4101C Group 5: Robotic Façade Inspection for High-Rise Homes
 
-Interactive **3D Robot Digital Twin & SCADA Engineering Dashboard** supporting the ENG4101C Group 5 Robotic Automation Integration proposal (`ENG4101C_Project_Proposal_Group5_v7.docx`).
+A drone survey and a cable-driven wall-tapping robot, joined into one inspection system for Singapore's Periodic Façade Inspection. This repo holds the presentation deck and the 3D digital twin that support the proposal (`ENG4101C_Project_Proposal_Group5_v8.docx`). Every number on screen comes from proposal v8.
 
-## Live Interactive Dashboard (GitHub Pages)
+## What is here
 
-- **Live URL:** https://reverii.github.io/ENG4101C/
-- **Standalone File:** [`index.html`](./index.html) / [`ENG4101C_3D_Robot_Dashboard.html`](./ENG4101C_3D_Robot_Dashboard.html)
-- **Proposal Document:** [`ENG4101C_Project_Proposal_Group5_v7.docx`](./ENG4101C_Project_Proposal_Group5_v7.docx)
+| File | What it is |
+|---|---|
+| [`Presentation.html`](./Presentation.html) | The 20-minute interactive deck (19 slides plus Questions). It drives the 3D twin live. |
+| [`script.html`](./script.html) | The printable speaking script, by part and slide, with timings. |
+| [`index.html`](./index.html) | The 3D digital twin and dashboard. Live at https://reverii.github.io/ENG4101C/ |
+| [`ENG4101C_3D_Robot_Dashboard.html`](./ENG4101C_3D_Robot_Dashboard.html) | A copy of `index.html` under its old name. |
+| `js/twin-scene.js` | The Three.js drawing layer for the twin. |
+| `vendor/three.min.js` | Three.js r160, saved locally so the 3D view needs no internet. |
 
-## Key Capabilities Visualised
+Keep these files together in one folder. The deck loads `index.html`, which loads `js/` and `vendor/`.
 
-1. **Three 3D Interactive Views:**
-   - **3D SCARA Close-Up:** 28 kg (`0.9 m × 0.9 m`) cable-suspended frame, dual `55 N` ducted thruster fans, 2-DOF planar SCARA arm ($L_1 = L_2 = 0.35\text{ m}$), `50 mm` Z-compliance slide, compliant acoustic shroud, and `1080p` arm alignment camera.
-   - **Side Z-Compliance & Wind Profile:** Real-time balance of `110 N` normal fan preload vs aerodynamic wind drag ($\frac{1}{2}\rho V^2 C_d A = 49.0\text{ N}$ at `8.0 m/s`).
-   - **20-Storey Building System Integration (`60 m × 30 m × 20 m`):** Rooftop two-winch carrier (`1.5×` proof-tested), `19` vertical drops, `30 m` cordoned safety perimeter, ground SCADA (`L2/L3`), and DJI Matrice 350 RTK (`P1 + H30T`) under the `H15` sequential phase lock.
-2. **Analytical Kinematics & Electrical Telemetry:**
-   - Dual-branch 2-link SCARA Inverse Kinematics covering the 16-point `0.8 m × 0.8 m` patch (`r_min = 0.122 m`, `19.9 mm` inner clearance, `|det(J)| >= 0.042 m²`).
-   - Live `EN 12385` rope tensions, safety factor, and `65 m` `48 V DC` umbilical current/voltage-drop telemetry.
-3. **9-Step Tap Handshake, Dual Oscilloscopes & PLC Fault Injection:**
-   - Live `1 kHz` load-cell impulse (`15–20 N` shroud preload + `5–15 N` strike) & `48 kHz` acoustic ringdown + FFT (`0.95 kHz` Hollow vs `2.84 kHz` Solid).
-   - Live PLC channel monitors (`%IX0.0`–`%QX0.2`) and hardware fault triggers (`H2`, `H8 NAMUR NE43`, `H10`, `V3`, `H15`).
+## Running the deck
+
+Open `Presentation.html` in Chrome or Edge.
+
+| Key | Action |
+|---|---|
+| → or Space | Next reveal or slide |
+| ← | Back |
+| T | Start or pause the 20-minute timer |
+| N | Show the script under the slide |
+| P | Presenter view in a second window |
+| D | Open the full dashboard over any slide |
+| F | Full screen |
+| 1 2 3 4 | Jump to a presenter's part |
+| ? | Keys, and who presents each part |
+
+The full dashboard page (`index.html`, or D in the deck) styles its panels with Tailwind from a CDN, so that page needs internet to look right. The 3D view embedded in the slides does not.
+
+## The digital twin
+
+- **Arm close-up:** the 20 kg cable platform, two wall-press fans (104 N), and the 3-joint SCARA arm (L1 = L2 = 0.35 m, 60 mm joint 3) tapping a 16-point, 0.8 m × 0.8 m patch with a 10 N preload.
+- **Side view:** fan thrust against wind load on the platform.
+- **Whole building:** the 60 m × 30 m × 20 m reference block, with three modes: today's gondola, the drone survey (15 m standoff, 21 flight lines, 193 images on this elevation), and robot tapping from the rooftop carrier.
+- **Tap handshake:** the nine steps of proposal Table 14, the rooftop PLC signals of Table 11, and five injectable faults. Every fault ends in the same safe state: brakes set, permit low, arm retracted.
+- The oscilloscope traces are illustrative. The proposal gives no tap-sound frequencies.
+
+## Design notes
+
+- Design: [`docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md`](./docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md)
+- Build plan: [`docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md`](./docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md)

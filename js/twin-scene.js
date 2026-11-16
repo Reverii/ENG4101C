@@ -1,8 +1,8 @@
 /* ENG4101C Group 5 digital twin: Three.js drawing layer.
    Draws the simulation state owned by index.html. It holds no engineering numbers of its own
-   except the reference block and flight geometry stated in proposal v8 (60 m x 30 m x 20 m block,
+   except the reference block and flight geometry stated in proposal v9 (60 m x 30 m x 20 m block,
    15 m standoff, 21 flight lines 2.86 m apart, 10.8 m x 7.2 m image footprint, 0.8 m drop strips).
-   Proportions with no dimension in v8 (frame, carrier, drone, figures) are drawn to plausible scale. */
+   Proportions with no dimension in v9 (frame, carrier, drone, figures) are drawn to plausible scale. */
 (function () {
   'use strict';
   const T = window.THREE;

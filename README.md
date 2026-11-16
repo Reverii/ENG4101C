@@ -1,6 +1,6 @@
 # ENG4101C Group 5: Robotic Façade Inspection for High-Rise Homes
 
-A drone survey and a cable-driven wall-tapping robot, joined into one inspection system for Singapore's Periodic Façade Inspection. This repo holds the presentation deck and the 3D digital twin that support the proposal (`ENG4101C_Project_Proposal_Group5_v8.docx`). Every number on screen comes from proposal v8.
+A drone survey and a cable-driven wall-tapping robot, joined into one inspection system for Singapore's Periodic Façade Inspection. This repo holds the presentation deck and the 3D digital twin that support the proposal (`ENG4101C_Project_Proposal_Group5_v9.docx`). Every number on screen comes from proposal v9.
 
 ## What is here
 
@@ -38,7 +38,7 @@ The full dashboard page (`index.html`, or D in the deck) styles its panels with 
 - **Arm close-up:** the 20 kg cable platform, two wall-press fans (104 N), and the 3-joint SCARA arm (L1 = L2 = 0.35 m, 60 mm joint 3) tapping a 16-point, 0.8 m × 0.8 m patch with a 10 N preload.
 - **Side view:** fan thrust against wind load on the platform.
 - **Whole building:** the 60 m × 30 m × 20 m reference block, with three modes: today's gondola, the drone survey (15 m standoff, 21 flight lines, 193 images on this elevation), and robot tapping from the rooftop carrier.
-- **Tap handshake:** the nine steps of proposal Table 14, the rooftop PLC signals of Table 11, and five injectable faults. Every fault ends in the same safe state: brakes set, permit low, arm retracted.
+- **Tap handshake:** the nine steps of proposal Table 15, the rooftop PLC signals of Table 12, and five injectable faults. Every fault ends in the same safe state: brakes set, permit low, arm retracted.
 - The oscilloscope traces are illustrative. The proposal gives no tap-sound frequencies.
 
 ## Design notes

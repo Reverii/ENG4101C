@@ -24,6 +24,9 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); f
 button, input, select { font: inherit; color: inherit; }
 button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
 [hidden] { display: none !important; }
+#lgBar { display: flex; align-items: center; gap: 8px; } #lgBar .btn { white-space: nowrap; } #lgSay { flex: 1; margin-left: 10px; color: var(--muted); font-size: 15px; line-height: 1.4; }
+#lgFig { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; background: #fff; padding: 10px; }
+#lgFig img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
 
 #viewport { position: fixed; inset: 0 0 34px 0; overflow: hidden; }
 #stage { width: 1280px; height: 720px; position: absolute; left: 50%; top: 50%; margin: -360px 0 0 -640px; transform-origin: center center; background: var(--stage); border-radius: 6px; overflow: hidden; box-shadow: 0 0 0 1px var(--line); flex: none; }
@@ -269,6 +272,7 @@ body.pv #pv { display: flex; }
         <tr class="reveal" data-step><td>Cost</td><td>no more than <b class="big cy">S$21,700</b> per block</td></tr>
       </table></div>
   </div>
+  <p class="src">Each target has an acceptance test after deployment, and each baseline its data source (proposal Table 1, test V10).</p>
   <div class="notes">So we set five objectives. Digitise the visual check. Give the Competent Person one view of the whole building. Automate the tap test. Take people off the wall. And keep the Competent Person in control. <span class="cue">[→ through the six criteria.]</span> These are our targets. Images at 1.5 millimetres per pixel or finer, which is BCA's figure. At least 95% of the façade imaged. At least 10% of each elevation tapped. Zero person-hours suspended for flat areas. Every image and tap tied to a position. And a cost no higher than today. I will hand over to {P2}, who will show how the system does this. <span class="cue">[Hand over.]</span></div>
 </section>
 
@@ -320,6 +324,7 @@ body.pv #pv { display: flex; }
         <b id="g1drops" class="big">0</b><span>drops on this face, 30 min of rigging each</span>
       </div><p id="g1note" style="margin-top:8px;font-size:15px"></p></div>
       <div class="box" style="display:flex;align-items:center;gap:14px"><button class="btn pri" id="g1approve" disabled>Approve targets (Gate 1)</button><span id="g1state" style="font-size:15.5px;color:var(--muted)">The robot stays idle until the list is approved.</span></div>
+      <p class="src">Full Gate 1 screen: proposal Figure 10.</p>
     </div>
   </div>
   <div class="notes">Step two is a person. The photos are stitched into this one view of the elevation, and the amber marks are what the AI flagged. The Competent Person now decides where the robot will tap. The rule is at least 10% of each elevation, and every flag on a flat area. <span class="cue">[Click "Place strips through the flags".]</span> Each strip is 0.8 metres wide, one arm patch, from roof to ground. Four strips on this face gives just over 10%. Notice one flag sits on its own. A strip for that one flag costs 30 minutes of rigging, so the Competent Person can send it to a manual check. That is a judgement, and it belongs to a person. <span class="cue">[Click "Approve targets".]</span> Approval is a method call over OPC UA. Without it, the PLC will not move the winch.</div>
@@ -341,7 +346,7 @@ body.pv #pv { display: flex; }
   <div class="notes">Step three. On the roof is a carrier with two winches and a safety PLC. We did not design this platform. It comes from a Hong Kong system that has been through five site trials and more than twelve commercial jobs. We chose cables because they carry the weight. A suction robot depends on grip, and grip fails on cracked tiles, which is exactly where the defects are. <span class="cue">[Click "Lower to the first target", or press →.]</span> The PLC lowers the platform at no more than 0.3 metres a second. This is sped up ten times. At the target height the spring brakes set. Then two fans press the platform onto the wall with about 104 newtons, and four bumpers confirm contact. Only then may the arm move.</div>
 </section>
 
-<section class="slide" data-part="2" data-sec="75" data-title="Three CUs in one tap" data-twin="540,112,684,560" id="s-cu">
+<section class="slide" data-part="2" data-sec="70" data-title="Three CUs in one tap" data-twin="540,112,684,560" id="s-cu">
   <h2>Three units in one tap</h2>
   <div class="left" style="width:450px">
     <div class="cu" id="cuA" style="--c:var(--green)"><h3><span>ENG4100C</span>Places the platform</h3><p>Winch encoders give the height. The arm camera matches the tiles to the drone map and measures the last 30 to 50 mm of error.</p></div>
@@ -353,7 +358,7 @@ body.pv #pv { display: flex; }
   <div class="notes">Now watch one patch being tapped, and watch the three cards. <span class="cue">[Let it run.]</span> The steps along the bottom are the handshake from our report. First, ENG4100C, autonomous robots: the platform is placed from the winch encoders, and the arm camera matches the tiles it sees to the drone's map. Cable stretch and wind leave 30 to 50 millimetres of error, and the camera removes it. Second, ENG3107C, robotics modelling: inverse kinematics turns each grid point into two joint angles, and the third joint presses the hammer until it reads 10 newtons. Third, ENG3106C, industrial automation: the arm asks the PLC for permission. The lamp goes green only while cable tension, brakes, fan thrust and wind are all inside limits. Then the hammer fires. Green is solid, red is hollow. <span class="cue">[→]</span> Take any one unit away and there is no tap. That is what we mean by integrated.</div>
 </section>
 
-<section class="slide roomy" data-part="2" data-sec="55" data-title="Who talks to whom">
+<section class="slide roomy" data-part="2" data-sec="50" data-title="Who talks to whom">
   <h2>Who talks to whom, how fast, and what happens when it fails</h2>
   <table class="t">
     <tr><th>Link</th><th>How</th><th>Rate</th><th>If it fails</th></tr>
@@ -363,11 +368,12 @@ body.pv #pv { display: flex; }
     <tr class="reveal" data-step><td>Sensors → PLC</td><td>4–20 mA, safety inputs</td><td>10 ms scan</td><td>Below 3.6 mA is treated as a fault: hold</td></tr>
     <tr class="reveal" data-step><td>Gateway → SCADA</td><td>OPC UA over TLS</td><td>500 ms</td><td>Site keeps running; data is buffered</td></tr>
   </table>
+  <p class="src">All 16 interfaces, and the 8 tap-path messages with data type, timeout and acknowledgement: proposal Tables 16 and 17.</p>
   <div class="grid2" style="flex:0">
     <div class="box reveal" data-step><h3>Safety trips are local</h3><p>They run in the PLC in under 100 ms and never wait for the network.</p></div>
     <div class="box reveal" data-step><h3>The dashboard never drives</h3><p>SCADA shows and alarms. Motion commands go to the PLC, which obeys only while every interlock is healthy.</p></div>
   </div>
-  <div class="notes">An integration is only as good as its interfaces. Here are five of the fifteen in our report. <span class="cue">[→ for each row.]</span> For each one we state how it talks, how fast, and what happens when it fails. Lose the drone link for three seconds and the drone hovers. Miss three heartbeats and the robot holds. The PLC to the arm is the important one. It is a wire, not a message. If that line goes low, the hammer has no power and the arm retracts within 200 milliseconds. A broken sensor wire reads as a fault, not as zero. <span class="cue">[→ →]</span> Two rules sit behind this. Safety trips happen in the PLC and never wait for a network. And the dashboard never drives anything. Over to {P3}. <span class="cue">[Hand over.]</span></div>
+  <div class="notes">An integration is only as good as its interfaces. Here are five of the sixteen in our report. <span class="cue">[→ for each row.]</span> For each one we state how it talks, how fast, and what happens when it fails. Lose the drone link for three seconds and the drone hovers. Miss three heartbeats and the robot holds. The PLC to the arm is the important one. It is a wire, not a message. If that line goes low, the hammer has no power and the arm retracts within 200 milliseconds. <span class="cue">[→ →]</span> Two rules sit behind this. Safety trips happen in the PLC and never wait for a network. And the dashboard never drives anything. Over to {P3}. <span class="cue">[Hand over.]</span></div>
 </section>
 
 <!-- ================= PART 3: ENGINEERING REASONING ================= -->
@@ -386,7 +392,7 @@ body.pv #pv { display: flex; }
   <div class="notes">Thank you. The part we designed ourselves is the arm. It is a SCARA. Two joints turn in the plane of the wall and move the hammer across a patch. The third slides straight into the wall. We chose it because a SCARA is stiff along that third axis, so the strike goes straight in. <span class="cue">[Click the point at top right, 0.30, 0.30.]</span> This is the worked example from our report. For the point 0.30, 0.30 the inverse kinematics gives an elbow angle of 105.4 degrees and a shoulder angle of minus 7.7. <span class="cue">[Click an inner point.]</span> The inner points are the tight ones. <span class="cue">[→]</span> The arm cannot fold past 160 degrees, so it cannot reach closer than 122 millimetres. The inner tap points sit only 19 millimetres outside that. That is why the camera must align the platform to within 15 millimetres before any tap. <span class="cue">[→]</span> For the motors, the shoulder holds 17.2 newton metres with the arm level, so we select 35.</div>
 </section>
 
-<section class="slide" data-part="3" data-sec="75" data-title="Hollow or solid" data-twin="540,112,684,560" id="s-tap">
+<section class="slide" data-part="3" data-sec="70" data-title="Hollow or solid" data-twin="540,112,684,560" id="s-tap">
   <h2>Hollow or solid: every tap starts the same way</h2>
   <div class="left" style="width:450px">
     <div class="box"><div class="kv">
@@ -399,10 +405,10 @@ body.pv #pv { display: flex; }
       <p id="tapSay" style="margin-top:10px;font-size:15.5px">The force trace must sit in the green band before the hammer fires.</p></div>
     <div class="box reveal" data-step><p><b class="fg">The classifier screens; the Competent Person decides.</b> Every hollow result is reviewed, plus a random 5% of solid ones. Bench target: catch at least 95% of hollow tiles.</p></div>
   </div>
-  <div class="notes">A human tapper hits a little differently every time, and tires over hundreds of taps. The robot does not. Before every strike, the third joint presses until the load cell reads 10 newtons. Then a solenoid fires a 0.1 kilogram hammer head at 2 metres a second, which is 0.2 joules. Every tap starts from the same contact. <span class="cue">[Click "Solid".]</span> Top trace: the force rises into the green band, then the strike. Bottom trace: the sound. A solid tile gives a short, bright ring. <span class="cue">[Click "Hollow".]</span> A hollow one rings lower and for longer. The traces here are illustrative. The real classifier is something we must prove on test panels. <span class="cue">[Click "Visibly cracked".]</span> If the camera sees a cracked tile, the arm does not strike it at all. It flags it for the Competent Person. <span class="cue">[→]</span> And the classifier only screens. A person reviews every hollow result and a random 5% of solid ones.</div>
+  <div class="notes">A human tapper hits a little differently every time, and tires over hundreds of taps. The robot does not. Before every strike, the third joint presses until the load cell reads 10 newtons. Then a solenoid fires a 0.1 kilogram hammer head at 2 metres a second, which is 0.2 joules. Every tap starts from the same contact. <span class="cue">[Click "Solid".]</span> Top trace: the force rises into the green band, then the strike. Bottom trace: the sound. A solid tile gives a short, bright ring. <span class="cue">[Click "Hollow".]</span> A hollow one rings lower and for longer. The traces are illustrative; the classifier must still be proven on test panels. <span class="cue">[Click "Visibly cracked".]</span> If the camera sees a cracked tile, the arm does not strike it at all. It flags it for the Competent Person. <span class="cue">[→]</span> And the classifier only screens. A person reviews every hollow result and a random 5% of solid ones.</div>
 </section>
 
-<section class="slide" data-part="3" data-sec="75" data-title="When things go wrong" data-twin="540,112,684,560" id="s-fault">
+<section class="slide" data-part="3" data-sec="60" data-title="When things go wrong" data-twin="540,112,684,560" id="s-fault">
   <h2>When something goes wrong, every fault ends the same way</h2>
   <div class="left" style="width:450px">
     <div class="ask"><b>SAFE STATE</b><span>Brakes set · permit low · arm retracted</span></div>
@@ -416,10 +422,25 @@ body.pv #pv { display: flex; }
       <p id="fMsg" style="margin-top:8px;font-size:15px;color:var(--muted);min-height:44px">Running normally.</p></div>
     <p class="reveal" data-step style="font-size:15.5px;color:var(--muted)">After a 2026 autonomous shuttle incident in Punggol, we show the operator the exact trigger and value for every automatic stop.</p>
   </div>
-  <div class="notes">The robot is tapping. Let us break things. <span class="cue">[Click "Squall gust".]</span> Wind goes above our 8 metres a second limit. The permit drops, the arm pulls back, the brakes hold. The banner tells the operator exactly why. <span class="cue">[Click it again to clear.]</span> It carries on from where it stopped. <span class="cue">[Click "Fan failure", then clear.]</span> One fan lost leaves 55 newtons. We need 69 to hold the platform against the tap and the wind, so the permit goes low. <span class="cue">[Click "Tension signal lost", then clear.]</span> A broken load-cell wire reads below 3.6 milliamps. The PLC treats that as a fault, not as zero load. <span class="cue">[Click "Emergency stop", then clear.]</span> Every one ends in the same state: brakes set, permit low, arm retracted. One safe state is easier to prove than five. <span class="cue">[→]</span> And every stop shows its reason. We took that from the Punggol shuttle incident, where the operator could not see why the vehicle had acted.</div>
+  <div class="notes">The robot is tapping. Let us break things. <span class="cue">[Click "Squall gust".]</span> Wind goes above our 8 metres a second limit. The permit drops, the arm pulls back, the brakes hold, and the banner says exactly why. <span class="cue">[Click it again to clear.]</span> It carries on from where it stopped. <span class="cue">[Click "Fan failure", then clear.]</span> One fan lost leaves 55 newtons. We need 69 to hold the platform against the tap and the wind, so the permit goes low. <span class="cue">[Click "Emergency stop", then clear.]</span> Every fault ends in the same state: brakes set, permit low, arm retracted. One safe state is easier to prove than five. <span class="cue">[→]</span> And every stop shows its reason, a lesson from the Punggol shuttle incident.</div>
 </section>
 
-<section class="slide roomy" data-part="3" data-sec="65" data-title="Sizing checks">
+<section class="slide" data-part="3" data-sec="45" data-title="The logic behind it" id="s-logic">
+  <h2>The logic behind the safe state</h2>
+  <div id="lgBar">
+    <button class="btn pri" data-lgb="0">Ladder logic</button><button class="btn" data-lgb="1">Tap cycle states</button><button class="btn" data-lgb="2">Operator screen</button>
+    <p id="lgSay"></p>
+  </div>
+  <div class="box" id="lgFig">
+    <img data-lg="0" src="figures/fig-plc-ladder-slide.png" alt="Carrier PLC ladder logic: rung 1 enables the winch only with the arm retracted, tension and wind in limits, a released target and no hold; rung 2 grants the hardwired tap permit only with both brakes set, fans, tilt and heartbeat healthy and the winch stopped">
+    <img data-lg="1" hidden src="figures/fig-tap-state-slide.png" alt="Tap cycle state machine: idle, moving, settling, aligning, tapping and retracting, with skip paths and one safe hold state left only by an operator reset">
+    <img data-lg="2" hidden src="figures/fig-hmi-screens-slide.png" alt="Robot tapping HMI screen: interlock lamps, the current patch's tap results and a prioritised alarm list with trigger values">
+  </div>
+  <p class="src">Proposal Figures 8, 9 and 10. Screen values are illustrative.</p>
+  <div class="notes">Behind that one safe state is plain PLC logic. <span class="cue">[Ladder logic is showing.]</span> Rung one: the winch may move only with the arm retracted, tension and wind in limits, a released target and no hold. Rung two is the tap permit: both brakes set, fans, tilt and heartbeat healthy, and the winch stopped. Any trip latches a hold that only an operator can reset. <span class="cue">[→ Tap cycle states.]</span> Here is the same cycle as states: six of them, and one way out of every fault. <span class="cue">[→ Operator screen.]</span> And this is what the operator sees: every permissive as a lamp, and every alarm with its trigger value.</div>
+</section>
+
+<section class="slide roomy" data-part="3" data-sec="60" data-title="Sizing checks">
   <h2>Three sizing checks that changed the design</h2>
   <div class="grid3" style="flex:1">
     <div class="box"><span class="tag">POWER DOWN 65 m OF CABLE</span><h3>The umbilical</h3><p>Fans and arm need 1.2 kW at the platform.</p>
@@ -430,24 +451,26 @@ body.pv #pv { display: flex; }
       <table class="t" style="margin-top:8px"><tr class="reveal" data-step><td>10% of 6,000 m²</td><td class="big">938 patches</td></tr><tr class="reveal" data-step><td>× 54 s each</td><td class="big">14.1 h</td></tr><tr class="reveal" data-step><td>13 drops × 30 min</td><td class="big">6.5 h</td></tr><tr class="reveal" data-step><td>Total</td><td><b class="big warn">20.6 h ≈ 3 site days</b></td></tr></table></div>
   </div>
   <div class="ask reveal" data-step><b>HONEST RESULT</b><span>The robot is not faster than today. It is safer, consistent and recorded.</span></div>
-  <div class="notes">Three calculations changed our design. <span class="cue">[→ ×3]</span> One, power. The platform needs 1.2 kilowatts at the end of 65 metres of cable. At 24 volts the cable loses 45 volts, which is impossible. At 48 volts it cannot deliver more than one kilowatt. So we send 230 volts AC and convert on the platform: 5 amps and a 2% drop. <span class="cue">[→ ×4]</span> Two, the fans. They must resist the tap, the preload and a 10 metre a second wind: 69 newtons. With a margin of one and a half, 104. <span class="cue">[→ ×4]</span> Three, time. Ten percent of the block is 938 patches. At 54 seconds each, plus 13 moves along the roof, that is about three site days. <span class="cue">[→]</span> So the robot is not faster than a gondola crew, and we say so. The gain is that nobody hangs off the wall, and every tap is the same and is recorded.</div>
+  <div class="notes">Three calculations changed our design. <span class="cue">[→ ×3]</span> One, power. The platform needs 1.2 kilowatts at the end of 65 metres of cable. At 24 volts the cable loses 45 volts, which is impossible. At 48 volts it cannot deliver more than one kilowatt. So we send 230 volts AC and convert on the platform: 5 amps and a 2% drop. <span class="cue">[→ ×4]</span> Two, the fans. They must resist the tap, the preload and a 10 metre a second wind: 69 newtons. With a margin of one and a half, 104. <span class="cue">[→ ×4]</span> Three, time. Ten percent of the block is 938 patches. At 54 seconds each, plus 13 moves along the roof, that is about three site days. <span class="cue">[→]</span> So the robot is not faster than a gondola crew. The gain is that nobody hangs off the wall, and every tap is recorded.</div>
 </section>
 
 <section class="slide roomy" data-part="3" data-sec="55" data-title="Alternatives">
-  <h2>What else we considered, and why not</h2>
+  <h2>What else we considered, scored against the requirements</h2>
   <table class="t">
-    <tr><th>Option</th><th>Strength</th><th>Weakness</th><th>Decision</th></tr>
-    <tr class="reveal" data-step><td>Tapping drone</td><td>No rigging; quick to reposition</td><td>Hard to hold steady while striking; wind and airspace limits</td><td class="bad">Not selected</td></tr>
-    <tr class="reveal" data-step><td>Suction wall-climbing robot</td><td>Moves freely on flat walls</td><td>Grip can fail on cracked or rough tiles; needs a tether anyway</td><td class="bad">Not selected</td></tr>
-    <tr class="reveal" data-step><td>Manual, from a gondola or ropes</td><td>Full hands-on contact; accepted practice</td><td>Work at height; judged by ear</td><td class="warn">Kept for corners and ledges</td></tr>
-    <tr class="reveal" data-step><td>Cable robot with our SCARA arm</td><td>Cables carry the load; platform proven on site</td><td>Still needs roof rigging and a move per drop</td><td class="ok">Selected</td></tr>
-    <tr class="reveal" data-step><td>Buy the drone</td><td>Full control</td><td>About S$52,000 of hardware, plus accreditation and pilots</td><td class="warn">Outsourced at S$2,750 a day</td></tr>
+    <tr><th>Choice</th><th>Selected</th><th>Alternatives (score)</th><th>Deciding reason</th></tr>
+    <tr class="reveal" data-step><td>Close-range platform</td><td class="ok">Cable robot + our SCARA arm <b>3.95</b></td><td>Manual gondola 3.20 (kept for ledges) · tapping drone 3.15 · suction robot 2.90</td><td>Suction grip fails on cracked tiles; a drone cannot hold steady while striking</td></tr>
+    <tr class="reveal" data-step><td>Tapping arm</td><td class="ok">3-joint SCARA <b>4.00</b></td><td>Gantry 3.60 · 6-axis arm 3.45</td><td>Stiff along the tap; light enough for a 20 kg platform</td></tr>
+    <tr class="reveal" data-step><td>Robot positioning</td><td class="ok">Winch encoders + arm camera <b>4.45</b></td><td>RTK on the platform 3.05 · total station 3.05</td><td>The wall blocks about a quarter of the sky</td></tr>
+    <tr class="reveal" data-step><td>Tap sensing</td><td class="ok">Force-controlled solenoid + microphone <b>4.15</b></td><td>Ultrasonic probe 3.10 · thermal alone fails the tactile gate</td><td>Same contact for every tap</td></tr>
+    <tr class="reveal" data-step><td>The drone</td><td class="ok">Hire an accredited provider</td><td>Buy: about S$52,000 of hardware</td><td>S$2,750 a day, accreditation and pilots included</td></tr>
   </table>
-  <div class="notes">We did look at other ways. <span class="cue">[→ for each row.]</span> A drone that taps needs no rigging, but it is hard to hold steady while it strikes a wall. A suction robot moves freely, but its grip fails on cracked tiles, and it needs a tether anyway. Manual tapping stays, for the corners and ledges our arm cannot reach. The cable robot is our choice: cables carry the load, and the platform has a field record. For the drone, we asked whether to buy or hire. Buying costs about S$52,000 before accreditation and pilots. An accredited provider costs S$2,750 a day. So we hire the drone and put our effort into the robot. {P4} will show what that costs. <span class="cue">[Hand over.]</span></div>
+  <div class="ask reveal" data-step><b>WEIGHTS</b><span>Safety 30% · cost 20% · cycle time 15% · reach 15% · payload 10% · maintainability 10%. Moving 10 points between safety and cost changes no choice.</span></div>
+  <p class="src">Scores 1 to 5 are the group's engineering judgement, after three pass/fail gates. Proposal Table 10.</p>
+  <div class="notes">We scored the alternatives, not just listed them. <span class="cue">[→ for each row.]</span> Each option first has to pass three gates, such as a tap permit that does not depend on the network. Then safety carries the most weight. The cable robot scores 3.95. Manual access stays for ledges. A tapping drone cannot hold steady while it strikes, and a suction robot's grip fails on cracked tiles. A SCARA beats a gantry or a six-axis arm: stiff along the tap, and light. The robot positions itself from its winches and camera, because the wall blocks a quarter of the sky. And we hire the drone rather than buy it. <span class="cue">[→]</span> Shifting weight between safety and cost changes none of these. {P4} will show what it costs. <span class="cue">[Hand over.]</span></div>
 </section>
 
 <!-- ================= PART 4: COST, RISK, CLOSE ================= -->
-<section class="slide roomy" data-part="4" data-sec="80" data-title="Cost" id="s-cost">
+<section class="slide roomy" data-part="4" data-sec="75" data-title="Cost" id="s-cost">
   <h2>Does it pay? Move the two things we do not yet know</h2>
   <div class="grid2">
     <div class="col">
@@ -482,27 +505,27 @@ body.pv #pv { display: flex; }
       <div class="box"><div class="kv"><b class="big bad" id="rmH">1</b><span>High (15 to 25)</span><b class="big warn" id="rmM">12</b><span>Medium (8 to 14)</span><b class="big ok" id="rmL">2</b><span>Low (1 to 7)</span></div></div>
       <div class="box" id="rmSay"><p><b class="fg">H2, squall gusts,</b> is the one High risk. Gusts in Singapore reach 11 to 22 m/s, above the drone's 12 m/s rating.</p></div>
       <div class="box reveal" data-step><p><b class="fg">Five stay Medium on purpose.</b> A fall or a missed defect is still severe, so we did not lower severity. We lowered likelihood, with hardware barriers and a person checking.</p></div>
-      <div class="box reveal" data-step><p>Each control is tied to a test. If it fails, the limit is cut: for example the wind limit drops from 8 to 6 m/s.</p></div>
+      <div class="box reveal" data-step><p>Each control is tied to a test and a named owner. If the test fails, the limit is cut: for example the wind limit drops from 8 to 6 m/s.</p></div>
     </div>
   </div>
-  <div class="notes">We found fifteen hazards: ten from the drone and five from the robot. Likelihood runs up the side and severity along the bottom. Before controls there is one High risk: H2, squall gusts. Singapore gusts reach 11 to 22 metres a second, and the drone is rated for 12. <span class="cue">[Click "After controls".]</span> After controls, nothing is High. Our wind limit is 8 metres a second with live monitoring, so H2 falls to Low. <span class="cue">[→]</span> Five stay Medium, and that is deliberate. Look at how they moved: down, not left. A loose tile falling or a missed defect is just as serious after our controls as before. So we did not pretend severity went down. We cut the likelihood, with hardware barriers and a person checking. <span class="cue">[→]</span> Every control is tied to a test. If a test fails, we cut the operating limit. We do not move the target.</div>
+  <div class="notes">We found fifteen hazards: ten from the drone and five from the robot. Likelihood runs up the side and severity along the bottom. Before controls there is one High risk: H2, squall gusts. Singapore gusts reach 11 to 22 metres a second, and the drone is rated for 12. <span class="cue">[Click "After controls".]</span> After controls, nothing is High. Our wind limit is 8 metres a second with live monitoring, so H2 falls to Low. <span class="cue">[→]</span> Five stay Medium, and that is deliberate. Look at how they moved: down, not left. A loose tile falling or a missed defect is just as serious after our controls as before. So we did not pretend severity went down. We cut the likelihood, with hardware barriers and a person checking. <span class="cue">[→]</span> Every control is tied to a test and an owner. If a test fails, we cut the operating limit. We do not move the target.</div>
 </section>
 
 <section class="slide roomy" data-part="4" data-sec="60" data-title="Validation, limits, close">
   <h2>What we still have to prove, and what we are sure of</h2>
   <div class="stage3">
-    <div class="box reveal" data-step><span class="tag">STAGE 1 · ABOUT 3 MONTHS</span><h3>Bench and dataset</h3><p>Strike force, tap classifier, image AI, equipment certificates.</p></div>
+    <div class="box reveal" data-step><span class="tag">STAGE 1 · ABOUT 3 MONTHS</span><h3>Bench and dataset</h3><p>Strike force, tap classifier, image AI, certificates, and quotes for the manual baseline.</p></div>
     <div class="box reveal" data-step><span class="tag">STAGE 2 · ABOUT 2 MONTHS</span><h3>Test block</h3><p>Wind limits, positioning near the wall, rigging time, cycle time. Then apply for approval.</p></div>
     <div class="box reveal" data-step><span class="tag">STAGE 3 · ABOUT 1 MONTH</span><h3>Pilot block</h3><p>First live inspection, with both Competent Person gates.</p></div>
   </div>
-  <div class="box reveal" data-step><h3>Limits we state plainly</h3><p>Flat areas only; corners and ledges stay manual. Robotic tapping needs approval for each use. Costs are guide prices, not quotes. The tap classifier is unproven until Stage 1.</p></div>
+  <div class="box reveal" data-step><h3>Limits we state plainly</h3><p>Flat areas only; corners and ledges stay manual. Robotic tapping needs approval for each use. Costs are guide prices until the baseline test brings quotes. The tap classifier is unproven until Stage 1.</p></div>
   <div class="takes">
     <div class="box reveal" data-step><b>One grid</b><p>The drone's map is the robot's target list.</p></div>
     <div class="box reveal" data-step><b>One wire</b><p>A hardwired permit that software cannot bypass.</p></div>
     <div class="box reveal" data-step><b>Two gates</b><p>A person approves the targets and the results.</p></div>
     <div class="box reveal" data-step><b>Zero suspended</b><p>Nobody hangs off the wall for flat areas.</p></div>
   </div>
-  <div class="notes">This is a proposal, so let me be clear about what is not yet proven. <span class="cue">[→ ×3]</span> We have nine validation tests in three stages: the bench, a test block, then one pilot block under approval. Each stage has an exit gate. <span class="cue">[→]</span> And the limits. The robot works on flat areas only. Our costs are guide prices. And the tap classifier is unproven until it is tested. <span class="cue">[→ ×4]</span> But four things we are sure of, because they are design decisions. One grid, so the drone's map becomes the robot's target list. One wire, so no software can fire the hammer. Two gates, so a person approves what is tapped and what is reported. And zero people suspended beside the wall for flat areas. Thank you. We welcome your questions.</div>
+  <div class="notes">This is a proposal, so let me be clear about what is not yet proven. <span class="cue">[→ ×3]</span> We have ten validation tests in three stages: the bench, a test block, then one pilot block under approval. Each stage has an exit gate. <span class="cue">[→]</span> And the limits. The robot works on flat areas only. Our costs are guide prices. And the tap classifier is unproven until it is tested. <span class="cue">[→ ×4]</span> But four things we are sure of, because they are design decisions. One grid, so the drone's map becomes the robot's target list. One wire, so no software can fire the hammer. Two gates, so a person approves what is tapped and what is reported. And zero people suspended beside the wall for flat areas. Thank you. We welcome your questions.</div>
 </section>
 
 <section class="slide" data-part="0" data-sec="0" data-title="Questions">
@@ -510,7 +533,7 @@ body.pv #pv { display: flex; }
     <h1>Questions</h1>
     <p class="lede">Press <b class="fg">D</b> for the full dashboard: three views, the tap handshake, PLC signals and fault injection. Press 1 to 4 to jump back to a part.</p>
     <div class="team" id="teamRow2" style="grid-template-columns:repeat(4,1fr)"></div>
-    <p class="src">Numbers are from our proposal, version 9. Vendor prices and published study figures are indicative. Oscilloscope traces in the twin are illustrative.</p>
+    <p class="src">Numbers are from our proposal, version 11. Vendor prices and published study figures are indicative. Oscilloscope traces in the twin are illustrative.</p>
   </div>
   <div class="notes">Backup for questions. Press D to open the full dashboard. Useful answers: the reference block is 60 m × 30 m × 20 m, 6,000 m² of façade. Drone: 15 m standoff, 1.32 mm per pixel, about 650 images. Arm: L1 = L2 = 0.35 m, 16 taps per 0.8 m patch, 10 N preload, 0.2 J strike. Platform: 20 kg, two cables, 104 N of fan thrust, 230 V AC umbilical. Time: about 3 site days. Cost: S$20,300 against S$21,700 at 25 jobs a year and a S$250,000 platform. Risk: 1 High before, none after, 5 Medium kept as low as reasonably practicable.</div>
 </section>
@@ -832,6 +855,19 @@ S('s-drone')._tick = () => { const t = Math.max(0, Math.min(1, tw.surveyT || 0))
   const IDX = { SOLID: 5, HOLLOW: 6, CRACKED: 10 };
   s._enter = () => { $('tapSay').textContent = 'The force trace must sit in the green band before the hammer fires.'; enterCmd({ scene: 'scara', onWall: true, strip: 'all', speed: 0.5, cam: [-0.25, 0.12, 2.0, 0.1, 0, 0.1], glide: false }); };
   s.querySelectorAll('[data-tapkind]').forEach((b) => { b.onclick = () => { const k = b.dataset.tapkind; $('tapSay').textContent = SAY[k]; send({ truth: { idx: IDX[k], value: k }, tap: 'single', idx: IDX[k] }); }; });
+})();
+
+// 15 logic figures
+(() => {
+  const s = S('s-logic'); let k = 0;
+  const SAY = ['Rung 1 enables the winch; rung 2 grants the hardwired tap permit. Any trip latches a hold that only an operator reset clears.',
+    'Six states for one patch. A patch that will not settle or match is skipped; every fault ends in the one safe hold.',
+    'The robot screen: each PLC permissive as a lamp, and every alarm with its trigger value. HOLD is always live.'];
+  const show = (i) => { k = i; s.querySelectorAll('[data-lg]').forEach((im) => { im.hidden = +im.dataset.lg !== i; }); s.querySelectorAll('[data-lgb]').forEach((b) => b.classList.toggle('pri', +b.dataset.lgb === i)); $('lgSay').textContent = SAY[i]; };
+  s.querySelectorAll('[data-lgb]').forEach((b) => { b.onclick = () => show(+b.dataset.lgb); });
+  s._enter = () => { lastCmd = null; show(0); };
+  s._next = () => { if (k < 2) { show(k + 1); return true; } return false; };
+  show(0);
 })();
 
 // 14 faults

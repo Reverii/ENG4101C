@@ -191,6 +191,7 @@
         <section id="card-hs" class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3 space-y-2">
           <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
             <span class="font-semibold">Tap handshake for one patch (proposal Table 18)</span>
+            <span class="font-mono">state <b id="hs-state" class="text-[var(--foreground)]">IDLE</b> <span class="text-[var(--muted-foreground)]">(Figure 9)</span></span>
             <span id="hs-interface-detail" class="font-mono text-[var(--muted-foreground)]">GCS to PLC &middot; OPC UA NextTarget</span>
           </div>
           <div id="hs-steps" class="grid grid-cols-3 sm:grid-cols-9 gap-1 text-xs font-mono"></div>
@@ -1106,6 +1107,12 @@
         }`;
 
         badge.textContent = state.faultMessage && state.held ? 'HOLD' : curStep.id;
+        const STATE_OF_STEP = ['IDLE', 'MOVING', 'SETTLING', 'SETTLING', 'ALIGNING', 'TAPPING', 'TAPPING', 'RETRACTING', 'IDLE'];
+        const hsState = document.getElementById('hs-state');
+        if (hsState) {
+          hsState.textContent = state.held ? 'SAFE HOLD' : (STATE_OF_STEP[state.stepIndex] || 'IDLE');
+          hsState.style.color = state.held ? 'var(--error)' : '';
+        }
         const interlock = document.getElementById('hdr-interlock-badge');
         interlock.textContent = state.permit ? 'TAP PERMIT %QX0.2: HIGH' : 'TAP PERMIT %QX0.2: LOW';
         interlock.className = `px-2 py-0.5 rounded-full text-xs font-mono border border-[var(--border)] ${

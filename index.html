@@ -190,7 +190,7 @@
         <!-- 9-Step Handshake Pipeline Card -->
         <section id="card-hs" class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3 space-y-2">
           <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span class="font-semibold">Tap handshake for one patch (proposal Table 15)</span>
+            <span class="font-semibold">Tap handshake for one patch (proposal Table 18)</span>
             <span id="hs-interface-detail" class="font-mono text-[var(--muted-foreground)]">GCS to PLC &middot; OPC UA NextTarget</span>
           </div>
           <div id="hs-steps" class="grid grid-cols-3 sm:grid-cols-9 gap-1 text-xs font-mono"></div>
@@ -383,7 +383,7 @@
             </div>
 
             <div class="space-y-1 pt-1 border-t border-[var(--card-border)]">
-              <div class="font-semibold">Rooftop carrier PLC I/O (proposal Table 12, 10 ms scan)</div>
+              <div class="font-semibold">Rooftop carrier PLC I/O (proposal Table 14, 10 ms scan)</div>
               <div id="plc-table" class="space-y-1 font-mono"></div>
             </div>
           </div>
@@ -432,7 +432,7 @@
     if (/[?&]embed=1/.test(location.search)) document.documentElement.classList.add("embed");
     (() => {
       // =========================================================================
-      // 1. ENGINEERING CONSTANTS (PROPOSAL v9, SECTION 3.5) AND THE TAP HANDSHAKE (TABLE 15)
+      // 1. ENGINEERING CONSTANTS (PROPOSAL v11, SECTION 3.5) AND THE TAP HANDSHAKE (TABLE 18)
       // =========================================================================
       const L1 = 0.35; // m
       const L2 = 0.35; // m

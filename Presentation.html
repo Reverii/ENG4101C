@@ -469,7 +469,7 @@ body.pv #pv { display: flex; }
       <div class="box reveal" data-step><p>At 25 blocks a year, that is also <b class="ok">1,050 person-hours</b> a year no longer spent hanging off a wall.</p></div>
     </div>
   </div>
-  <p class="src">Manual baseline from vendor guide prices, not quotations [29][30]. Model: proposal 3.6, Tables 17 and 18.</p>
+  <p class="src">Manual baseline from vendor guide prices, not quotations [29][30]. Model: proposal 3.6, Tables 20 and 21.</p>
   <div class="notes">Thank you. Does it pay? Two things we do not know yet: what the platform costs, because the supplier does not publish a price, and how many jobs a year we would win. So we made both a slider. Our planning case is a S$250,000 platform and 25 blocks a year. Each job costs S$15,000 to run. Fixed costs are about S$132,000 a year. That gives S$20,300 a block, against S$21,700 today. <span class="cue">[Drag inspections down to 15.]</span> At 15 jobs a year the robot costs more than a gondola crew. <span class="cue">[Drag back up past 20.]</span> Break-even is 20 a year. <span class="cue">[Drag the price to 350, then back to 250.]</span> Even at S$350,000 it breaks even at 24. <span class="cue">[→]</span> That gives a simple rule. At low volume, hire the robot by the day, up to S$3,650. Once a Town Council contract takes us past 20 blocks a year, buy it. <span class="cue">[→]</span> The saving is small. The real return is a thousand hours a year that nobody spends hanging off a wall.</div>
 </section>
 
@@ -850,7 +850,7 @@ S('s-drone')._tick = () => { const t = Math.max(0, Math.min(1, tw.surveyT || 0))
   };
 })();
 
-// 17 cost (proposal Table 17: per job S$15,000; fixed = depreciation + 13% of acquisition + S$26,000)
+// 17 cost (proposal Table 20: per job S$15,000; fixed = depreciation + 13% of acquisition + S$26,000)
 (() => {
   const calc = () => {
     const P = +$('cP').value * 1000, N = +$('cN').value, acq = P + 140000;
@@ -867,7 +867,7 @@ S('s-drone')._tick = () => { const t = Math.max(0, Math.min(1, tw.surveyT || 0))
   calc();
 })();
 
-// 18 risk matrix (proposal Table 19): [id, name, L before, S before, L after, S after]
+// 18 risk matrix (proposal Table 22): [id, name, L before, S before, L after, S after]
 (() => {
   const HZ = [['H1', 'GNSS or link loss near the wall', 3, 4, 2, 4], ['H2', 'Squall gusts', 4, 4, 1, 4], ['H3', 'Drone battery', 3, 3, 1, 3], ['H4', 'Drone falls on people', 2, 5, 1, 5], ['H5', 'Airspace conflict', 1, 5, 1, 5],
     ['H6', 'Residents’ privacy', 4, 3, 2, 3], ['H7', 'Cyber attack or spoofing', 2, 4, 1, 4], ['H8', 'Image AI misses a defect', 3, 4, 2, 4], ['H9', 'Operator error', 3, 4, 2, 4], ['H10', 'Rain damage', 3, 2, 1, 2],

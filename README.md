@@ -43,5 +43,5 @@ The full dashboard page (`index.html`, or D in the deck) styles its panels with 
 
 ## Design notes
 
-- Design: [`docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md`](./docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md)
-- Build plan: [`docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md`](./docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md)
+- Design (updated to v11): [`docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md`](./docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md)
+- Build plan (updated to v11): [`docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md`](./docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md)

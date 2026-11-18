@@ -1,14 +1,14 @@
 # ENG4101C Group 5: 3D twin rebuild and story deck
 
-Design note, 16 Nov 2026. Status: awaiting approval.
+Design note, 16 Nov 2026. Status: approved and built. Updated 18 Nov 2026: the source of truth is now proposal v11 (`ENG4101C_Project_Proposal_Group5_v11.docx`), and table numbers below follow v11.
 
 ## Why
 
-The Session 6 oral presentation carries 80% of the marks (problem 15, integrated design 25, engineering reasoning 25, delivery and Q&A 15). The slot is 20 minutes with four presenters. The group wants a deck that works like the ENG4100C one and tells the story with a live 3D model. The current dashboard is drawn on a flat canvas, looks rough, and shows numbers that contradict the v8 report.
+The Session 6 oral presentation carries 80% of the marks (problem 15, integrated design 25, engineering reasoning 25, delivery and Q&A 15). The slot is 20 minutes with four presenters. The group wants a deck that works like the ENG4100C one and tells the story with a live 3D model. The current dashboard is drawn on a flat canvas, looks rough, and shows numbers that contradicted the report at the time (v8).
 
 ## Goals
 
-1. One 3D digital twin that looks credible on a projector and agrees with the v8 report on every number.
+1. One 3D digital twin that looks credible on a projector and agrees with the v11 report on every number.
 2. A 20-minute interactive deck, built like the ENG4100C deck, where the twin moves with the script.
 3. Everything runs from local files with no internet.
 
@@ -16,11 +16,11 @@ The Session 6 oral presentation carries 80% of the marks (problem 15, integrated
 
 - No edits to the Word report. Report fixes stay a separate list.
 - No push to GitHub until asked.
-- No new engineering content. The deck and twin show only what v8 says.
+- No new engineering content. The deck and twin show only what v11 says.
 
 ## What would make this a failure
 
-- A number on screen that differs from v8.
+- A number on screen that differs from v11.
 - A demo that needs internet or stalls on the presentation laptop.
 - A deck that runs over 20 minutes.
 
@@ -41,7 +41,7 @@ The group picked A.
 | `vendor/three.module.min.js` | Three.js, saved locally. Downloaded once from the jsDelivr CDN (about 0.7 MB). Approving this note approves that download. |
 | `Presentation.html` | The deck. |
 | `script.html` | Printable full script, generated from the deck's notes the same way as ENG4100C. |
-| `README.md` | Updated to v8 and the new files. |
+| `README.md` | Updated to v11 and the new files. |
 
 ## Part 1: the twin
 
@@ -59,7 +59,7 @@ Three.js replaces the hand-written painter. The existing camera state (yaw, pitc
 - **Building scene:** the 60 m × 30 m × 20 m block with window bands, balconies, a void deck and a roof parapet; rooftop carrier with two winch drums on rails; ropes and umbilical to the platform; the 200 mm façade grid shown as a faint overlay with tapped patches coloured; the drone with arms, rotors and dual gimbal flying its 21 lines at 15 m standoff with the camera footprint on the wall; ground station, cordoned drop zone and small figures for scale.
 - Labels are HTML overlays anchored to 3D points, so they stay sharp and do not collide.
 
-### Numbers synced to v8
+### Numbers synced to v11
 
 | Item | Now | Becomes |
 |---|---|---|
@@ -71,11 +71,11 @@ Three.js replaces the hand-written painter. The existing camera state (yaw, pitc
 | Winch speed | 0.15 m/s | up to 0.3 m/s |
 | PLC | on the platform | on the rooftop carrier; the platform box is the arm controller and AC-DC supplies |
 | Wind | 49 N at 8 m/s | 60 Pa × 0.4 m² × 1.2 = 29 N at 10 m/s; fans sized for 104 N |
-| Fault and interlock labels | H2, H8, H10, V3, H15 with dashboard-only meanings | Renamed to the report's hazard IDs, FMEA rows and Table 11 signals |
-| Drop zone label | "30 m (17.6 m drift + 5 m buffer)" | "Cordoned drop zone" with no figure, since v8 gives none |
-| Header | "from v7 report" | v8 |
+| Fault and interlock labels | H2, H8, H10, V3, H15 with dashboard-only meanings | Renamed to the report's hazard IDs (Table 22), FMEA rows (Table 26) and PLC signals (Table 14) |
+| Drop zone label | "30 m (17.6 m drift + 5 m buffer)" | "Cordoned drop zone" with no figure, since v11 gives none |
+| Header | "from v7 report" | v11 |
 
-Any dashboard figure with no source in v8 is removed or relabelled, not invented.
+Any dashboard figure with no source in v11 is removed or relabelled, not invented.
 
 ### Deck control
 
@@ -122,11 +122,11 @@ Each slide carries a full speaking script at about 130 words a minute, in plain 
 
 ## Left to the builder
 
-Exact camera shots, colours, model proportions where v8 gives no dimension (drawn to plausible scale and not labelled with invented figures), and the wording of the script.
+Exact camera shots, colours, model proportions where v11 gives no dimension (drawn to plausible scale and not labelled with invented figures), and the wording of the script.
 
 ## Checks before calling it done
 
-- Every number in the twin and deck traced to a line in v8.
+- Every number in the twin and deck traced to a line in v11.
 - Each scene, the tap cycle and each fault run in the browser with no console errors, in light and dark.
 - The deck is walked through end to end, including presenter view, with the internet off.
 - Planned times sum to 20:00 or less.

@@ -510,7 +510,7 @@ body.pv #pv { display: flex; }
       </div>
     </div>
   </div>
-  <p class="src">Proposal v12, Integration approach: all 16 interfaces (Table 16) and the 8 tap-path messages (Table 17). Rates marked (A) are design targets.</p>
+  <p class="src">Proposal v13, Integration approach: all 16 interfaces (Table 16) and the 8 tap-path messages (Table 17). Rates marked (A) are design targets.</p>
   <div class="notes">To join both robots into one dashboard, one OPC UA gateway exposes Objects, PFI System, with four folders: drone, carrier PLC, SCARA platform and mission gates. <span class="cue">[Click TapResult and TapPermit.]</span> OPC 40010-1 Robotics is closest, but no drone companion spec exists, so we built on OPC UA for Devices. Status publishes every 500 milliseconds over TLS, and alarms fire as events with trigger values. <span class="cue">[Click "Interfaces" tab, then back to "Address space".]</span> The Interfaces tab shows five of our sixteen links with rate and failure action. Two rules hold: safety trips run locally in the PLC under 100 milliseconds, and the dashboard never drives motion. <span class="cue">[Click "Call ApproveTargets".]</span> Gate 1 calls ApproveTargets with a 5 second timeout. <span class="cue">[Click "Stop heartbeat" and count 1, 2, 3.]</span> Three missed 1 second heartbeats latch HOLD: brakes on, arm retracted, hardwired 24 volt permit low.</div>
 </section>
 
@@ -618,7 +618,7 @@ body.pv #pv { display: flex; }
     <span><b>Columns</b> of each matrix are the old frame's axes written in the new frame.</span>
     <span><b>Check:</b> speed never changes, only its description.</span>
   </div>
-  <p class="src">ENG4100C Localization 1 · Practice Set 2, Problems 2.2 and 2.3; undo a rotation with its transpose. Proposal v12 (surveyed check points, model error ≤ 5 cm).</p>
+  <p class="src">ENG4100C Localization 1 · Practice Set 2, Problems 2.2 and 2.3; undo a rotation with its transpose. Proposal v13, Technology selection (reference frames; surveyed check points, model error ≤ 5 cm).</p>
   <div class="notes">To fly that route, the drone links three frames with two rotation matrices. Onboard gyros, accelerometers and LiDAR measure in the body frame: x forward, y right, z down. First, R from body to NED rotates body readings onto a local north, east, down chart using yaw, pitch and roll. Second, R from NED to ECEF rotates onto Earth-centred X, Y, Z using latitude and longitude, matching RTK GNSS. Inside the controller, NED is the working frame: IMU and visual odometry rotate in via R b to n, while RTK GNSS rotates in via the transpose of R n to e. Position error is worked out in NED and rotated back to body via the transpose. Fixing NED to one surveyed point keeps seven-year surveys aligned within 5 centimetres.</div>
 </section>
 
@@ -759,7 +759,7 @@ body.pv #pv { display: flex; }
       </div>
     </div>
   </div>
-  <p class="src">Proposal v12: Technology selection (positioning and sensing), drone design calculations (stopping distance), validation test V3. Zenmuse P1 50 mm lens: 1.32 mm/px at 15 m, 17 m max for 1.5 mm/px. Operational assumptions marked (A).</p>
+  <p class="src">Proposal v13: Technology selection (positioning and sensing), drone design calculations (stopping distance), validation test V3. Zenmuse P1 50 mm lens: 1.32 mm/px at 15 m, 17 m max for 1.5 mm/px. Operational assumptions marked (A).</p>
   <div class="notes">Thank you. GNSS is weakest right beside a 60 metre wall. At 15 metres standoff, lower floors block satellites up to 76 degrees ahead, hiding about 24% of the sky on one side, so error grows straight toward the wall. Active ranging solves this in three layers. LiDAR holds 15 metres without GNSS. The H30T laser rangefinder cross-checks against RTK and flags any mismatch over 0.5 metres for more than 1 second. Over glass windows, binocular vision and millimetre-wave radar take over. <span class="cue">[Drag standoff past 17 m, then back to 15 m.]</span> At 15 metres our 50 millimetre lens gives 1.32 millimetres per pixel, failing beyond 17 metres. At 1.5 metres a second, stopping distance is 0.9 metres, well inside the 3 to 5 metre clearance.</div>
 </section>
 
@@ -906,7 +906,7 @@ body.pv #pv { display: flex; }
         <div class="fc-sol fc-sol-a">
           <h4>Solution A (elbow +)</h4>
           <div class="fc-mono">(θ1, θ2) = (−7.7°, +105.4°)</div>
-          <p>Worked example in proposal v12</p>
+          <p>Worked example in proposal v13</p>
         </div>
         <div class="fc-sol fc-sol-b">
           <h4>Solution B (elbow −)</h4>
@@ -919,7 +919,7 @@ body.pv #pv { display: flex; }
       </div>
     </div>
   </div>
-  <p class="src">Proposal v12 Table 7 and Figure 7; d<sub>3</sub> = 42 mm at wall contact (60 mm stroke, 10 N preload). Inner points at r = 0.141 m keep 19 mm outside the 0.122 m fold limit. Inputs marked (A) are design assumptions.</p>
+  <p class="src">Proposal v13 Table 7 and Figure 7; d<sub>3</sub> ≈ 42 mm nominal wall contact (A) (60 mm stroke, 10 N preload). Inner points at r = 0.141 m keep 19 mm outside the 0.122 m fold limit. Inputs marked (A) are design assumptions.</p>
   <div class="notes">Here are both directions verified side by side for our 0.35 metre links. On the left, forward kinematics feeds shoulder minus 7.693 degrees, elbow 105.385 degrees, and joint 3 at 42 millimetres wall contact inside its 60 millimetre stroke. Step 1 gives combined angle 97.693 degrees. Step 2 places the elbow at 0.347, minus 0.047 metres. Steps 3 to 5 land the hammer at 0.300, 0.300, 0.042 metres. On the right, inverse kinematics runs backwards from that same point. Reach r is 0.424 metres, cosine rule gives D equals minus 0.265, and elbow theta 2 is plus or minus 105.4 degrees. That gives two valid branches: Solution A at minus 7.7 and plus 105.4, or mirrored Solution B at plus 97.7 and minus 105.4. Both hold Jacobian determinant 0.118, well above 0.042; the controller picks the nearer branch.</div>
 </section>
 
@@ -998,7 +998,7 @@ body.pv #pv { display: flex; }
     <h1>Questions</h1>
     <p class="lede">Press <b class="fg">D</b> for the full dashboard: three views, the tap handshake, PLC signals and fault injection. Press 1 to 4 to jump back to a part.</p>
     <div class="team" id="teamRow2" style="grid-template-columns:repeat(4,1fr)"></div>
-    <p class="src">Numbers are from our proposal, version 12. Vendor prices and published study figures are indicative. Oscilloscope traces in the twin are illustrative.</p>
+    <p class="src">Numbers are from our proposal, version 13. Vendor prices and published study figures are indicative. Oscilloscope traces in the twin are illustrative.</p>
   </div>
   <div class="notes">Backup for questions. Press D to open the full dashboard. Useful answers: the reference block is 60 m × 30 m × 20 m, 6,000 m² of façade. Drone: 15 m standoff, 1.32 mm per pixel, about 650 images. Ranging: 15 m standoff (17 m max for 1.5 mm/px), LiDAR hold, H30T LRF vs RTK mismatch flag &gt; 0.5 m for &gt; 1 s, ~0.9 m stop inside 3–5 m clearance, ~24% sky blocked at lower floors (76°). OPC UA and interfaces: Objects → PFI_System on OPC UA for Devices (Drone_M350, Carrier_PLC, Platform_SCARA, Mission_Gates), 500 ms publishing (A), 1 s heartbeat with 3 missed → HOLD (A), ApproveTargets 5 s timeout, SignAndEncrypt, hardwired 24 V TapPermit (arm retracts ≤ 200 ms), local PLC trips &lt; 100 ms, 4–20 mA fault &lt; 3.6 mA, dashboard never drives. FK/IK: L1 = L2 = 0.35 m, P = (0.300, 0.300, 0.042) m, r = 0.424 m, D = −0.265, θ2 = ±105.4°, θ1 = −7.7° (or +97.7°), d3 = 42 mm at contact (60 mm stroke, 10 N preload), |det J| = 0.118 m² ≥ 0.042 m². Arm: 16 taps per 0.8 m patch, 10 N preload, 0.2 J strike. Platform: 20 kg, two cables, 104 N of fan thrust, 230 V AC umbilical. Time: about 3 site days. Cost: S$20,300 against S$21,700 at 25 jobs a year and a S$250,000 platform. Risk: 1 High before, none after, 5 Medium kept as low as reasonably practicable.</div>
 </section>

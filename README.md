@@ -1,6 +1,6 @@
 # ENG4101C Group 5: Robotic Façade Inspection for High-Rise Homes
 
-A drone survey and a cable-driven wall-tapping robot, joined into one inspection system for Singapore's Periodic Façade Inspection. This repo holds the presentation deck and the 3D digital twin that support the proposal (`ENG4101C_Project_Proposal_Group5_v12.docx`). Every number on screen comes from proposal v12, which keeps the v11 table and figure numbers.
+A drone survey and a cable-driven wall-tapping robot, joined into one inspection system for Singapore's Periodic Façade Inspection. This repo holds the presentation deck and the 3D digital twin that support the proposal (`ENG4101C_Project_Proposal_Group5_v13.docx`). Every number on screen comes from proposal v13, which keeps the v11 table and figure numbers.
 
 ## What is here
 
@@ -43,5 +43,5 @@ The full dashboard page (`index.html`, or D in the deck) styles its panels with 
 
 ## Design notes
 
-- Design (v11 table numbers, unchanged in v12): [`docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md`](./docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md)
-- Build plan (v11 table numbers, unchanged in v12): [`docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md`](./docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md)
+- Design (v11 table numbers, unchanged in v13): [`docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md`](./docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md)
+- Build plan (v11 table numbers, unchanged in v13): [`docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md`](./docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md)

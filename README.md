@@ -1,12 +1,12 @@
 # ENG4101C Group 5: Robotic Façade Inspection for High-Rise Homes
 
-A drone survey and a cable-driven wall-tapping robot, joined into one inspection system for Singapore's Periodic Façade Inspection. This repo holds the presentation deck and the 3D digital twin that support the proposal (`ENG4101C_Project_Proposal_Group5_v11.docx`). Every number on screen comes from proposal v11.
+A drone survey and a cable-driven wall-tapping robot, joined into one inspection system for Singapore's Periodic Façade Inspection. This repo holds the presentation deck and the 3D digital twin that support the proposal (`ENG4101C_Project_Proposal_Group5_v12.docx`). Every number on screen comes from proposal v12, which keeps the v11 table and figure numbers.
 
 ## What is here
 
 | File | What it is |
 |---|---|
-| [`Presentation.html`](./Presentation.html) | The 20-minute interactive deck (19 slides plus Questions). It drives the 3D twin live. |
+| [`Presentation.html`](./Presentation.html) | The 20-minute interactive deck (25 slides plus Questions, one competency segment per presenter). It drives the 3D twin live. |
 | [`script.html`](./script.html) | The printable speaking script, by part and slide, with timings. |
 | [`index.html`](./index.html) | The 3D digital twin and dashboard. Live at https://reverii.github.io/ENG4101C/ |
 | [`ENG4101C_3D_Robot_Dashboard.html`](./ENG4101C_3D_Robot_Dashboard.html) | A copy of `index.html` under its old name. |
@@ -43,5 +43,5 @@ The full dashboard page (`index.html`, or D in the deck) styles its panels with 
 
 ## Design notes
 
-- Design (updated to v11): [`docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md`](./docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md)
-- Build plan (updated to v11): [`docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md`](./docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md)
+- Design (v11 table numbers, unchanged in v12): [`docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md`](./docs/superpowers/specs/2026-11-16-3d-twin-and-story-deck-design.md)
+- Build plan (v11 table numbers, unchanged in v12): [`docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md`](./docs/superpowers/plans/2026-11-16-3d-twin-and-story-deck.md)

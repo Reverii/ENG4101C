@@ -208,23 +208,154 @@ body.pv #pv { display: flex; }
 #pvBody { flex: 1; overflow-y: auto; font-size: 27px; line-height: 1.5; }
 #pvNext { font-family: var(--mono); font-size: 15px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
 #pvNext button { background: var(--panel); border: 1px solid var(--line-2); border-radius: 6px; padding: 8px 16px; cursor: pointer; font-family: var(--mono); }
+
+/* course topics (slides 8–15) */
+.slide.fc { gap: 12px; }
+.slide.fc .fc-mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.slide.fc .fc-chain { display: grid; grid-template-columns: 1fr 128px 1fr 128px 1fr; align-items: stretch; flex: 1; min-height: 0; }
+.slide.fc .fc-frame { border: 1.5px solid var(--fc-c, var(--ink)); border-top: 5px solid var(--fc-c, var(--ink)); background: var(--panel); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.slide.fc .fc-frame h3 { margin: 0; font-family: var(--cond); font-size: 24px; color: var(--fc-c, var(--ink)); line-height: 1.15; }
+.slide.fc .fc-frame svg { width: 112px; height: 84px; flex: none; }
+.slide.fc .fc-axes { font-size: 16px; line-height: 1.45; color: var(--fg); }
+.slide.fc .fc-lives { font-size: 14.5px; color: var(--muted); line-height: 1.45; border-top: 1px solid var(--line); padding-top: 8px; margin-top: auto; }
+.slide.fc .fc-link { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 5px; padding: 0 6px; }
+.slide.fc .fc-link .fc-prob { font-family: var(--mono); font-size: 11.5px; background: var(--panel-2); border: 1px solid var(--ink); padding: 2px 7px; color: var(--ink); }
+.slide.fc .fc-link .fc-mat { font-family: var(--mono); font-size: 18px; font-weight: 600; color: var(--ink); }
+.slide.fc .fc-link .fc-arrow { font-size: 28px; line-height: 1; color: var(--ink); }
+.slide.fc .fc-link .fc-by { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+.slide.fc .fc-strap { display: flex; gap: 24px; flex-wrap: wrap; background: var(--panel); border: 1.5px solid var(--ink); padding: 10px 16px; font-size: 15.5px; color: var(--muted); }
+.slide.fc .fc-strap b { color: var(--fg); }
+
+.slide.fc .fc-ctrls { display: grid; gap: 10px 14px; background: var(--panel); border: 1.5px solid var(--ink); padding: 9px 14px; }
+.slide.fc .fc-ctrls.fc-c3 { grid-template-columns: repeat(3, 1fr); }
+.slide.fc .fc-ctrls.fc-c6 { grid-template-columns: repeat(6, 1fr); }
+.slide.fc .fc-ctrl label { display: flex; justify-content: space-between; gap: 6px; font-size: 12.5px; color: var(--muted); margin-bottom: 3px; white-space: nowrap; }
+.slide.fc .fc-ctrl label output { font-family: var(--mono); color: var(--fg); font-weight: 600; }
+.slide.fc .fc-ctrl input[type=range] { width: 100%; margin: 0; accent-color: var(--ink); }
+.slide.fc .fc-ctrl.fc-g1 input[type=range] { accent-color: var(--cyan); }
+.slide.fc .fc-ctrl.fc-g2 input[type=range] { accent-color: var(--violet); }
+
+.slide.fc .fc-s2grid { display: grid; grid-template-columns: 1fr 376px; gap: 16px; align-items: start; flex: 1; min-height: 0; }
+.slide.fc .fc-s2left { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.slide.fc .fc-trio { display: flex; align-items: flex-start; justify-content: flex-start; gap: 8px; }
+.slide.fc .fc-op { font-size: 20px; color: var(--muted); font-family: var(--mono); }
+.slide.fc .fc-trio .fc-op { margin-top: 28px; }
+.slide.fc .fc-sm { display: grid; grid-template-columns: repeat(3, auto); column-gap: 4px; row-gap: 3px; padding: 5px 10px; position: relative; background: var(--panel); }
+.slide.fc .fc-sm::before, .slide.fc .fc-sm::after { content: ""; position: absolute; top: 0; bottom: 0; width: 6px; border: 1.5px solid var(--ink); }
+.slide.fc .fc-sm::before { left: 0; border-right: none; }
+.slide.fc .fc-sm::after { right: 0; border-left: none; }
+.slide.fc .fc-sm span { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 13.5px; text-align: right; min-width: 54px; padding: 2px 3px; }
+.slide.fc .fc-sm span.fc-t { background: rgba(21, 101, 176, .14); color: var(--ink); }
+.slide.fc .fc-sm span.fc-one { font-weight: 700; color: var(--ink); }
+.slide.fc .fc-sm span.fc-z { color: var(--faint); }
+.slide.fc .fc-mcap { text-align: center; margin-top: 5px; }
+.slide.fc .fc-mcap b { font-family: var(--cond); font-size: 15px; display: block; color: var(--ink); }
+.slide.fc .fc-mcap span { font-size: 12px; color: var(--muted); }
+.slide.fc .fc-combo { display: flex; align-items: center; gap: 14px; }
+.slide.fc .fc-read { font-size: 14px; color: var(--muted); line-height: 1.4; max-width: 220px; }
+.slide.fc .fc-note-row { display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--muted); background: var(--panel); border: 1.5px solid var(--ink); padding: 7px 12px; }
+.slide.fc .fc-note-row b { color: var(--fg); }
+.slide.fc .fc-view { border: 1.5px solid var(--ink); background: var(--panel); display: flex; flex-direction: column; }
+.slide.fc .fc-view canvas { display: block; width: 373px; height: 261px; background: var(--panel); }
+.slide.fc .fc-vbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 10px; border-top: 1.5px solid var(--ink); font-size: 12.5px; color: var(--muted); background: var(--panel-2); }
+.slide.fc .fc-vbar .btn { padding: 4px 10px; font-size: 13px; white-space: nowrap; }
+
+.slide.fc .fc-mx { display: grid; grid-template-columns: auto repeat(var(--n), auto); column-gap: 10px; row-gap: 2px; align-items: center; position: relative; padding: 3px 10px; background: var(--panel); }
+.slide.fc .fc-mx::before, .slide.fc .fc-mx::after { content: ""; position: absolute; top: 19px; bottom: 0; width: 6px; border: 1.5px solid var(--ink); }
+.slide.fc .fc-mx::before { left: 20px; border-right: none; }
+.slide.fc .fc-mx::after { right: 0; border-left: none; }
+.slide.fc .fc-mx .fc-h { font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--fc-c, var(--muted)); text-align: right; padding-bottom: 2px; font-weight: 600; }
+.slide.fc .fc-mx .fc-r { font-size: 11.5px; color: var(--muted); font-family: var(--mono); width: 13px; }
+.slide.fc .fc-mx .fc-v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 16.5px; text-align: right; min-width: 68px; color: var(--fg); }
+.slide.fc .fc-mx.fc-vec .fc-v { min-width: 54px; font-weight: 600; }
+.slide.fc .fc-vbox { display: flex; flex-direction: column; align-items: center; }
+.slide.fc .fc-vname { font-size: 11.5px; color: var(--muted); font-family: var(--mono); margin-bottom: 2px; }
+.slide.fc .fc-chk { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 3px; text-align: center; white-space: nowrap; }
+.slide.fc .fc-chk.ok { color: var(--green); font-weight: 600; }
+.slide.fc .fc-rows { display: flex; flex-direction: column; gap: 16px; flex: 1; justify-content: center; }
+.slide.fc .fc-eqrow { display: grid; grid-template-columns: 128px 1fr; gap: 12px; align-items: center; background: var(--panel); border: 1.5px solid var(--ink); padding: 10px 14px; }
+.slide.fc .fc-rtag { border-left: 4px solid var(--fc-c, var(--ink)); padding-left: 10px; }
+.slide.fc .fc-rtag b { font-family: var(--cond); font-size: 18px; display: block; color: var(--ink); }
+.slide.fc .fc-rtag span { font-size: 12.5px; color: var(--muted); line-height: 1.35; display: block; }
+.slide.fc .fc-eq { display: flex; align-items: center; gap: 11px; flex-wrap: nowrap; }
+.slide.fc .fc-eq .fc-read { max-width: 245px; font-size: 13.5px; }
+
+#s-loc1 .fc-chain { flex: 0 0 auto; }
+#s-loc1 .fc-frame { padding: 10px 13px; gap: 5px; }
+#s-loc1 .fc-frame svg { width: 84px; height: 62px; }
+#s-loc1 .fc-frame h3 { font-size: 20px; }
+#s-loc1 .fc-axes { font-size: 14.5px; line-height: 1.35; }
+#s-loc1 .fc-lives { font-size: 13.5px; line-height: 1.35; padding-top: 6px; }
+#s-loc1 .fc-hub-strip { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; background: var(--panel); border: 1.5px solid var(--ink); border-left: 5px solid var(--violet); padding: 9px 16px; font-size: 15.5px; color: var(--fg); }
+#s-loc1 .fc-hub-strip .fc-hm { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+#s-loc1 .fc-hub-strip .fc-hub-mid { color: var(--violet); font-family: var(--cond); font-size: 18px; font-weight: 700; }
+#s-loc1 .fc-ctrl-note { background: var(--panel); border: 1.5px solid var(--ink); padding: 9px 16px; font-size: 14.5px; color: var(--muted); line-height: 1.42; display: flex; flex-direction: column; gap: 4px; }
+#s-loc1 .fc-ctrl-note b { color: var(--fg); }
+
+.slide.fc .fc-opgrid { display: grid; grid-template-columns: 1.18fr 1fr; gap: 16px; flex: 1; min-height: 0; }
+.slide.fc .fc-op-tabs { display: flex; align-items: center; gap: 8px; }
+.slide.fc .fc-op-tabs .btn { padding: 5px 12px; font-size: 14px; white-space: nowrap; }
+.slide.fc .fc-iface-box { display: flex; flex-direction: column; gap: 8px; }
+.slide.fc .fc-iface-t { font-size: 13.5px; }
+.slide.fc .fc-iface-t th { padding: 4px 7px; font-size: 11px; }
+.slide.fc .fc-iface-t td { padding: 6px 7px; line-height: 1.35; }
+.slide.fc .fc-iface-rules { font-size: 13.5px; color: var(--muted); line-height: 1.4; margin-top: auto; padding-top: 6px; border-top: 1px solid var(--line); }
+.slide.fc .fc-tree-box { display: flex; flex-direction: column; gap: 8px; }
+.slide.fc .fc-tree-root { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--ink); padding: 4px 8px; background: var(--panel-2); border: 1px solid var(--ink); }
+.slide.fc .fc-folders { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; align-content: start; }
+.slide.fc .fc-folder { border: 1px solid var(--line); background: var(--stage); padding: 7px 8px; display: flex; flex-direction: column; gap: 4px; }
+.slide.fc .fc-folder-h { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--ink); border-bottom: 1px solid var(--line); padding-bottom: 3px; margin-bottom: 2px; }
+.slide.fc .fc-node { text-align: left; font-family: var(--mono); font-size: 12.5px; padding: 3px 7px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; border-radius: 0; }
+.slide.fc .fc-node:hover { background: var(--panel-2); border-color: var(--ink); }
+.slide.fc .fc-node.fc-sel { background: var(--pc); color: #fff; border-color: var(--pc); font-weight: 600; }
+.slide.fc .fc-node.fc-meth { border-left: 4px solid var(--violet); }
+.slide.fc .fc-node.fc-hw { border-left: 4px solid var(--red); }
+.slide.fc .fc-op-demo { display: flex; flex-direction: column; gap: 8px; }
+.slide.fc .fc-op-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.slide.fc .fc-op-btns .btn { font-size: 14px; padding: 5px 11px; }
+.slide.fc .fc-pill { display: inline-block; font-family: var(--mono); font-size: 12px; font-weight: 700; padding: 2px 7px; border: 1px solid currentColor; }
+
+.slide.fc .fc-rng-srow { display: flex; flex-direction: column; gap: 4px; }
+.slide.fc .fc-rng-srow label { display: flex; justify-content: space-between; font-size: 14.5px; color: var(--muted); }
+.slide.fc .fc-rng-srow label b { font-family: var(--mono); color: var(--fg); }
+
+.slide.fc .fc-kin-eq { font-family: var(--mono); font-size: 14px; line-height: 1.45; color: var(--ink); background: var(--panel-2); border: 1px solid var(--line); padding: 6px 10px; margin: 5px 0; }
+.slide.fc .fc-steps { display: flex; flex-direction: column; gap: 5px; }
+.slide.fc .fc-step { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: baseline; padding: 4px 8px; background: var(--stage); border-left: 3px solid var(--pc); font-size: 14px; }
+.slide.fc .fc-step i { font-style: normal; font-family: var(--mono); font-weight: 700; font-size: 12.5px; color: var(--pc); }
+.slide.fc .fc-step b { color: var(--fg); }
+.slide.fc .fc-step .fc-stext { color: var(--muted); line-height: 1.34; }
+#s-fk .grid2 { gap: 16px; }
+#s-fk .col { gap: 10px; }
+#s-fk .box { padding: 10px 14px; }
+#s-fk .ask { padding: 8px 14px; }
+#s-fk .fc-fk-sliders { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px; }
+#s-fk .fc-fk-sliders label { font-size: 14px; }
+.slide.fc .fc-sols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.slide.fc .fc-sol { border: 1.5px solid var(--ink); background: var(--panel); padding: 9px 12px; }
+.slide.fc .fc-sol.fc-sol-a { border-left: 5px solid var(--pc); }
+.slide.fc .fc-sol.fc-sol-b { border-left: 5px solid var(--muted); }
+.slide.fc .fc-sol h4 { margin: 0 0 4px; font-family: var(--cond); font-size: 16px; color: var(--ink); }
+.slide.fc .fc-sol .fc-mono { font-size: 15px; font-weight: 600; color: var(--fg); }
+.slide.fc .fc-sol p { font-size: 14px; color: var(--muted); margin-top: 3px; }
+@media (prefers-reduced-motion: reduce) { .slide.fc { animation: none; } }
 </style>
 </head>
 <body>
 <div id="viewport"><div id="stage">
 
-<!-- ================= PART 1: THE PROBLEM ================= -->
-<section class="slide" data-part="1" data-sec="25" data-title="Title" data-twin="700,26,554,650" id="s-title">
+<!-- ================= PART 1: THE PROBLEM, OPC UA & INTERFACING ================= -->
+<section class="slide" data-part="1" data-sec="20" data-title="Title" data-twin="700,26,554,650" id="s-title">
   <div class="title-wrap">
     <span class="k">ENG4101C ROBOTICS AUTOMATION INTEGRATION · GROUP 5</span>
     <h1>Robotic façade inspection for high-rise homes</h1>
     <p class="lede">A drone survey and a wall-tapping robot, joined into one inspection system for Singapore's Periodic Façade Inspection.</p>
     <div class="team" id="teamRow"></div>
   </div>
-  <div class="notes">Good morning. We are Group 5. Our project takes people off the side of a building. A drone surveys the façade and a robot on cables taps the wall, as one system. I am {P1}, and I will start with the problem. {P2} shows the system, {P3} the engineering, and {P4} the cost and risk. <span class="cue">[Next slide.]</span></div>
+  <div class="notes">Good morning. We are Group 5. I am {P1}, and I cover the problem, OPC UA and interfacing. {P2} covers localization, {P3} covers ranging and engineering checks, and {P4} covers forward and inverse kinematics, cost and risk. <span class="cue">[Next slide.]</span></div>
 </section>
 
-<section class="slide" data-part="1" data-sec="60" data-title="The job today">
+<section class="slide" data-part="1" data-sec="40" data-title="The job today">
   <h2>The job today: 30,000 buildings, two checks, every seven years</h2>
   <div class="grid3">
     <div class="box"><div class="stat"><b>30,000</b><span>buildings in the first cycle</span></div><p style="margin-top:6px">Taller than 13 m and older than 20 years. Inspected every 7 years since 1 Jan 2022.</p></div>
@@ -236,10 +367,10 @@ body.pv #pv { display: flex; }
     <div class="box reveal" data-step><span class="tag">CHECK 2 · AT LEAST 10% OF EACH ELEVATION</span><h3>Close-range tap test</h3><p>An inspector taps the wall and listens for a hollow sound. This is the check that puts people at height.</p><p class="reveal" data-step style="margin-top:8px"><b class="cy">Equivalent method named in the regulations: a robotic tapping device.</b> Regulation 15(2)(b)(ii), with approval from the Commissioner of Building Control.</p></div>
   </div>
   <p class="src">Sources: BCA media release 21 Oct 2021 [1]; BCA PFI Guidelines v1.3 s. 6.3 and 6.4 [28]; Periodic Inspection Regulations 2021 [42].</p>
-  <div class="notes">Since 2022, every building in Singapore taller than 13 metres and older than 20 years must have its façade inspected every seven years. That is about 30,000 buildings, or roughly 4,300 inspections a year. When the rule started, only 149 Competent Persons and 140 Façade Inspectors were qualified to do them. <span class="cue">[→]</span> Each inspection has two checks. The first is visual: every elevation, usually from the ground. <span class="cue">[→]</span> The second is a tap test on at least 10% of each elevation. An inspector taps the wall and listens. A hollow sound means a tile has come loose. <span class="cue">[→ →]</span> The regulations already name an equivalent method for each check, with the Commissioner’s approval: a drone for the visual, and a robotic tapping device for the tap test. What nobody has done is join the two into one system.</div>
+  <div class="notes">Since 2022, every Singapore building taller than 13 metres and older than 20 years needs façade inspection every seven years. That is 30,000 buildings, about 4,300 inspections a year, with only 149 Competent Persons and 140 Façade Inspectors qualified at launch. <span class="cue">[→]</span> First is a visual check of every elevation. <span class="cue">[→]</span> The regulations already name a drone as an equivalent method. <span class="cue">[→]</span> Second is a close-range tap test on at least 10% of each face, listening for hollow tiles. <span class="cue">[→]</span> The rules also name a robotic tapper with approval. Nobody has joined both into one system.</div>
 </section>
 
-<section class="slide" data-part="1" data-sec="55" data-title="Where people hang off the wall" data-twin="560,112,664,560" id="s-today">
+<section class="slide" data-part="1" data-sec="35" data-title="Where people hang off the wall" data-twin="560,112,664,560" id="s-today">
   <h2>Where people hang off the wall</h2>
   <div class="left" style="width:470px">
     <div class="ask"><b>TODAY</b><span>Two people in a gondola, tapping by hand.</span></div>
@@ -247,37 +378,40 @@ body.pv #pv { display: flex; }
       <ol><li class="reveal" data-step>Rig the gondola on the roof</li><li class="reveal" data-step><b class="bad">Lower two people down the wall</b></li><li class="reveal" data-step><b class="bad">Tap, listen, write notes and take photos</b></li><li class="reveal" data-step>De-rig, move along the roof, start again</li></ol></div>
     <div class="box reveal" data-step><div class="stat"><b style="color:var(--red)">42</b><span>person-hours suspended beside the façade, per inspection</span></div><p style="margin-top:6px">3 days × 7 hours × 2 people on our reference block: 20 storeys, 60 m high, 30 m long, 20 m wide (our estimate).</p></div>
   </div>
-  <div class="notes">This is the tap test today. Our reference block is 20 storeys: 60 metres high, 30 long and 20 wide. <span class="cue">[→ for each step.]</span> A crew rigs a gondola on the roof. Two people go down the wall in it. They tap, listen, and write down what they hear. Then the crew de-rigs, moves along the roof, and does it again for the next drop. <span class="cue">[→]</span> We estimate about three days of this for one block. Two people, seven hours a day: 42 person-hours hanging beside the wall, for every inspection, every seven years. And the result is a set of notes and photos with no exact position, so the same spot is hard to find again next cycle.</div>
+  <div class="notes">This is the tap test today on our 20-storey reference block: 60 metres high, 30 long and 20 wide. <span class="cue">[→ ×4, one per step.]</span> A crew rigs a gondola on the roof, lowers two people down the wall, taps and notes by hand, then de-rigs and moves along for the next drop. <span class="cue">[→]</span> We estimate about three days of this: two people, seven hours a day, 42 person-hours hanging beside the wall every seven years, leaving notes and photos with no exact position.</div>
 </section>
 
-<section class="slide" data-part="1" data-sec="55" data-title="Six pain points">
+<section class="slide" data-part="1" data-sec="40" data-title="Six pain points">
   <h2>Six pain points, each with a number</h2>
   <p class="lede" style="font-size:16px">Click a card.</p>
   <div class="pains" id="pains"></div>
-  <div class="notes">The template asks for six kinds of pain point, and we could put a number on each. <span class="cue">[Click the cards in order.]</span> Safety: falls from height killed four workers in 2024, and one study counted more than 90 façade parts falling in three years. Quality: tapping is judged by ear, and a manual visual survey covered only 40 to 60% of the wall in one study. Time: one to five days on site, then up to ten more for the report. Manpower: about 29 buildings a year for every Competent Person. Downtime: a cordon and a rig for every drop. Cost: about S$21,700 for our reference block. That last figure is our baseline. The robot has to match it.</div>
+  <div class="notes">The template asks for six pain points, and we put a number on each. <span class="cue">[→ lights first three cards.]</span> Safety: falls from height killed four workers in 2024, and over 90 façade parts fell in three years. Quality: tapping is judged by ear, and manual visual checks covered only 40 to 60% of the wall. Time: one to five days on site, plus up to ten for the report. <span class="cue">[→ lights next three cards.]</span> Manpower: 29 buildings a year per Competent Person. Downtime: a rig and cordon for every drop. Cost: S$21,700 per block, our baseline to match.</div>
 </section>
 
-<section class="slide roomy" data-part="1" data-sec="45" data-title="Objectives and KPIs">
+<section class="slide roomy" data-part="1" data-sec="35" data-title="Objectives and KPIs">
   <h2>What we set out to do, and how we will know</h2>
   <div class="grid2">
     <div class="box"><h3>Five objectives</h3>
       <ol style="font-size:16px"><li>Digitise the visual check with a drone and a façade model</li><li>Give the Competent Person one whole-building view</li><li>Automate the tap test with our SCARA arm on a cable robot</li><li>Take people off the façade for flat areas</li><li>Keep the Competent Person in control, with two approval gates</li></ol></div>
     <div class="box"><h3>Success criteria</h3>
       <table class="t">
-        <tr class="reveal" data-step><td>Image detail</td><td><b class="big cy">1.5 mm</b> per pixel or finer (BCA)</td></tr>
-        <tr class="reveal" data-step><td>Visual coverage</td><td>at least <b class="big cy">95%</b> of the façade</td></tr>
-        <tr class="reveal" data-step><td>Tap coverage</td><td>at least <b class="big cy">10%</b> per elevation, plus every flag on flat areas</td></tr>
-        <tr class="reveal" data-step><td>People at height</td><td><b class="big ok">0</b> person-hours suspended for flat areas</td></tr>
-        <tr class="reveal" data-step><td>Traceability</td><td><b class="big cy">100%</b> of images and taps tied to a grid cell</td></tr>
-        <tr class="reveal" data-step><td>Cost</td><td>no more than <b class="big cy">S$21,700</b> per block</td></tr>
+        <tbody class="reveal" data-step>
+          <tr><td>Image detail</td><td><b class="big cy">1.5 mm</b> per pixel or finer (BCA)</td></tr>
+          <tr><td>Visual coverage</td><td>at least <b class="big cy">95%</b> of the façade</td></tr>
+          <tr><td>Tap coverage</td><td>at least <b class="big cy">10%</b> per elevation, plus every flag on flat areas</td></tr>
+        </tbody>
+        <tbody class="reveal" data-step>
+          <tr><td>People at height</td><td><b class="big ok">0</b> person-hours suspended for flat areas</td></tr>
+          <tr><td>Traceability</td><td><b class="big cy">100%</b> of images and taps tied to a grid cell</td></tr>
+          <tr><td>Cost</td><td>no more than <b class="big cy">S$21,700</b> per block</td></tr>
+        </tbody>
       </table></div>
   </div>
   <p class="src">Each target has an acceptance test after deployment, and each baseline its data source (proposal Table 1, test V10).</p>
-  <div class="notes">So we set five objectives. Digitise the visual check. Give the Competent Person one view of the whole building. Automate the tap test. Take people off the wall. And keep the Competent Person in control. <span class="cue">[→ through the six criteria.]</span> These are our targets. Images at 1.5 millimetres per pixel or finer, which is BCA's figure. At least 95% of the façade imaged. At least 10% of each elevation tapped. Zero person-hours suspended for flat areas. Every image and tap tied to a position. And a cost no higher than today. I will hand over to {P2}, who will show how the system does this. <span class="cue">[Hand over.]</span></div>
+  <div class="notes">So we set five objectives: digitise the visual check, give the Competent Person one whole-building view, automate tapping with our SCARA arm, take people off flat walls, and keep the Competent Person in control. <span class="cue">[→ reveals first three criteria.]</span> Our first three targets: images at 1.5 millimetres per pixel or finer, at least 95% visual coverage, and at least 10% tapped on every elevation. <span class="cue">[→ reveals next three criteria.]</span> Next: zero person-hours suspended on flat areas, 100% grid traceability, and cost no higher than S$21,700 per block.</div>
 </section>
 
-<!-- ================= PART 2: THE INTEGRATED SYSTEM ================= -->
-<section class="slide" data-part="2" data-sec="60" data-title="One system, one grid">
+<section class="slide" data-part="1" data-sec="45" data-title="One system, one grid">
   <h2>One system: seven elements on one shared grid</h2>
   <div class="flow">
     <div class="node reveal" data-step><i class="cu1">ENG4100C</i><b>Drone</b>Flies the route and photographs every elevation</div>
@@ -291,27 +425,96 @@ body.pv #pv { display: flex; }
   <div class="rail reveal" data-step><b class="cy">SHARED GRID</b><span>Every image, flag and tap carries the same position: elevation, X and Z in <b class="fg">200 mm × 200 mm</b> cells. The drone's output is the robot's input.</span></div>
   <div class="rail reveal" data-step><b class="warn">OPC UA + SCADA</b><span>One gateway, one database, one dashboard for both robots. It monitors and alarms. It never commands motion.</span></div>
   <div class="rail reveal" data-step><b class="bad">HARDWIRED TAP PERMIT</b><span>A 24 V line from the PLC cuts power to the hammer. No software can bypass it.</span></div>
-  <div class="notes">Thank you. This is the whole system in one line. <span class="cue">[→ for each box.]</span> A drone photographs every elevation. Software stitches the photos into a model, and AI flags possible defects. At Gate 1 the Competent Person approves where to tap. A PLC on the roof lowers the platform. Our arm taps. At Gate 2 the Competent Person reviews every hollow result before it goes into the report. <span class="cue">[→]</span> Three things tie these together. First, one grid. Every image, flag and tap has the same kind of address: a 200 millimetre cell on the wall. So what the drone finds, the robot can go to. <span class="cue">[→]</span> Second, one data layer over OPC UA. <span class="cue">[→]</span> Third, one hardwired safety line. The colours show which unit each part comes from. All three are in the design.</div>
+  <div class="notes">This is the whole system in seven boxes. <span class="cue">[→ ×7, one per box.]</span> A drone photographs every elevation. Software stitches the façade model and AI flags possible defects. At Gate 1 the Competent Person approves tap targets. The roof PLC lowers the platform, our SCARA arm taps, and Gate 2 reviews every hollow result before the report is filed. <span class="cue">[→]</span> Three rails tie it together. First, one shared 200 millimetre grid, so the drone's output becomes the robot's input. <span class="cue">[→]</span> Second, one OPC UA data layer. <span class="cue">[→]</span> Third, a hardwired 24 volt tap permit. The colours show all three course units in the design.</div>
 </section>
 
-<section class="slide" data-part="2" data-sec="60" data-title="Drone survey" data-twin="540,112,684,560" id="s-drone">
-  <h2>Step 1: the drone surveys every elevation</h2>
-  <div class="left" style="width:450px">
-    <div class="box"><div class="kv">
-      <b>15 m</b><span>standoff, held by LiDAR range to the wall</span>
-      <b>1.32 mm/px</b><span>with a 50 mm lens. BCA asks for 1.5 or finer</span>
-      <b>10.8 × 7.2 m</b><span>each photo, with 70% and 60% overlap</span>
-      <b>21 lines</b><span>per elevation, 2.86 m apart</span>
-      <b>650 images</b><span>for the block, about 30 min of flying</span>
-    </div></div>
-    <div class="box"><h3>Live on this elevation</h3><div class="live"><span>Image <b id="dImg">0</b> of 193</span><span>Covered <b id="dCov">0%</b></span></div></div>
-    <div class="box reveal" data-step><p><b class="fg">Why 15 m?</b> Closer gives more detail but less margin. 17 m is the furthest that still meets 1.5 mm per pixel. The drone stops in about 0.9 m.</p></div>
-    <div class="box reveal" data-step><p><b class="fg">Flown by an SAC-accredited provider.</b> The drone design comes from our ENG4100C project, adapted here to 15 m and a mapping camera.</p></div>
+<section class="slide fc" data-part="1" data-sec="55" data-title="OPC UA: one address space for both robots" id="s-opcua">
+  <h2>OPC UA: one address space for both robots</h2>
+  <p class="lede">Our unified information model on OPC UA for Devices (no drone companion spec exists; OPC 40010-1 Robotics is closest). OPC UA monitors and alarms only — it never commands motion.</p>
+  <div class="fc-opgrid">
+    <div class="col" style="gap:8px">
+      <div class="fc-op-tabs" id="fcOpTabs">
+        <button class="btn pri" type="button" data-optab="0">Address space</button>
+        <button class="btn" type="button" data-optab="1">Interfaces</button>
+      </div>
+      <div class="box fc-tree-box" data-oppane="0" style="flex:1">
+        <span class="tag">ADDRESS SPACE · CLICK A NODE</span>
+        <div class="fc-tree-root">Objects → PFI_System</div>
+        <div class="fc-folders" id="fcOpTree">
+          <div class="fc-folder">
+            <div class="fc-folder-h">Drone_M350</div>
+            <button class="btn fc-node fc-sel" type="button" data-opnode="WindSpeed">WindSpeed</button>
+            <button class="btn fc-node" type="button" data-opnode="StandoffLRF">StandoffLRF</button>
+            <button class="btn fc-node" type="button" data-opnode="RTKFixStatus">RTKFixStatus</button>
+            <button class="btn fc-node" type="button" data-opnode="SimplexState">SimplexState</button>
+          </div>
+          <div class="fc-folder">
+            <div class="fc-folder-h">Carrier_PLC</div>
+            <button class="btn fc-node" type="button" data-opnode="CableTension">CableTension_L/R</button>
+            <button class="btn fc-node" type="button" data-opnode="WinchHeight_Z">WinchHeight_Z</button>
+            <button class="btn fc-node" type="button" data-opnode="RoofWind">RoofWind</button>
+            <button class="btn fc-node fc-hw" type="button" data-opnode="TapPermit">TapPermit (24 V HW)</button>
+          </div>
+          <div class="fc-folder">
+            <div class="fc-folder-h">Platform_SCARA</div>
+            <button class="btn fc-node" type="button" data-opnode="TiltAngle">TiltAngle</button>
+            <button class="btn fc-node" type="button" data-opnode="FanThrust">FanThrust</button>
+            <button class="btn fc-node" type="button" data-opnode="PreloadForce">PreloadForce</button>
+            <button class="btn fc-node" type="button" data-opnode="TapResult">TapResult[1..16]</button>
+          </div>
+          <div class="fc-folder">
+            <div class="fc-folder-h">Mission_Gates</div>
+            <button class="btn fc-node" type="button" data-opnode="Gate1_ApprovedTargets">Gate1_ApprovedTargets</button>
+            <button class="btn fc-node" type="button" data-opnode="Gate2_ReportSignOff">Gate2_ReportSignOff</button>
+            <button class="btn fc-node fc-meth" type="button" data-opnode="ApproveTargets">ApproveTargets()</button>
+          </div>
+        </div>
+      </div>
+      <div class="box fc-iface-box" data-oppane="1" hidden style="flex:1">
+        <span class="tag">FIVE OF SIXTEEN INTERFACES</span>
+        <table class="t fc-iface-t">
+          <tr><th>Link</th><th>How</th><th>Rate</th><th>If it fails</th></tr>
+          <tr><td>Drone ↔ ground station</td><td>Encrypted radio</td><td>10 Hz</td><td>Lost for 3 s: hover, then the pre-set lost-link action</td></tr>
+          <tr><td>Ground station ↔ PLC</td><td>OPC UA, signed and encrypted</td><td>500 ms, heartbeat 1 s</td><td>3 missed heartbeats: brakes on, arm retracted</td></tr>
+          <tr><td>PLC ↔ arm</td><td><b class="bad">Hardwired 24 V permit</b> + Modbus TCP</td><td>10 ms scan</td><td>Permit low: arm retracts within 200 ms</td></tr>
+          <tr><td>Sensors → PLC</td><td>4–20 mA, safety inputs</td><td>10 ms scan</td><td>Below 3.6 mA is treated as a fault: hold</td></tr>
+          <tr><td>Gateway → SCADA</td><td>OPC UA over TLS</td><td>500 ms</td><td>Site keeps running; data is buffered</td></tr>
+        </table>
+        <p class="fc-iface-rules"><b class="fg">Safety trips are local:</b> they run in the PLC in under 100 ms and never wait for the network. · <b class="fg">The dashboard never drives:</b> SCADA shows and alarms; motion goes to the PLC while every interlock is healthy.</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="box" style="flex:1">
+        <span class="tag">SELECTED NODE</span>
+        <div class="kv" style="margin-top:6px;font-size:14.5px">
+          <b>Path</b><span id="fcOpPath" class="fc-mono">–</span>
+          <b>Type / signal</b><span id="fcOpType">–</span>
+          <b>Rate</b><span id="fcOpRate">–</span>
+          <b>Owner</b><span id="fcOpOwner">–</span>
+        </div>
+        <p id="fcOpDesc" style="margin-top:8px;font-size:14px;color:var(--muted);line-height:1.4"></p>
+      </div>
+      <div class="box fc-op-demo">
+        <span class="tag">LIVE METHOD &amp; HEARTBEAT CHECK</span>
+        <div class="live" style="font-size:13px">
+          <span>Gate 1: <b id="fcOpGate">IDLE (false)</b></span>
+          <span>Heartbeat (1 s): <b id="fcOpHb">OK · #0</b></span>
+          <span><i class="lamp hi" id="fcOpLamp"></i>PLC state: <b id="fcOpState">READY</b></span>
+          <span>Security: <b>SignAndEncrypt</b></span>
+        </div>
+        <div class="fc-op-btns">
+          <button class="btn pri" id="fcOpApprove" type="button">Call ApproveTargets</button>
+          <button class="btn" id="fcOpStopHb" type="button">Stop heartbeat</button>
+        </div>
+        <p id="fcOpLog" style="font-size:13.5px;color:var(--muted);min-height:36px;line-height:1.35">500 ms publishing (A); alarms sent as events with the trigger value. Tap permit stays a hardwired 24 V line.</p>
+      </div>
+    </div>
   </div>
-  <div class="notes">Step one is the drone. You are watching it fly one elevation. It works down the wall in 21 horizontal lines. The orange patch is one photo, 10.8 by 7.2 metres. The blue area is what has been covered, and each ring is something the AI has flagged. It flies 15 metres from the wall, where a 50 millimetre lens gives 1.32 millimetres per pixel, inside BCA's 1.5. <span class="cue">[→]</span> We chose 15 because 17 is the furthest that still meets the target, and the drone can stop in under a metre. The whole block is about 650 images and 30 minutes of flying. <span class="cue">[→]</span> An accredited provider flies it, as BCA requires. The drone is our ENG4100C design, moved in to 15 metres with a mapping camera added.</div>
+  <p class="src">Proposal v12, Integration approach: all 16 interfaces (Table 16) and the 8 tap-path messages (Table 17). Rates marked (A) are design targets.</p>
+  <div class="notes">To join both robots into one dashboard, one OPC UA gateway exposes Objects, PFI System, with four folders: drone, carrier PLC, SCARA platform and mission gates. <span class="cue">[Click TapResult and TapPermit.]</span> OPC 40010-1 Robotics is closest, but no drone companion spec exists, so we built on OPC UA for Devices. Status publishes every 500 milliseconds over TLS, and alarms fire as events with trigger values. <span class="cue">[Click "Interfaces" tab, then back to "Address space".]</span> The Interfaces tab shows five of our sixteen links with rate and failure action. Two rules hold: safety trips run locally in the PLC under 100 milliseconds, and the dashboard never drives motion. <span class="cue">[Click "Call ApproveTargets".]</span> Gate 1 calls ApproveTargets with a 5 second timeout. <span class="cue">[Click "Stop heartbeat" and count 1, 2, 3.]</span> Three missed 1 second heartbeats latch HOLD: brakes on, arm retracted, hardwired 24 volt permit low.</div>
 </section>
 
-<section class="slide" data-part="2" data-sec="65" data-title="CP Gate 1" id="s-gate1">
+<section class="slide" data-part="1" data-sec="35" data-title="CP Gate 1" id="s-gate1">
   <h2>Step 2: the Competent Person chooses where to tap</h2>
   <div id="g1wrap">
     <canvas id="g1c" width="300" height="520"></canvas>
@@ -327,10 +530,176 @@ body.pv #pv { display: flex; }
       <p class="src">Full Gate 1 screen: proposal Figure 10.</p>
     </div>
   </div>
-  <div class="notes">Step two is a person. The photos are stitched into this one view of the elevation, and the amber marks are what the AI flagged. The Competent Person now decides where the robot will tap. The rule is at least 10% of each elevation, and every flag on a flat area. <span class="cue">[Click "Place strips through the flags".]</span> Each strip is 0.8 metres wide, one arm patch, from roof to ground. Four strips on this face gives just over 10%. Notice one flag sits on its own. A strip for that one flag costs 30 minutes of rigging, so the Competent Person can send it to a manual check. That is a judgement, and it belongs to a person. <span class="cue">[Click "Approve targets".]</span> Approval is a method call over OPC UA. Without it, the PLC will not move the winch.</div>
+  <div class="notes">Here is that ApproveTargets call on the Competent Person's screen: the stitched elevation with amber AI flags. The rule is at least 10% of each elevation and every flag on flat wall. <span class="cue">[Click "Place strips through the flags", or press →.]</span> Each strip is 0.8 metres wide from roof to ground. Four strips clear 10%. One stray flag costs 30 minutes of rigging, so a person can route it to manual check. <span class="cue">[Click "Approve targets", or press →.]</span> Approval sends ApproveTargets over OPC UA; without it, the PLC will not move the winch.</div>
 </section>
 
-<section class="slide" data-part="2" data-sec="65" data-title="The robot goes down the wall" data-twin="540,112,684,560" id="s-descend">
+<section class="slide" data-part="1" data-sec="25" data-title="The logic behind it" id="s-logic">
+  <h2>The logic behind the safe state</h2>
+  <div id="lgBar">
+    <button class="btn pri" data-lgb="0">Ladder logic</button><button class="btn" data-lgb="1">Tap cycle states</button><button class="btn" data-lgb="2">Operator screen</button>
+    <p id="lgSay"></p>
+  </div>
+  <div class="box" id="lgFig">
+    <img data-lg="0" src="figures/fig-plc-ladder-slide.png" alt="Carrier PLC ladder logic: rung 1 enables the winch only with the arm retracted, tension and wind in limits, a released target and no hold; rung 2 grants the hardwired tap permit only with both brakes set, fans, tilt and heartbeat healthy and the winch stopped">
+    <img data-lg="1" hidden src="figures/fig-tap-state-slide.png" alt="Tap cycle state machine: idle, moving, settling, aligning, tapping and retracting, with skip paths and one safe hold state left only by an operator reset">
+    <img data-lg="2" hidden src="figures/fig-hmi-screens-slide.png" alt="Robot tapping HMI screen: interlock lamps, the current patch's tap results and a prioritised alarm list with trigger values">
+  </div>
+  <p class="src">Proposal Figures 8, 9 and 10. Screen values are illustrative.</p>
+  <div class="notes">Once approved, plain PLC logic guards winch and hammer. <span class="cue">[Ladder logic is showing.]</span> Rung one moves the winch only with arm retracted, wind and tension safe, and no hold. Rung two grants the hardwired permit with brakes set, fans, tilt and heartbeat healthy. <span class="cue">[→ Tap cycle states.]</span> Six states, one safe hold. <span class="cue">[→ Operator screen.]</span> Every permissive as a lamp. Over to {P2} for localization. <span class="cue">[Hand over.]</span></div>
+</section>
+
+<!-- ================= PART 2: LOCALIZATION ================= -->
+<section class="slide" data-part="2" data-sec="50" data-title="Drone survey" data-twin="540,112,684,560" id="s-drone">
+  <h2>Step 1: the drone surveys every elevation</h2>
+  <div class="left" style="width:450px">
+    <div class="box"><div class="kv">
+      <b>15 m</b><span>standoff, held by LiDAR range to the wall</span>
+      <b>1.32 mm/px</b><span>with a 50 mm lens. BCA asks for 1.5 or finer</span>
+      <b>10.8 × 7.2 m</b><span>each photo, with 70% and 60% overlap</span>
+      <b>21 lines</b><span>per elevation, 2.86 m apart</span>
+      <b>650 images</b><span>for the block, about 30 min of flying</span>
+    </div></div>
+    <div class="box"><h3>Live on this elevation</h3><div class="live"><span>Image <b id="dImg">0</b> of 193</span><span>Covered <b id="dCov">0%</b></span></div></div>
+    <div class="box reveal" data-step><p><b class="fg">Why 15 m?</b> Closer gives more detail but less margin. 17 m is the furthest that still meets 1.5 mm per pixel. The drone stops in about 0.9 m.</p></div>
+    <div class="box reveal" data-step><p><b class="fg">Flown by an SAC-accredited provider.</b> The drone design comes from our ENG4100C project, adapted here to 15 m and a mapping camera.</p></div>
+  </div>
+  <div class="notes">Thank you. I cover localization, starting with the drone survey. You are watching it work down one elevation in 21 horizontal lines. Each orange patch is one photo, 10.8 by 7.2 metres, with blue showing coverage and rings showing what AI has flagged. At 15 metres from the wall, a 50 millimetre lens delivers 1.32 millimetres per pixel, inside BCA's 1.5 limit. <span class="cue">[→]</span> We chose 15 metres because 17 is the furthest that still meets 1.5, while the drone stops in about 0.9 metres. One block takes about 650 images and 30 minutes of flying. <span class="cue">[→]</span> An SAC-accredited provider flies our adapted ENG4100C drone with a mapping camera.</div>
+</section>
+
+<section class="slide fc" data-part="2" data-sec="55" data-title="One drone, two rotations, one working frame" id="s-loc1">
+  <h2>One drone, two rotations, one working frame</h2>
+  <p class="lede">Measure on the drone, rotate onto the local chart, then rotate onto the Earth. Each arrow is one rotation matrix.</p>
+  <div class="fc-chain">
+    <div class="fc-frame" style="--fc-c:var(--cyan)">
+      <svg viewBox="0 0 120 92" aria-hidden="true"><g stroke="currentColor" stroke-width="2" fill="none" style="color:var(--cyan)"><path d="M40 40 L100 40"/><path d="M40 40 L12 70"/><path d="M40 40 L40 88"/><path d="M94 35 L100 40 L94 45"/><path d="M13 62 L12 70 L20 69"/><path d="M35 82 L40 88 L45 82"/></g><g font-family="Consolas,ui-monospace,monospace" font-size="11.5" fill="currentColor" style="color:var(--ink)"><text x="74" y="32">x fwd</text><text x="0" y="90">y right</text><text x="48" y="74">z down</text></g></svg>
+      <h3>Drone body (b)</h3>
+      <div class="fc-axes">Fixed to the airframe: x forward (nose), y right, z down</div>
+      <div class="fc-lives">Gyros, accelerometers, LiDAR report relative to the drone.</div>
+    </div>
+    <div class="fc-link">
+      <div class="fc-prob">Problem 2.2</div>
+      <div class="fc-mat">R<sub>b</sub><sup>n</sup></div>
+      <div class="fc-arrow">→</div>
+      <div class="fc-by">yaw ψ, pitch θ, roll φ<br>R = R<sub>z</sub> R<sub>y</sub> R<sub>x</sub></div>
+    </div>
+    <div class="fc-frame" style="--fc-c:var(--violet)">
+      <svg viewBox="0 0 120 92" aria-hidden="true"><g stroke="currentColor" stroke-width="2" fill="none" style="color:var(--violet)"><path d="M40 40 L40 6"/><path d="M40 40 L100 40"/><path d="M40 40 L40 88"/><path d="M35 12 L40 6 L45 12"/><path d="M94 35 L100 40 L94 45"/><path d="M35 82 L40 88 L45 82"/></g><g font-family="Consolas,ui-monospace,monospace" font-size="11.5" fill="currentColor" style="color:var(--ink)"><text x="48" y="14">N</text><text x="84" y="32">E</text><text x="48" y="86">D</text></g></svg>
+      <h3>Local NED (n)</h3>
+      <div class="fc-axes">Flat chart at the work site: north, east, down</div>
+      <div class="fc-lives">Flight route, waypoints, position and velocity over ground.</div>
+    </div>
+    <div class="fc-link">
+      <div class="fc-prob">Problem 2.3</div>
+      <div class="fc-mat">R<sub>n</sub><sup>e</sup></div>
+      <div class="fc-arrow">→</div>
+      <div class="fc-by">latitude μ,<br>longitude l</div>
+    </div>
+    <div class="fc-frame" style="--fc-c:var(--ink)">
+      <svg viewBox="0 0 120 92" aria-hidden="true"><g stroke="currentColor" stroke-width="2" fill="none" style="color:var(--ink)"><circle cx="44" cy="50" r="30" stroke-width="1.2"/><path d="M44 50 L44 8"/><path d="M44 50 L104 50"/><path d="M44 50 L16 80"/><path d="M39 14 L44 8 L49 14"/><path d="M98 45 L104 50 L98 55"/><path d="M17 72 L16 80 L24 79"/></g><g font-family="Consolas,ui-monospace,monospace" font-size="11.5" fill="currentColor" style="color:var(--ink)"><text x="52" y="16">Z pole</text><text x="92" y="66">Y</text><text x="2" y="70">X</text></g></svg>
+      <h3>Earth ECEF (e)</h3>
+      <div class="fc-axes">Centre of the Earth, turns with the Earth: X, Y, Z</div>
+      <div class="fc-lives">What RTK GNSS outputs. One frame for every cycle.</div>
+    </div>
+  </div>
+  <div class="fc-hub-strip">
+    <span>IMU/VO (body)</span>
+    <span class="fc-hm">R<sub>b</sub><sup>n</sup></span>
+    <span>→</span>
+    <span class="fc-hub-mid">NED, the working frame</span>
+    <span>←</span>
+    <span class="fc-hm">(R<sub>n</sub><sup>e</sup>)<sup>T</sup></span>
+    <span>RTK GNSS (ECEF)</span>
+  </div>
+  <div class="fc-ctrl-note">
+    <span><b>Control:</b> position error is worked out in NED, then rotated into the body frame with the transpose (R<sub>b</sub><sup>n</sup>)<sup>T</sup>, so the motors know which way to tilt.</span>
+    <span><b>Surveyed point:</b> fixing NED to the same surveyed point on the block each cycle lets the 7-year surveys line up (model error ≤ 5 cm).</span>
+  </div>
+  <div class="fc-strap">
+    <span><b>Columns</b> of each matrix are the old frame's axes written in the new frame.</span>
+    <span><b>Check:</b> speed never changes, only its description.</span>
+  </div>
+  <p class="src">ENG4100C Localization 1 · Practice Set 2, Problems 2.2 and 2.3; undo a rotation with its transpose. Proposal v12 (surveyed check points, model error ≤ 5 cm).</p>
+  <div class="notes">To fly that route, the drone links three frames with two rotation matrices. Onboard gyros, accelerometers and LiDAR measure in the body frame: x forward, y right, z down. First, R from body to NED rotates body readings onto a local north, east, down chart using yaw, pitch and roll. Second, R from NED to ECEF rotates onto Earth-centred X, Y, Z using latitude and longitude, matching RTK GNSS. Inside the controller, NED is the working frame: IMU and visual odometry rotate in via R b to n, while RTK GNSS rotates in via the transpose of R n to e. Position error is worked out in NED and rotated back to body via the transpose. Fixing NED to one surveyed point keeps seven-year surveys aligned within 5 centimetres.</div>
+</section>
+
+<section class="slide fc" data-part="2" data-sec="55" data-title="Three single turns make R_b^n" id="s-loc2">
+  <h2>Three single turns make R<sub>b</sub><sup>n</sup></h2>
+  <div class="fc-ctrls fc-c3">
+    <div class="fc-ctrl fc-g1"><label for="fcYaw2">Yaw ψ (heading) <output data-fc-o="yaw">30°</output></label><input id="fcYaw2" data-k="yaw" type="range" min="0" max="359" step="1" value="30"></div>
+    <div class="fc-ctrl fc-g1"><label for="fcPit2">Pitch θ (nose up/down) <output data-fc-o="pit">5°</output></label><input id="fcPit2" data-k="pit" type="range" min="-30" max="30" step="1" value="5"></div>
+    <div class="fc-ctrl fc-g1"><label for="fcRol2">Roll φ (tilt sideways) <output data-fc-o="rol">0°</output></label><input id="fcRol2" data-k="rol" type="range" min="-30" max="30" step="1" value="0"></div>
+  </div>
+  <div class="fc-s2grid">
+    <div class="fc-s2left">
+      <div class="fc-trio">
+        <div><div class="fc-sm" id="fcSz"></div><div class="fc-mcap"><b>R<sub>z</sub> · yaw</b><span>turn about z; 1 bottom-right</span></div></div>
+        <div class="fc-op">×</div>
+        <div><div class="fc-sm" id="fcSy"></div><div class="fc-mcap"><b>R<sub>y</sub> · pitch</b><span>turn about y; 1 in the centre</span></div></div>
+        <div class="fc-op">×</div>
+        <div><div class="fc-sm" id="fcSx"></div><div class="fc-mcap"><b>R<sub>x</sub> · roll</b><span>turn about x; 1 top-left</span></div></div>
+      </div>
+      <div class="fc-combo">
+        <div class="fc-op">=</div>
+        <div id="fcSr"></div>
+        <div class="fc-read">Yaw, then pitch, then roll. Columns are the drone's nose, right side and belly, written in N, E, D.</div>
+      </div>
+      <div class="fc-note-row">
+        <span><b>Shaded:</b> the only cells each angle changes.</span>
+        <span><b>Pitch</b> is the odd one out: its minus sign sits below the diagonal.</span>
+      </div>
+    </div>
+    <div class="fc-view">
+      <canvas id="fcDv" width="746" height="522" aria-label="3D view of the drone and its axes against fixed north, east and down"></canvas>
+      <div class="fc-vbar">
+        <span id="fcVstep">Dashed: fixed N, E, D. Solid: the drone's own axes.</span>
+        <button class="btn" id="fcPlay" type="button">Play the order</button>
+      </div>
+    </div>
+  </div>
+  <p class="src">Problem 2.2 · fx-991ES PLUS: MatA = R<sub>z</sub>, MatB = R<sub>y</sub>, MatC = R<sub>x</sub>, then MatA × MatB × MatC =</p>
+  <div class="notes">Here is how R from body to NED is built from three single-axis turns: yaw about z, pitch about y, and roll about x. In each 3-by-3 matrix, the shaded cells are the only four entries that change, and the 1 sits on the axis that stays still. Pitch is the odd one out: its minus sign sits below the diagonal. <span class="cue">[Drag yaw to 90, then back to 30.]</span> Multiply R z by R y by R x to get the combined matrix below. Its columns are the drone's nose, right side and belly in north, east and down. <span class="cue">[Click "Play the order".]</span> Watch the dashed N, E, D frame stay fixed while the drone turns in order: yaw 30 degrees, pitch 5 degrees up, then roll. Rotations do not commute.</div>
+</section>
+
+<section class="slide fc" data-part="2" data-sec="60" data-title="Drone over Singapore: body → NED → ECEF" id="s-loc3">
+  <h2>Drone over Singapore: body → NED → ECEF</h2>
+  <div class="fc-ctrls fc-c6">
+    <div class="fc-ctrl"><label for="fcSpd">Speed nose <output id="fcOSpd">2.0 m/s</output></label><input id="fcSpd" data-k="spd" type="range" min="0" max="10" step="0.5" value="2"></div>
+    <div class="fc-ctrl fc-g1"><label for="fcYaw">Yaw ψ <output id="fcOYaw">30°</output></label><input id="fcYaw" data-k="yaw" type="range" min="0" max="359" step="1" value="30"></div>
+    <div class="fc-ctrl fc-g1"><label for="fcPit">Pitch θ <output id="fcOPit">5°</output></label><input id="fcPit" data-k="pit" type="range" min="-30" max="30" step="1" value="5"></div>
+    <div class="fc-ctrl fc-g1"><label for="fcRol">Roll φ <output id="fcORol">0°</output></label><input id="fcRol" data-k="rol" type="range" min="-30" max="30" step="1" value="0"></div>
+    <div class="fc-ctrl fc-g2"><label for="fcLat">Lat μ <output id="fcOLat">1.35° N</output></label><input id="fcLat" data-k="lat" type="range" min="-89" max="89" step="0.05" value="1.35"></div>
+    <div class="fc-ctrl fc-g2"><label for="fcLon">Lon l <output id="fcOLon">103.8° E</output></label><input id="fcLon" data-k="lon" type="range" min="-180" max="180" step="0.1" value="103.8"></div>
+  </div>
+  <div class="fc-rows">
+    <div class="fc-eqrow">
+      <div class="fc-rtag" style="--fc-c:var(--cyan)"><b>Step 1</b><span>Body → NED<br>Problem 2.2</span></div>
+      <div class="fc-eq">
+        <div id="fcM1"></div><div class="fc-op">×</div>
+        <div class="fc-vbox"><div id="fcVb"></div><div class="fc-chk" id="fcCb"></div></div>
+        <div class="fc-op">=</div>
+        <div class="fc-vbox"><div id="fcVn"></div><div class="fc-chk" id="fcCn"></div></div>
+        <div class="fc-read" id="fcRn"></div>
+      </div>
+    </div>
+    <div class="fc-eqrow">
+      <div class="fc-rtag" style="--fc-c:var(--violet)"><b>Step 2</b><span>NED → ECEF<br>Problem 2.3</span></div>
+      <div class="fc-eq">
+        <div id="fcM2"></div><div class="fc-op">×</div>
+        <div class="fc-vbox"><div id="fcVn2"></div><div class="fc-chk">&nbsp;</div></div>
+        <div class="fc-op">=</div>
+        <div class="fc-vbox"><div id="fcVe"></div><div class="fc-chk" id="fcCe"></div></div>
+        <div class="fc-read">Earth frame: same as GNSS latitude and longitude, as X, Y, Z. A real drone mostly runs this step in reverse, rotating GNSS fix into NED via the transpose.</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <p class="src">fx-991ES PLUS: MatA = R<sub>b</sub><sup>n</sup>, MatB = R<sub>n</sub><sup>e</sup>, MatC = v (3×1), then MatB × MatA × MatC =</p>
+    <button class="btn" id="fcReset" type="button" style="padding:4px 12px;font-size:13px">Reset to worked example</button>
+  </div>
+  <div class="notes">Now run real numbers over Singapore: 2 metres a second along the nose, yaw 30 degrees, pitch 5 degrees up, roll zero, at latitude 1.35 degrees north and longitude 103.8 degrees east. In Step 1, R from body to NED multiplies body velocity 2, 0, 0 to give 1.73 metres a second north, 1.00 east and minus 0.17 down. Negative down means a gentle climb. Check the norm underneath: 2.00 metres a second, unchanged. In Step 2, R from NED to ECEF rotates that velocity into Earth X, Y, Z, and the speed stays 2.00 metres a second. <span class="cue">[Drag latitude or longitude, then click "Reset to worked example".]</span> Moving around the globe changes ECEF components because north and down point differently on a sphere, but speed never changes. In flight, RTK fixes run Step 2 in reverse.</div>
+</section>
+
+<section class="slide" data-part="2" data-sec="50" data-title="The robot goes down the wall" data-twin="540,112,684,560" id="s-descend">
   <h2>Step 3: the robot goes down the wall</h2>
   <div class="left" style="width:450px">
     <div class="box"><h3>We reuse a proven platform</h3><p>A cable-driven robot from Hong Kong, verified in 5 site trials and used on more than 12 commercial jobs. Cables carry the weight, so it does not rely on suction over cracked tiles.</p></div>
@@ -343,56 +712,58 @@ body.pv #pv { display: flex; }
     <div class="box"><div class="live"><span>Height <b id="rH">57 m</b></span><span>Step <b id="rStep">waiting</b></span><span>Brakes <b id="rBrk">released</b></span><span>On the wall <b id="rWall">no</b></span></div>
       <button class="btn pri" id="rGo" style="margin-top:10px">Lower to the first target</button> <span class="src">shown 10× faster than real</span></div>
   </div>
-  <div class="notes">Step three. On the roof is a carrier with two winches and a safety PLC. We did not design this platform. It comes from a Hong Kong system that has been through five site trials and more than twelve commercial jobs. We chose cables because they carry the weight. A suction robot depends on grip, and grip fails on cracked tiles, which is exactly where the defects are. <span class="cue">[Click "Lower to the first target", or press →.]</span> The PLC lowers the platform at no more than 0.3 metres a second. This is sped up ten times. At the target height the spring brakes set. Then two fans press the platform onto the wall with about 104 newtons, and four bumpers confirm contact. Only then may the arm move.</div>
+  <div class="notes">The drone relies on RTK GNSS and local NED, but close to the wall the tapping robot does not use GNSS at all. A roof carrier with two winches and a safety PLC lowers a proven Hong Kong cable platform, verified in five site trials and over twelve commercial jobs. Cables carry the 20 kilogram load, unlike suction which fails on cracked tiles. <span class="cue">[Click "Lower to the first target", or press →.]</span> Winch encoders guide descent at up to 0.3 metres a second, shown ten times faster here. At target height, two spring brakes set, two fans press the wall with 104 newtons, and the arm camera aligns to the drone map. Over to {P3} for ranging and engineering checks. <span class="cue">[Hand over.]</span></div>
 </section>
 
-<section class="slide" data-part="2" data-sec="70" data-title="Three CUs in one tap" data-twin="540,112,684,560" id="s-cu">
-  <h2>Three units in one tap</h2>
-  <div class="left" style="width:450px">
-    <div class="cu" id="cuA" style="--c:var(--green)"><h3><span>ENG4100C</span>Places the platform</h3><p>Winch encoders give the height. The arm camera matches the tiles to the drone map and measures the last 30 to 50 mm of error.</p></div>
-    <div class="cu" id="cuB" style="--c:var(--cyan)"><h3><span>ENG3107C</span>Aims the hammer</h3><p>Inverse kinematics turns each grid point into joint angles. Joint 3 presses to a 10 N preload.</p></div>
-    <div class="cu" id="cuC" style="--c:var(--amber)"><h3><span>ENG3106C</span>Decides if the strike may happen</h3><p>The PLC grants the tap permit only while tension, brakes, fan thrust and wind are inside limits.</p></div>
-    <div class="box"><div class="live"><span><i class="lamp" id="cuLamp"></i>Tap permit <b id="cuPermit">low</b></span><span>Taps <b id="cuTaps">0 / 16</b></span><span>θ1 <b id="cuT1">0°</b> θ2 <b id="cuT2">0°</b></span><span>Preload <b id="cuPre">0 N</b></span></div></div>
-    <p class="reveal" data-step style="font-size:16px;color:var(--fg)">Take one away and no tap happens: wrong place, no reach, or no permit.</p>
-  </div>
-  <div class="notes">Now watch one patch being tapped, and watch the three cards. <span class="cue">[Let it run.]</span> The steps along the bottom are the handshake from our report. First, ENG4100C, autonomous robots: the platform is placed from the winch encoders, and the arm camera matches the tiles it sees to the drone's map. Cable stretch and wind leave 30 to 50 millimetres of error, and the camera removes it. Second, ENG3107C, robotics modelling: inverse kinematics turns each grid point into two joint angles, and the third joint presses the hammer until it reads 10 newtons. Third, ENG3106C, industrial automation: the arm asks the PLC for permission. The lamp goes green only while cable tension, brakes, fan thrust and wind are all inside limits. Then the hammer fires. Green is solid, red is hollow. <span class="cue">[→]</span> Take any one unit away and there is no tap. That is what we mean by integrated.</div>
-</section>
-
-<section class="slide roomy" data-part="2" data-sec="50" data-title="Who talks to whom">
-  <h2>Who talks to whom, how fast, and what happens when it fails</h2>
-  <table class="t">
-    <tr><th>Link</th><th>How</th><th>Rate</th><th>If it fails</th></tr>
-    <tr class="reveal" data-step><td>Drone ↔ ground station</td><td>Encrypted radio</td><td>10 Hz</td><td>Lost for 3 s: hover, then the pre-set lost-link action</td></tr>
-    <tr class="reveal" data-step><td>Ground station ↔ PLC</td><td>OPC UA, signed and encrypted</td><td>500 ms, heartbeat 1 s</td><td>3 missed heartbeats: brakes on, arm retracted</td></tr>
-    <tr class="reveal" data-step><td>PLC ↔ arm</td><td><b class="bad">Hardwired 24 V permit</b> + Modbus TCP</td><td>10 ms scan</td><td>Permit low: arm retracts within 200 ms</td></tr>
-    <tr class="reveal" data-step><td>Sensors → PLC</td><td>4–20 mA, safety inputs</td><td>10 ms scan</td><td>Below 3.6 mA is treated as a fault: hold</td></tr>
-    <tr class="reveal" data-step><td>Gateway → SCADA</td><td>OPC UA over TLS</td><td>500 ms</td><td>Site keeps running; data is buffered</td></tr>
-  </table>
-  <p class="src">All 16 interfaces, and the 8 tap-path messages with data type, timeout and acknowledgement: proposal Tables 16 and 17.</p>
-  <div class="grid2" style="flex:0">
-    <div class="box reveal" data-step><h3>Safety trips are local</h3><p>They run in the PLC in under 100 ms and never wait for the network.</p></div>
-    <div class="box reveal" data-step><h3>The dashboard never drives</h3><p>SCADA shows and alarms. Motion commands go to the PLC, which obeys only while every interlock is healthy.</p></div>
-  </div>
-  <div class="notes">An integration is only as good as its interfaces. Here are five of the sixteen in our report. <span class="cue">[→ for each row.]</span> For each one we state how it talks, how fast, and what happens when it fails. Lose the drone link for three seconds and the drone hovers. Miss three heartbeats and the robot holds. The PLC to the arm is the important one. It is a wire, not a message. If that line goes low, the hammer has no power and the arm retracts within 200 milliseconds. <span class="cue">[→ →]</span> Two rules sit behind this. Safety trips happen in the PLC and never wait for a network. And the dashboard never drives anything. Over to {P3}. <span class="cue">[Hand over.]</span></div>
-</section>
-
-<!-- ================= PART 3: ENGINEERING REASONING ================= -->
-<section class="slide" data-part="3" data-sec="70" data-title="The arm" data-twin="560,112,664,560" id="s-arm">
-  <h2>The arm: why a SCARA, and where it can reach</h2>
-  <div class="left" style="width:470px">
-    <div class="box"><p><b class="fg">Two joints turn in the plane of the wall; the third slides straight into it.</b> A SCARA is stiff along that third axis, so the strike goes straight into the wall.</p></div>
-    <div style="display:flex;gap:14px">
-      <div id="pad"><div class="base"></div></div>
-      <div class="box" style="flex:1"><span class="tag">CLICK A TAP POINT</span>
-        <div class="kv" style="margin-top:6px"><b id="aXY">–</b><span>target (x, y), m</span><b id="aT2">–</b><span>θ2, elbow</span><b id="aT1">–</b><span>θ1, shoulder</span><b id="aDet">–</b><span>|det J|, keep above 0.042</span></div><p class="src" style="margin-top:6px">θ2 = arccos((x² + y² − L1² − L2²) ÷ 2·L1·L2)</p></div>
+<!-- ================= PART 3: RANGING & ENGINEERING CHECKS ================= -->
+<section class="slide fc" data-part="3" data-sec="55" data-title="Ranging: holding 15 m from the wall" id="s-range">
+  <h2>Ranging: holding 15 m from the wall</h2>
+  <p class="lede">Beside a 60 m wall, GNSS error grows normal to the façade — so active ranging holds the standoff while the camera sets the outer limit.</p>
+  <div class="grid2">
+    <div class="col">
+      <div class="box" style="display:flex;flex-direction:column;gap:10px">
+        <span class="tag">STANDOFF &amp; SKY-BLOCKAGE CHECK</span>
+        <div class="fc-rng-srow">
+          <label for="fcRngD"><span>Standoff distance D</span><b id="fcRngDv">15.0 m</b></label>
+          <input id="fcRngD" type="range" min="5" max="30" step="0.5" value="15">
+        </div>
+        <div class="fc-rng-srow">
+          <label for="fcRngH"><span>Drone height h on 60 m wall</span><b id="fcRngHv">0 m (ground)</b></label>
+          <input id="fcRngH" type="range" min="0" max="60" step="3" value="0">
+        </div>
+        <div class="kv" style="margin-top:4px;font-size:14.5px">
+          <b>Image detail</b><span id="fcRngGsd" class="fc-mono">1.32 mm/px · PASS</span>
+          <b>Clearance</b><span id="fcRngClr" class="fc-mono">10.0–12.0 m spare vs 3–5 m min</span>
+          <b>Stop check</b><span id="fcRngStop" class="fc-mono">OK · 0.9 m stop at 1.5 m/s (A)</span>
+          <b>Blocked sky</b><span id="fcRngSky" class="fc-mono">76.0° ahead · ~24% sky hidden</span>
+        </div>
+      </div>
+      <div class="ask" style="margin-top:auto"><b>WHY 15 m</b><span id="fcRngSay" style="font-size:15.5px">1.32 mm/px passes BCA's 1.5 mm/px limit (17 m max), with over 3× the 3–5 m minimum clearance.</span></div>
     </div>
-    <div class="box reveal" data-step><div class="kv"><b>0.70 m</b><span>furthest reach, arm straight (L1 = L2 = 0.35 m)</span><b>0.122 m</b><span>closest reach, at the 160° fold limit</span><b>19 mm</b><span>spare at the inner points, so the camera must align within 15 mm</span></div></div>
-    <div class="box reveal" data-step><p><b class="fg">Sizing:</b> joint 1 holds 17.2 N·m with the arm level, so we select at least 35 N·m.</p></div>
+    <div class="col">
+      <div class="box">
+        <span class="tag">THREE RANGING LAYERS</span>
+        <ul style="font-size:15px;margin-top:6px">
+          <li><b class="fg">LiDAR standoff hold:</b> holds 15 m directly to the wall, needing no GNSS.</li>
+          <li><b class="fg">H30T laser rangefinder cross-check:</b> compares wall range against RTK and flags <b class="fg">|d<sub>LRF</sub> − d<sub>RTK</sub>| &gt; 0.5 m</b> for over <b class="fg">1 s</b> (test V3).</li>
+          <li><b class="fg">Over glazed windows:</b> binocular vision and mm-wave radar guard against specular laser reflections, keeping concrete frames in view.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <span class="tag">WHY GNSS ALONE FAILS NORMAL TO THE WALL</span>
+        <p style="font-size:15px;margin-top:4px">At 15 m from our 60 m × 30 m wall, lower floors hide satellites below <b class="fg">arctan(60 ÷ 15) ≈ 76°</b> straight ahead — blocking about <b class="fg">24%</b> of the sky on one side, so error grows along the standoff axis.</p>
+      </div>
+      <div class="box">
+        <span class="tag">STOPPING DISTANCE (CAPTURE AT 1.5 m/s)</span>
+        <p style="font-size:15px;margin-top:4px">1.5² ÷ (2 × 2) + 1.5 × 0.2 ≈ <b class="fg">0.9 m</b> (assumed 2 m/s² braking, 0.2 s latency (A)) — inside the <b class="fg">3–5 m</b> minimum clearance [16].</p>
+      </div>
+    </div>
   </div>
-  <div class="notes">Thank you. The part we designed ourselves is the arm. It is a SCARA. Two joints turn in the plane of the wall and move the hammer across a patch. The third slides straight into the wall. We chose it because a SCARA is stiff along that third axis, so the strike goes straight in. <span class="cue">[Click the point at top right, 0.30, 0.30.]</span> This is the worked example from our report. For the point 0.30, 0.30 the inverse kinematics gives an elbow angle of 105.4 degrees and a shoulder angle of minus 7.7. <span class="cue">[Click an inner point.]</span> The inner points are the tight ones. <span class="cue">[→]</span> The arm cannot fold past 160 degrees, so it cannot reach closer than 122 millimetres. The inner tap points sit only 19 millimetres outside that. That is why the camera must align the platform to within 15 millimetres before any tap. <span class="cue">[→]</span> For the motors, the shoulder holds 17.2 newton metres with the arm level, so we select 35.</div>
+  <p class="src">Proposal v12: Technology selection (positioning and sensing), drone design calculations (stopping distance), validation test V3. Zenmuse P1 50 mm lens: 1.32 mm/px at 15 m, 17 m max for 1.5 mm/px. Operational assumptions marked (A).</p>
+  <div class="notes">Thank you. GNSS is weakest right beside a 60 metre wall. At 15 metres standoff, lower floors block satellites up to 76 degrees ahead, hiding about 24% of the sky on one side, so error grows straight toward the wall. Active ranging solves this in three layers. LiDAR holds 15 metres without GNSS. The H30T laser rangefinder cross-checks against RTK and flags any mismatch over 0.5 metres for more than 1 second. Over glass windows, binocular vision and millimetre-wave radar take over. <span class="cue">[Drag standoff past 17 m, then back to 15 m.]</span> At 15 metres our 50 millimetre lens gives 1.32 millimetres per pixel, failing beyond 17 metres. At 1.5 metres a second, stopping distance is 0.9 metres, well inside the 3 to 5 metre clearance.</div>
 </section>
 
-<section class="slide" data-part="3" data-sec="70" data-title="Hollow or solid" data-twin="540,112,684,560" id="s-tap">
+<section class="slide" data-part="3" data-sec="55" data-title="Hollow or solid" data-twin="540,112,684,560" id="s-tap">
   <h2>Hollow or solid: every tap starts the same way</h2>
   <div class="left" style="width:450px">
     <div class="box"><div class="kv">
@@ -405,10 +776,10 @@ body.pv #pv { display: flex; }
       <p id="tapSay" style="margin-top:10px;font-size:15.5px">The force trace must sit in the green band before the hammer fires.</p></div>
     <div class="box reveal" data-step><p><b class="fg">The classifier screens; the Competent Person decides.</b> Every hollow result is reviewed, plus a random 5% of solid ones. Bench target: catch at least 95% of hollow tiles.</p></div>
   </div>
-  <div class="notes">A human tapper hits a little differently every time, and tires over hundreds of taps. The robot does not. Before every strike, the third joint presses until the load cell reads 10 newtons. Then a solenoid fires a 0.1 kilogram hammer head at 2 metres a second, which is 0.2 joules. Every tap starts from the same contact. <span class="cue">[Click "Solid".]</span> Top trace: the force rises into the green band, then the strike. Bottom trace: the sound. A solid tile gives a short, bright ring. <span class="cue">[Click "Hollow".]</span> A hollow one rings lower and for longer. The traces are illustrative; the classifier must still be proven on test panels. <span class="cue">[Click "Visibly cracked".]</span> If the camera sees a cracked tile, the arm does not strike it at all. It flags it for the Competent Person. <span class="cue">[→]</span> And the classifier only screens. A person reviews every hollow result and a random 5% of solid ones.</div>
+  <div class="notes">From ranging on the drone to acoustic tapping on the wall. A human tapper varies and tires over hundreds of taps; the robot does not. Before every strike, joint 3 presses until the 1 kilohertz force loop holds 10 newtons. A solenoid then fires a 0.1 kilogram hammer head at 2 metres a second, 0.2 joules, recorded by a 48 kilohertz microphone in 1.5 seconds per tap. <span class="cue">[Click "Solid".]</span> Top trace shows preload entering the green band; bottom shows a short, bright solid ring. <span class="cue">[Click "Hollow".]</span> Hollow tiles ring lower and longer. Traces are illustrative until proven on test panels. <span class="cue">[Click "Visibly cracked".]</span> Cracked tiles are never struck, only flagged. <span class="cue">[→]</span> The classifier only screens: the Competent Person reviews every hollow tile and a random 5% of solid ones.</div>
 </section>
 
-<section class="slide" data-part="3" data-sec="60" data-title="When things go wrong" data-twin="540,112,684,560" id="s-fault">
+<section class="slide" data-part="3" data-sec="55" data-title="When things go wrong" data-twin="540,112,684,560" id="s-fault">
   <h2>When something goes wrong, every fault ends the same way</h2>
   <div class="left" style="width:450px">
     <div class="ask"><b>SAFE STATE</b><span>Brakes set · permit low · arm retracted</span></div>
@@ -422,25 +793,10 @@ body.pv #pv { display: flex; }
       <p id="fMsg" style="margin-top:8px;font-size:15px;color:var(--muted);min-height:44px">Running normally.</p></div>
     <p class="reveal" data-step style="font-size:15.5px;color:var(--muted)">After a 2026 autonomous shuttle incident in Punggol, we show the operator the exact trigger and value for every automatic stop.</p>
   </div>
-  <div class="notes">The robot is tapping. Let us break things. <span class="cue">[Click "Squall gust".]</span> Wind goes above our 8 metres a second limit. The permit drops, the arm pulls back, the brakes hold, and the banner says exactly why. <span class="cue">[Click it again to clear.]</span> It carries on from where it stopped. <span class="cue">[Click "Fan failure", then clear.]</span> One fan lost leaves 55 newtons. We need 69 to hold the platform against the tap and the wind, so the permit goes low. <span class="cue">[Click "Emergency stop", then clear.]</span> Every fault ends in the same state: brakes set, permit low, arm retracted. One safe state is easier to prove than five. <span class="cue">[→]</span> And every stop shows its reason, a lesson from the Punggol shuttle incident.</div>
+  <div class="notes">The robot is tapping. Let us inject two faults and see what happens. <span class="cue">[Click "Squall gust".]</span> Wind crosses our 8 metres a second limit. The hardwired permit drops, the arm pulls back, spring brakes hold, and the display states the exact trigger and value. <span class="cue">[Click again to clear.]</span> Once wind clears, tapping carries on from where it stopped. <span class="cue">[Click "Fan failure".]</span> Losing one fan leaves 55 newtons, below the 69 newtons needed to hold the platform against the strike and wind, so the permit drops immediately. <span class="cue">[Click again to clear.]</span> Whether it is wind, a fan, cable tension or emergency stop, every fault ends in one safe state: brakes set, permit low, arm retracted. One safe state is easier to prove than five. <span class="cue">[→]</span> Showing the exact trigger and value applies the lesson from the 2026 Punggol shuttle incident.</div>
 </section>
 
-<section class="slide" data-part="3" data-sec="45" data-title="The logic behind it" id="s-logic">
-  <h2>The logic behind the safe state</h2>
-  <div id="lgBar">
-    <button class="btn pri" data-lgb="0">Ladder logic</button><button class="btn" data-lgb="1">Tap cycle states</button><button class="btn" data-lgb="2">Operator screen</button>
-    <p id="lgSay"></p>
-  </div>
-  <div class="box" id="lgFig">
-    <img data-lg="0" src="figures/fig-plc-ladder-slide.png" alt="Carrier PLC ladder logic: rung 1 enables the winch only with the arm retracted, tension and wind in limits, a released target and no hold; rung 2 grants the hardwired tap permit only with both brakes set, fans, tilt and heartbeat healthy and the winch stopped">
-    <img data-lg="1" hidden src="figures/fig-tap-state-slide.png" alt="Tap cycle state machine: idle, moving, settling, aligning, tapping and retracting, with skip paths and one safe hold state left only by an operator reset">
-    <img data-lg="2" hidden src="figures/fig-hmi-screens-slide.png" alt="Robot tapping HMI screen: interlock lamps, the current patch's tap results and a prioritised alarm list with trigger values">
-  </div>
-  <p class="src">Proposal Figures 8, 9 and 10. Screen values are illustrative.</p>
-  <div class="notes">Behind that one safe state is plain PLC logic. <span class="cue">[Ladder logic is showing.]</span> Rung one: the winch may move only with the arm retracted, tension and wind in limits, a released target and no hold. Rung two is the tap permit: both brakes set, fans, tilt and heartbeat healthy, and the winch stopped. Any trip latches a hold that only an operator can reset. <span class="cue">[→ Tap cycle states.]</span> Here is the same cycle as states: six of them, and one way out of every fault. <span class="cue">[→ Operator screen.]</span> And this is what the operator sees: every permissive as a lamp, and every alarm with its trigger value.</div>
-</section>
-
-<section class="slide roomy" data-part="3" data-sec="60" data-title="Sizing checks">
+<section class="slide roomy" data-part="3" data-sec="55" data-title="Sizing checks">
   <h2>Three sizing checks that changed the design</h2>
   <div class="grid3" style="flex:1">
     <div class="box"><span class="tag">POWER DOWN 65 m OF CABLE</span><h3>The umbilical</h3><p>Fans and arm need 1.2 kW at the platform.</p>
@@ -451,10 +807,10 @@ body.pv #pv { display: flex; }
       <table class="t" style="margin-top:8px"><tr class="reveal" data-step><td>10% of 6,000 m²</td><td class="big">938 patches</td></tr><tr class="reveal" data-step><td>× 54 s each</td><td class="big">14.1 h</td></tr><tr class="reveal" data-step><td>13 drops × 30 min</td><td class="big">6.5 h</td></tr><tr class="reveal" data-step><td>Total</td><td><b class="big warn">20.6 h ≈ 3 site days</b></td></tr></table></div>
   </div>
   <div class="ask reveal" data-step><b>HONEST RESULT</b><span>The robot is not faster than today. It is safer, consistent and recorded.</span></div>
-  <div class="notes">Three calculations changed our design. <span class="cue">[→ ×3]</span> One, power. The platform needs 1.2 kilowatts at the end of 65 metres of cable. At 24 volts the cable loses 45 volts, which is impossible. At 48 volts it cannot deliver more than one kilowatt. So we send 230 volts AC and convert on the platform: 5 amps and a 2% drop. <span class="cue">[→ ×4]</span> Two, the fans. They must resist the tap, the preload and a 10 metre a second wind: 69 newtons. With a margin of one and a half, 104. <span class="cue">[→ ×4]</span> Three, time. Ten percent of the block is 938 patches. At 54 seconds each, plus 13 moves along the roof, that is about three site days. <span class="cue">[→]</span> So the robot is not faster than a gondola crew. The gain is that nobody hangs off the wall, and every tap is recorded.</div>
+  <div class="notes">Three sizing calculations shaped our design. <span class="cue">[→ ×3]</span> First, power down 65 metres of cable for 1.2 kilowatts. At 24 volts DC, line drop is 45 volts: impossible. At 48 volts, maximum delivery is 1 kilowatt: not enough. So we send 230 volts AC at 5.3 amps with a 2% drop. <span class="cue">[→ ×4]</span> Second, wall-press fans. Tap reaction is 30 newtons, preload 10, and 10 metre a second wind 29: 69 newtons total. With a 1.5 margin, we need 104 newtons from two 55 newton fans. <span class="cue">[→ ×4]</span> Third, time. Ten percent of 6,000 square metres is 938 patches at 54 seconds plus 13 drops: 20.6 hours, about three site days. <span class="cue">[→]</span> The robot is not faster than today; it is safer, consistent and recorded.</div>
 </section>
 
-<section class="slide roomy" data-part="3" data-sec="55" data-title="Alternatives">
+<section class="slide roomy" data-part="3" data-sec="50" data-title="Alternatives">
   <h2>What else we considered, scored against the requirements</h2>
   <table class="t">
     <tr><th>Choice</th><th>Selected</th><th>Alternatives (score)</th><th>Deciding reason</th></tr>
@@ -466,11 +822,120 @@ body.pv #pv { display: flex; }
   </table>
   <div class="ask reveal" data-step><b>WEIGHTS</b><span>Safety 30% · cost 20% · cycle time 15% · reach 15% · payload 10% · maintainability 10%. Moving 10 points between safety and cost changes no choice.</span></div>
   <p class="src">Scores 1 to 5 are the group's engineering judgement, after three pass/fail gates. Proposal Table 10.</p>
-  <div class="notes">We scored the alternatives, not just listed them. <span class="cue">[→ for each row.]</span> Each option first has to pass three gates, such as a tap permit that does not depend on the network. Then safety carries the most weight. The cable robot scores 3.95. Manual access stays for ledges. A tapping drone cannot hold steady while it strikes, and a suction robot's grip fails on cracked tiles. A SCARA beats a gantry or a six-axis arm: stiff along the tap, and light. The robot positions itself from its winches and camera, because the wall blocks a quarter of the sky. And we hire the drone rather than buy it. <span class="cue">[→]</span> Shifting weight between safety and cost changes none of these. {P4} will show what it costs. <span class="cue">[Hand over.]</span></div>
+  <div class="notes">We scored every alternative against our requirements after three pass-fail gates, such as a tap permit that does not depend on the network. <span class="cue">[→ ×5, one per row.]</span> Safety carries 30% weight. The cable robot scores 3.95, beating manual gondolas kept for ledges, unstable tapping drones, and suction robots that slip on cracked tiles. A 3-joint SCARA scores 4.00: stiff along the tap and light for a 20 kilogram platform. Winch encoders plus camera score 4.45 because the wall blocks a quarter of the sky. Force-controlled tapping scores 4.15, and we hire the drone at S$2,750 a day rather than buy S$52,000 of hardware. <span class="cue">[→]</span> Shifting 10 points between safety and cost changes no choice. Over to {P4} for kinematics, cost and risk. <span class="cue">[Hand over.]</span></div>
 </section>
 
-<!-- ================= PART 4: COST, RISK, CLOSE ================= -->
-<section class="slide roomy" data-part="4" data-sec="75" data-title="Cost" id="s-cost">
+<!-- ================= PART 4: FK/IK, COST, RISK & CLOSE ================= -->
+<section class="slide" data-part="4" data-sec="50" data-title="The arm" data-twin="560,112,664,560" id="s-arm">
+  <h2>The arm: why a SCARA, and where it can reach</h2>
+  <div class="left" style="width:470px">
+    <div class="box"><p><b class="fg">Two joints turn in the plane of the wall; the third slides straight into it.</b> A SCARA is stiff along that third axis, so the strike goes straight into the wall.</p></div>
+    <div style="display:flex;gap:14px">
+      <div id="pad"><div class="base"></div></div>
+      <div class="box" style="flex:1"><span class="tag">CLICK A TAP POINT</span>
+        <div class="kv" style="margin-top:6px"><b id="aXY">–</b><span>target (x, y), m</span><b id="aT2">–</b><span>θ2, elbow</span><b id="aT1">–</b><span>θ1, shoulder</span><b id="aDet">–</b><span>|det J|, keep above 0.042</span></div><p class="src" style="margin-top:6px">θ2 = arccos((x² + y² − L1² − L2²) ÷ 2·L1·L2)</p></div>
+    </div>
+    <div class="box reveal" data-step><div class="kv"><b>0.70 m</b><span>furthest reach, arm straight (L1 = L2 = 0.35 m)</span><b>0.122 m</b><span>closest reach, at the 160° fold limit</span><b>19 mm</b><span>spare at the inner points, so the camera must align within 15 mm</span></div></div>
+    <div class="box reveal" data-step><p><b class="fg">Sizing:</b> joint 1 holds 17.2 N·m with the arm level, so we select at least 35 N·m.</p></div>
+  </div>
+  <div class="notes">Thank you. The subsystem we designed ourselves is this 3-joint SCARA arm. Two rotary joints position the hammer across an 0.8 metre patch; the third slides straight into the wall so the strike stays stiff. <span class="cue">[Click top-right point (0.30, 0.30).]</span> At our worked corner 0.30, 0.30, inverse kinematics gives elbow 105.4 degrees and shoulder minus 7.7 degrees. <span class="cue">[Click an inner point.]</span> The inner points are tightest. <span class="cue">[→]</span> With 0.35 metre links, outer reach is 0.70 metres, and the 160 degree fold limit sets inner reach at 0.122 metres. Inner taps sit just 19 millimetres outside that, so camera alignment must hold within 15 millimetres. <span class="cue">[→]</span> Joint 1 holds 17.2 newton metres level, so we select 35.</div>
+</section>
+
+<section class="slide fc" data-part="4" data-sec="60" data-title="FK and IK: joint values ⇄ hammer at (x, y, z)" id="s-fk">
+  <h2>FK and IK: joint values ⇄ hammer at (x, y, z)</h2>
+  <div class="grid2">
+    <div class="col">
+      <div class="box">
+        <span class="tag">FORWARD KINEMATICS · L1 = L2 = 0.35 m (A) · d3 ≤ 60 mm (A)</span>
+        <div class="fc-kin-eq">
+          x = 0.35 cos θ<sub>1</sub> + 0.35 cos(θ<sub>1</sub> + θ<sub>2</sub>)<br>
+          y = 0.35 sin θ<sub>1</sub> + 0.35 sin(θ<sub>1</sub> + θ<sub>2</sub>)<br>
+          z = d<sub>3</sub> &nbsp;<span style="color:var(--muted)">(extends normal to wall to 10 N preload)</span>
+        </div>
+        <p style="font-size:14px">Limits: <b class="fg">θ<sub>2</sub> ∈ [25°, 160°]</b> · reach <b class="fg">0.122–0.70 m</b> · <b class="fg">|det J| ≥ 0.042 m²</b></p>
+      </div>
+      <div class="box" style="flex:1">
+        <span class="tag">FK WORKED STEPS 01–05</span>
+        <div class="fc-steps">
+          <div class="fc-step"><i>01</i><div class="fc-stext"><b>Combined angle:</b> <span id="fcFkS1" class="fc-mono">θ1 + θ2 = −7.693° + 105.385° = 97.693°</span></div></div>
+          <div class="fc-step"><i>02</i><div class="fc-stext"><b>Elbow (joint 2):</b> <span id="fcFkS2" class="fc-mono">xe = 0.347 m · ye = −0.047 m</span></div></div>
+          <div class="fc-step"><i>03</i><div class="fc-stext"><b>X along wall:</b> <span id="fcFkS3" class="fc-mono">x = 0.347 − 0.047 = 0.300 m</span></div></div>
+          <div class="fc-step"><i>04</i><div class="fc-stext"><b>Y up wall:</b> <span id="fcFkS4" class="fc-mono">y = −0.047 + 0.347 = 0.300 m</span></div></div>
+          <div class="fc-step"><i>05</i><div class="fc-stext"><b>Z into wall:</b> <span id="fcFkS5" class="fc-mono">z = d3 = 42 mm = 0.042 m (contact, ≤ 60 mm)</span></div></div>
+        </div>
+      </div>
+      <div class="box">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="tag">LIVE FK CHECK</span>
+          <button class="btn" id="fcFkReset" type="button" style="padding:2px 9px;font-size:14px">Reset</button>
+        </div>
+        <div class="fc-fk-sliders">
+          <div class="fc-rng-srow">
+            <label for="fcFkT1"><span>θ<sub>1</sub></span><b id="fcFkT1v">−7.693°</b></label>
+            <input id="fcFkT1" type="range" min="-180" max="180" step="0.1" value="-7.7">
+          </div>
+          <div class="fc-rng-srow">
+            <label for="fcFkT2"><span>θ<sub>2</sub></span><b id="fcFkT2v">105.385°</b></label>
+            <input id="fcFkT2" type="range" min="25" max="160" step="0.1" value="105.4">
+          </div>
+          <div class="fc-rng-srow">
+            <label for="fcFkD3"><span>d<sub>3</sub></span><b id="fcFkD3v">42 mm</b></label>
+            <input id="fcFkD3" type="range" min="0" max="60" step="1" value="42">
+          </div>
+        </div>
+      </div>
+      <div class="ask">
+        <b>FK RESULT</b>
+        <div>
+          <span id="fcFkRes" class="fc-mono" style="font-size:15.5px;font-weight:600;color:var(--ink)">Hammer P = (0.300, 0.300, 0.042) m</span> · <span id="fcFkDet" class="fc-mono ok" style="font-size:14px">|det J| = 0.118 m² ≥ 0.042 m²</span>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="box" style="flex:1">
+        <span class="tag">INVERSE KINEMATICS · P = (0.30, 0.30, 0.042) m · OUTER CORNER</span>
+        <div class="fc-steps">
+          <div class="fc-step"><i>1</i><div class="fc-stext"><b>Reach:</b> <span class="fc-mono">r = √(x² + y²) = 0.424 m (inside 0.122–0.70 m)</span></div></div>
+          <div class="fc-step"><i>2</i><div class="fc-stext"><b>Cosine rule:</b> <span class="fc-mono">D = (r² − L1² − L2²) ÷ (2 L1 L2) = −0.265</span></div></div>
+          <div class="fc-step"><i>3</i><div class="fc-stext"><b>Elbow:</b> <span class="fc-mono">θ2 = ±arccos(D) = ±105.4°</span></div></div>
+          <div class="fc-step"><i>4</i><div class="fc-stext"><b>Shoulder:</b> <span class="fc-mono">θ1 = atan2(y, x) − atan2(L2 sin θ2, L1 + L2 cos θ2) = 45.0° − 52.7° = −7.7° (+θ2)</span></div></div>
+          <div class="fc-step"><i>5</i><div class="fc-stext"><b>Joint 3 (Z):</b> <span class="fc-mono">d3 = z = 42 mm inside 60 mm stroke; PLC stops on 10 N load-cell reading</span></div></div>
+        </div>
+      </div>
+      <div class="fc-sols">
+        <div class="fc-sol fc-sol-a">
+          <h4>Solution A (elbow +)</h4>
+          <div class="fc-mono">(θ1, θ2) = (−7.7°, +105.4°)</div>
+          <p>Worked example in proposal v12</p>
+        </div>
+        <div class="fc-sol fc-sol-b">
+          <h4>Solution B (elbow −)</h4>
+          <div class="fc-mono">(θ1, θ2) = (+97.7°, −105.4°)</div>
+          <p>Mirrored elbow branch; controller picks nearer</p>
+        </div>
+      </div>
+      <div class="box">
+        <span class="fc-mono ok" style="font-size:14.5px;font-weight:600">Both keep |θ2| inside [25°, 160°], with |det J| = 0.118 m² ≥ 0.042 m²</span>
+      </div>
+    </div>
+  </div>
+  <p class="src">Proposal v12 Table 7 and Figure 7; d<sub>3</sub> = 42 mm at wall contact (60 mm stroke, 10 N preload). Inner points at r = 0.141 m keep 19 mm outside the 0.122 m fold limit. Inputs marked (A) are design assumptions.</p>
+  <div class="notes">Here are both directions verified side by side for our 0.35 metre links. On the left, forward kinematics feeds shoulder minus 7.693 degrees, elbow 105.385 degrees, and joint 3 at 42 millimetres wall contact inside its 60 millimetre stroke. Step 1 gives combined angle 97.693 degrees. Step 2 places the elbow at 0.347, minus 0.047 metres. Steps 3 to 5 land the hammer at 0.300, 0.300, 0.042 metres. On the right, inverse kinematics runs backwards from that same point. Reach r is 0.424 metres, cosine rule gives D equals minus 0.265, and elbow theta 2 is plus or minus 105.4 degrees. That gives two valid branches: Solution A at minus 7.7 and plus 105.4, or mirrored Solution B at plus 97.7 and minus 105.4. Both hold Jacobian determinant 0.118, well above 0.042; the controller picks the nearer branch.</div>
+</section>
+
+<section class="slide" data-part="4" data-sec="50" data-title="Three CUs in one tap" data-twin="540,112,684,560" id="s-cu">
+  <h2>Three units in one tap</h2>
+  <div class="left" style="width:450px">
+    <div class="cu" id="cuA" style="--c:var(--green)"><h3><span>ENG4100C</span>Places the platform</h3><p>Winch encoders give the height. The arm camera matches the tiles to the drone map and measures the last 30 to 50 mm of error.</p></div>
+    <div class="cu" id="cuB" style="--c:var(--cyan)"><h3><span>ENG3107C</span>Aims the hammer</h3><p>Inverse kinematics turns each grid point into joint angles. Joint 3 presses to a 10 N preload.</p></div>
+    <div class="cu" id="cuC" style="--c:var(--amber)"><h3><span>ENG3106C</span>Decides if the strike may happen</h3><p>The PLC grants the tap permit only while tension, brakes, fan thrust and wind are inside limits.</p></div>
+    <div class="box"><div class="live"><span><i class="lamp" id="cuLamp"></i>Tap permit <b id="cuPermit">low</b></span><span>Taps <b id="cuTaps">0 / 16</b></span><span>θ1 <b id="cuT1">0°</b> θ2 <b id="cuT2">0°</b></span><span>Preload <b id="cuPre">0 N</b></span></div></div>
+    <p class="reveal" data-step style="font-size:16px;color:var(--fg)">Take one away and no tap happens: wrong place, no reach, or no permit.</p>
+  </div>
+  <div class="notes">Now watch one 16-point patch run live across all three course units. <span class="cue">[Let it run.]</span> First, ENG4100C, autonomous robots: winch encoders set height, and the arm camera matches tiles to the drone map, removing 30 to 50 millimetres of cable and wind drift. Second, ENG3107C, robotics modelling: inverse kinematics computes the joint angles, and joint 3 presses to 10 newtons preload. Third, ENG3106C, industrial automation: the PLC checks cable tension, brakes, fan thrust and wind before raising the green tap permit lamp. Only then does the hammer fire: green is solid, red is hollow. <span class="cue">[→]</span> Remove any one unit and no tap happens: wrong place, no reach, or no permit.</div>
+</section>
+
+<section class="slide roomy" data-part="4" data-sec="55" data-title="Cost" id="s-cost">
   <h2>Does it pay? Move the two things we do not yet know</h2>
   <div class="grid2">
     <div class="col">
@@ -493,10 +958,10 @@ body.pv #pv { display: flex; }
     </div>
   </div>
   <p class="src">Manual baseline from vendor guide prices, not quotations [29][30]. Model: proposal 3.6, Tables 20 and 21.</p>
-  <div class="notes">Thank you. Does it pay? Two things we do not know yet: what the platform costs, because the supplier does not publish a price, and how many jobs a year we would win. So we made both a slider. Our planning case is a S$250,000 platform and 25 blocks a year. Each job costs S$15,000 to run. Fixed costs are about S$132,000 a year. That gives S$20,300 a block, against S$21,700 today. <span class="cue">[Drag inspections down to 15.]</span> At 15 jobs a year the robot costs more than a gondola crew. <span class="cue">[Drag back up past 20.]</span> Break-even is 20 a year. <span class="cue">[Drag the price to 350, then back to 250.]</span> Even at S$350,000 it breaks even at 24. <span class="cue">[→]</span> That gives a simple rule. At low volume, hire the robot by the day, up to S$3,650. Once a Town Council contract takes us past 20 blocks a year, buy it. <span class="cue">[→]</span> The saving is small. The real return is a thousand hours a year that nobody spends hanging off a wall.</div>
+  <div class="notes">Now to the business case. Does it pay? Two inputs are uncertain: the platform price, which the supplier does not publish, and how many jobs a year we win, so both are sliders. Our planning case is a S$250,000 platform at 25 blocks a year: S$15,000 per job plus S$132,400 fixed cost a year gives S$20,300 a block, against S$21,700 today. <span class="cue">[Drag inspections down to 15, then back to 25.]</span> At 15 blocks a year, manual is cheaper; break-even is 20 blocks a year. <span class="cue">[Drag platform price to S$350,000, then back to S$250,000.]</span> Even at S$350,000, break-even is only 24 blocks a year. <span class="cue">[→]</span> That gives a simple rule: below 20 blocks a year, hire by the day up to S$3,650; past 20 to 24 blocks, buy it. <span class="cue">[→]</span> The real return is 1,050 person-hours a year nobody spends hanging off a wall.</div>
 </section>
 
-<section class="slide" data-part="4" data-sec="65" data-title="Risk before and after" id="s-risk">
+<section class="slide" data-part="4" data-sec="45" data-title="Risk before and after" id="s-risk">
   <h2>Fifteen hazards, before and after our controls</h2>
   <div style="display:flex;gap:26px;flex:1;min-height:0">
     <div id="rm"></div>
@@ -508,10 +973,10 @@ body.pv #pv { display: flex; }
       <div class="box reveal" data-step><p>Each control is tied to a test and a named owner. If the test fails, the limit is cut: for example the wind limit drops from 8 to 6 m/s.</p></div>
     </div>
   </div>
-  <div class="notes">We found fifteen hazards: ten from the drone and five from the robot. Likelihood runs up the side and severity along the bottom. Before controls there is one High risk: H2, squall gusts. Singapore gusts reach 11 to 22 metres a second, and the drone is rated for 12. <span class="cue">[Click "After controls".]</span> After controls, nothing is High. Our wind limit is 8 metres a second with live monitoring, so H2 falls to Low. <span class="cue">[→]</span> Five stay Medium, and that is deliberate. Look at how they moved: down, not left. A loose tile falling or a missed defect is just as serious after our controls as before. So we did not pretend severity went down. We cut the likelihood, with hardware barriers and a person checking. <span class="cue">[→]</span> Every control is tied to a test and an owner. If a test fails, we cut the operating limit. We do not move the target.</div>
+  <div class="notes">We assessed fifteen hazards: ten drone, five robot. Likelihood runs up the side, severity across the bottom. Before controls, H2, squall gusts, is High: Singapore gusts reach 11 to 22 metres a second against a 12 metre a second drone rating. <span class="cue">[Click "After controls", or press →.]</span> With an 8 metres a second limit and live monitoring, no High risks remain and H2 drops to Low. <span class="cue">[→]</span> Five hazards stay Medium on purpose: tiles falling or missed defects stay severe, so we cut likelihood with hardware barriers and human review. <span class="cue">[→]</span> Every control has a test and owner; if a test fails, we tighten the operating limit.</div>
 </section>
 
-<section class="slide roomy" data-part="4" data-sec="60" data-title="Validation, limits, close">
+<section class="slide roomy" data-part="4" data-sec="40" data-title="Validation, limits, close">
   <h2>What we still have to prove, and what we are sure of</h2>
   <div class="stage3">
     <div class="box reveal" data-step><span class="tag">STAGE 1 · ABOUT 3 MONTHS</span><h3>Bench and dataset</h3><p>Strike force, tap classifier, image AI, certificates, and quotes for the manual baseline.</p></div>
@@ -525,7 +990,7 @@ body.pv #pv { display: flex; }
     <div class="box reveal" data-step><b>Two gates</b><p>A person approves the targets and the results.</p></div>
     <div class="box reveal" data-step><b>Zero suspended</b><p>Nobody hangs off the wall for flat areas.</p></div>
   </div>
-  <div class="notes">This is a proposal, so let me be clear about what is not yet proven. <span class="cue">[→ ×3]</span> We have ten validation tests in three stages: the bench, a test block, then one pilot block under approval. Each stage has an exit gate. <span class="cue">[→]</span> And the limits. The robot works on flat areas only. Our costs are guide prices. And the tap classifier is unproven until it is tested. <span class="cue">[→ ×4]</span> But four things we are sure of, because they are design decisions. One grid, so the drone's map becomes the robot's target list. One wire, so no software can fire the hammer. Two gates, so a person approves what is tapped and what is reported. And zero people suspended beside the wall for flat areas. Thank you. We welcome your questions.</div>
+  <div class="notes">Because this is a proposal, let me be clear about what is not yet proven. <span class="cue">[→ ×3]</span> We have ten validation tests in three gated stages: bench and dataset, a test block, then one pilot block under approval. <span class="cue">[→]</span> Our limits are plain: flat areas only, guide prices until quotes arrive, and an unproven tap classifier until Stage 1. <span class="cue">[→ ×4]</span> Four design decisions we stand behind: one shared grid, one hardwired permit wire, two Competent Person gates, and zero people suspended beside flat walls. Thank you. We welcome your questions.</div>
 </section>
 
 <section class="slide" data-part="0" data-sec="0" data-title="Questions">
@@ -533,9 +998,9 @@ body.pv #pv { display: flex; }
     <h1>Questions</h1>
     <p class="lede">Press <b class="fg">D</b> for the full dashboard: three views, the tap handshake, PLC signals and fault injection. Press 1 to 4 to jump back to a part.</p>
     <div class="team" id="teamRow2" style="grid-template-columns:repeat(4,1fr)"></div>
-    <p class="src">Numbers are from our proposal, version 11. Vendor prices and published study figures are indicative. Oscilloscope traces in the twin are illustrative.</p>
+    <p class="src">Numbers are from our proposal, version 12. Vendor prices and published study figures are indicative. Oscilloscope traces in the twin are illustrative.</p>
   </div>
-  <div class="notes">Backup for questions. Press D to open the full dashboard. Useful answers: the reference block is 60 m × 30 m × 20 m, 6,000 m² of façade. Drone: 15 m standoff, 1.32 mm per pixel, about 650 images. Arm: L1 = L2 = 0.35 m, 16 taps per 0.8 m patch, 10 N preload, 0.2 J strike. Platform: 20 kg, two cables, 104 N of fan thrust, 230 V AC umbilical. Time: about 3 site days. Cost: S$20,300 against S$21,700 at 25 jobs a year and a S$250,000 platform. Risk: 1 High before, none after, 5 Medium kept as low as reasonably practicable.</div>
+  <div class="notes">Backup for questions. Press D to open the full dashboard. Useful answers: the reference block is 60 m × 30 m × 20 m, 6,000 m² of façade. Drone: 15 m standoff, 1.32 mm per pixel, about 650 images. Ranging: 15 m standoff (17 m max for 1.5 mm/px), LiDAR hold, H30T LRF vs RTK mismatch flag &gt; 0.5 m for &gt; 1 s, ~0.9 m stop inside 3–5 m clearance, ~24% sky blocked at lower floors (76°). OPC UA and interfaces: Objects → PFI_System on OPC UA for Devices (Drone_M350, Carrier_PLC, Platform_SCARA, Mission_Gates), 500 ms publishing (A), 1 s heartbeat with 3 missed → HOLD (A), ApproveTargets 5 s timeout, SignAndEncrypt, hardwired 24 V TapPermit (arm retracts ≤ 200 ms), local PLC trips &lt; 100 ms, 4–20 mA fault &lt; 3.6 mA, dashboard never drives. FK/IK: L1 = L2 = 0.35 m, P = (0.300, 0.300, 0.042) m, r = 0.424 m, D = −0.265, θ2 = ±105.4°, θ1 = −7.7° (or +97.7°), d3 = 42 mm at contact (60 mm stroke, 10 N preload), |det J| = 0.118 m² ≥ 0.042 m². Arm: 16 taps per 0.8 m patch, 10 N preload, 0.2 J strike. Platform: 20 kg, two cables, 104 N of fan thrust, 230 V AC umbilical. Time: about 3 site days. Cost: S$20,300 against S$21,700 at 25 jobs a year and a S$250,000 platform. Risk: 1 High before, none after, 5 Medium kept as low as reasonably practicable.</div>
 </section>
 
 <div id="twinWrap"><iframe id="twin" title="3D digital twin" src="index.html?embed=1"></iframe><span class="cap">drag to orbit · scroll to zoom</span></div>
@@ -591,7 +1056,7 @@ body.pv #pv { display: flex; }
 const $ = (id) => document.getElementById(id);
 const PCOL = ['#8a93a3', '#1565b0', '#c2410c', '#1a7f55', '#6a45c4'];
 const DEFAULT_NAMES = ['', 'Brandon Ng', 'Tan Kim Song', 'Wong Pann', 'Tay Chay Yong'];
-const PART_TOPIC = ['', 'The problem and our targets', 'The integrated system', 'Engineering reasoning', 'Cost, risk and close'];
+const PART_TOPIC = ['', 'The problem, OPC UA and interfacing', 'Localization', 'Ranging and engineering checks', 'FK/IK, cost and risk'];
 const ROSTER = DEFAULT_NAMES.slice(1), TBC = 'TBC';
 let names = DEFAULT_NAMES.slice();
 try { const s = JSON.parse(localStorage.getItem('g5names4101') || 'null'); if (Array.isArray(s) && s.length === 5) names = s; } catch (e) {}
@@ -775,11 +1240,301 @@ const PAINS = [
   ['Cost', 'S$21,700', 'Manual baseline for our block: S$13,000 base + S$3,900 tiled façade + S$2,800 counterweights + S$2,000 inspector (guide prices) [29][30].']
 ];
 (() => { const host = $('pains'); PAINS.forEach(([h, v, d]) => { const b = document.createElement('button'); b.className = 'pain'; b.innerHTML = '<span class="h">' + h + '</span><span class="v">' + v + '</span><span class="d">' + d + '</span>'; b.onclick = () => b.classList.toggle('lit'); host.appendChild(b); }); })();
-(() => { const s = $('pains').closest('.slide'); s._enter = () => { lastCmd = null; s.querySelectorAll('.pain').forEach((p) => p.classList.remove('lit')); }; s._next = () => { const n = s.querySelector('.pain:not(.lit)'); if (n) { n.classList.add('lit'); return true; } return false; }; })();
+(() => { const s = $('pains').closest('.slide'); s._enter = () => { lastCmd = null; s.querySelectorAll('.pain').forEach((p) => p.classList.remove('lit')); }; s._next = () => { const u = [...s.querySelectorAll('.pain:not(.lit)')]; if (u.length) { u.slice(0, 3).forEach((p) => p.classList.add('lit')); return true; } return false; }; })();
 
 // 7 drone survey
 S('s-drone')._enter = () => enterCmd({ scene: 'building', mission: 'survey', surveyT: 0, surveyPlay: true, speed: 1, cam: [-0.72, 0.1, 92, 1, 30, 5], glide: false });
 S('s-drone')._tick = () => { const t = Math.max(0, Math.min(1, tw.surveyT || 0)); $('dImg').textContent = Math.round(t * 193); $('dCov').textContent = Math.round(t * 100) + '%'; };
+
+// 8 OPC UA: address space tree, ApproveTargets method, heartbeat monitor
+(() => {
+  const s = S('s-opcua');
+  const NODES = {
+    WindSpeed: { path: 'PFI_System/Drone_M350/WindSpeed', type: 'MAVLink/SDK telemetry mapped to OPC UA', rate: '10 Hz drone (A) · 2 Hz gateway · 500 ms OPC UA (A)', owner: 'Drone provider / Our team (I1, I3, I12)', desc: 'Live wind speed at the drone. Exceeding 8 m/s mean or 10 m/s gust raises a wind-limit alarm event with trigger value; stale after 5 s.' },
+    StandoffLRF: { path: 'PFI_System/Drone_M350/StandoffLRF', type: 'H30T laser rangefinder distance via GCS', rate: '2 Hz gateway · 500 ms OPC UA (A)', owner: 'Drone provider / Our team (I3, I12)', desc: 'Perpendicular wall distance cross-checked against RTK. Flags |d_LRF − d_RTK| > 0.5 m for > 1 s.' },
+    RTKFixStatus: { path: 'PFI_System/Drone_M350/RTKFixStatus', type: 'RTK fix state (SiReNT NTRIP RTCM 3)', rate: '1 Hz corrections (A) · 500 ms OPC UA (A)', owner: 'SLA / Drone provider / Our team (I2, I3)', desc: 'Logged with every image. Corrections older than 5 s drop to float (A) and pause capture in LiDAR hover.' },
+    SimplexState: { path: 'PFI_System/Drone_M350/SimplexState', type: 'Independent Simplex monitor state (Processor B)', rate: '50 Hz onboard · 2 Hz gateway · 500 ms OPC UA (A)', owner: 'Our team (I3, I12)', desc: 'Reports hardware MUX override state and exact triggering sensor value if standoff, wind, battery or geofence trips.' },
+    CableTension: { path: 'PFI_System/Carrier_PLC/CableTension_L/R', type: 'PLC AI 4–20 mA (16-bit, NAMUR NE43)', rate: '10 ms PLC scan (A) · 500 ms OPC UA (A)', owner: 'Our team (I10, I12)', desc: 'Dual winch load cells. Below 3.6 mA or above 21 mA trips local PLC hold in under 100 ms (A) without waiting on OPC UA.' },
+    WinchHeight_Z: { path: 'PFI_System/Carrier_PLC/WinchHeight_Z', type: 'Drum quadrature encoder (10 kHz counter)', rate: '10 ms PLC scan (A) · 500 ms OPC UA (A)', owner: 'Our team (I10, I12)', desc: 'Paid-out cable length converted to platform height on the shared 200 mm façade grid.' },
+    RoofWind: { path: 'PFI_System/Carrier_PLC/RoofWind', type: 'AI 4–20 mA / Modbus RTU anemometer', rate: '1 Hz mean + 3 s gust · 500 ms OPC UA (A)', owner: 'Our team (I11, I12)', desc: 'Rooftop wind speed input to PLC permissives. Sensor fault is treated as over limit (no-go).' },
+    TapPermit: { path: 'PFI_System/Carrier_PLC/TapPermit', type: 'Hardwired 24 V DC discrete (%QX0.2) — read-only mirror', rate: 'Always on (10 ms scan) · 500 ms OPC UA mirror (A)', owner: 'Our team (I8)', desc: 'Directly gates solenoid hammer power. OPC UA only mirrors its state; low cuts solenoid power and retracts arm within 200 ms.' },
+    TiltAngle: { path: 'PFI_System/Platform_SCARA/TiltAngle', type: 'Modbus TCP holding register (inclinometer)', rate: '20 Hz + rolling watchdog · 500 ms OPC UA (A)', owner: 'Our team (I8, Table 14)', desc: 'Platform tilt fed into the carrier PLC tap-permit permissive.' },
+    FanThrust: { path: 'PFI_System/Platform_SCARA/FanThrust', type: 'Modbus TCP holding register (fan current)', rate: '20 Hz + rolling watchdog · 500 ms OPC UA (A)', owner: 'Our team (I8, Table 14)', desc: 'Wall-press fan thrust (104 N nominal, ≥ 69 N required). Dropping below limit removes TapPermit.' },
+    PreloadForce: { path: 'PFI_System/Platform_SCARA/PreloadForce', type: 'Hammer load cell (±10 V EtherCAT, 0–500 N (A))', rate: '1 kHz arm loop (A) · 500 ms OPC UA (A)', owner: 'Our team (Table 15)', desc: 'Joint 3 PI force loop holds 10 N preload against the wall before each solenoid strike.' },
+    TapResult: { path: 'PFI_System/Platform_SCARA/TapResult[1..16]', type: 'Struct {Index UInt8; Class enum; PeakForce Float N; AudioURI String; E,X,Z; Time DateTime}', rate: 'Per tap (1.5 s); 0.5 s classify (A)', owner: 'Our team (I12, Table 17)', desc: 'Classification (Solid, Hollow, Invalid) tagged to grid cell; raw 48 kHz audio stays in object storage by URI.' },
+    Gate1_ApprovedTargets: { path: 'PFI_System/Mission_Gates/Gate1_ApprovedTargets', type: 'Release flag + approved target patch list', rate: 'On CP action (I6)', owner: 'CP decision / Our software (I6)', desc: 'Set only when ApproveTargets returns Good. Without it, the carrier PLC rejects NextTarget and stays idle.' },
+    Gate2_ReportSignOff: { path: 'PFI_System/Mission_Gates/Gate2_ReportSignOff', type: 'CP HMI sign-off after 100% hollow + 5% solid audit', rate: 'On CP action (I13)', owner: 'Competent Person (I13)', desc: 'Unreviewed tap results cannot enter the filed PFI report.' },
+    ApproveTargets: { path: 'PFI_System/Mission_Gates/ApproveTargets()', type: 'Method(TargetList[], CP_ID String, Time DateTime)', rate: 'On CP action · 5 s timeout (Table 17)', owner: 'Our team (I6, Table 17)', desc: 'Invoked from SCADA at CP Gate 1. Good return sets Gate1_ApprovedTargets; timeout or bad status leaves the robot idle.' }
+  };
+  const btns = [...$('fcOpTree').querySelectorAll('[data-opnode]')];
+  function showNode(key) {
+    const n = NODES[key]; if (!n) return;
+    btns.forEach((b) => b.classList.toggle('fc-sel', b.dataset.opnode === key));
+    $('fcOpPath').textContent = n.path; $('fcOpType').textContent = n.type;
+    $('fcOpRate').textContent = n.rate; $('fcOpOwner').textContent = n.owner;
+    $('fcOpDesc').textContent = n.desc;
+  }
+  btns.forEach((b) => { b.onclick = () => showNode(b.dataset.opnode); });
+  let hbTimer = null, hbSeq = 0, missed = 0, hbStopped = false, hold = false, gate1 = false;
+  function stopTimer() { if (hbTimer) { clearInterval(hbTimer); hbTimer = null; } }
+  function paintOp() {
+    $('fcOpGate').textContent = gate1 ? 'TRUE (released)' : 'IDLE (false)';
+    $('fcOpGate').className = gate1 ? 'ok' : '';
+    $('fcOpHb').textContent = hbStopped ? (missed + ' / 3 missed') : ('OK · #' + hbSeq);
+    $('fcOpHb').className = hold ? 'bad' : hbStopped ? 'warn' : 'ok';
+    $('fcOpState').textContent = hold ? 'HOLD (brakes on, arm retracted)' : gate1 ? 'APPROVED · READY' : 'READY (idle)';
+    $('fcOpState').className = hold ? 'bad' : 'ok';
+    $('fcOpLamp').className = 'lamp ' + (hold ? 'lo' : 'hi');
+    $('fcOpStopHb').textContent = hbStopped ? 'Restore heartbeat & reset' : 'Stop heartbeat';
+    $('fcOpStopHb').classList.toggle('act', hold);
+  }
+  function startTimer() {
+    stopTimer();
+    hbTimer = setInterval(() => {
+      if (slides[cur] !== s) { stopTimer(); return; }
+      if (!hbStopped) { hbSeq++; paintOp(); return; }
+      if (missed < 3) {
+        missed++;
+        if (missed >= 3) {
+          hold = true;
+          $('fcOpLog').innerHTML = '<b class="bad">HOLD latched (3 missed heartbeats, 3 s):</b> brakes on, arm retracted, 24 V permit low. Alarm event P1 (900 (A)), TriggerValue = 3.';
+        } else {
+          $('fcOpLog').innerHTML = '<b class="warn">Heartbeat missed (' + missed + ' of 3)…</b> GCS ↔ PLC counter timeout at 3 s.';
+        }
+        paintOp();
+      }
+    }, 1000);
+  }
+  $('fcOpApprove').onclick = () => {
+    if (hold) { $('fcOpLog').innerHTML = '<b class="bad">Rejected while in HOLD:</b> restore heartbeat and operator-reset first.'; return; }
+    gate1 = true; showNode('Gate1_ApprovedTargets');
+    $('fcOpLog').innerHTML = '<b class="ok">ApproveTargets(TargetList[], CP_ID, Time) → Good</b> (&lt; 5 s timeout). Gate1_ApprovedTargets set.';
+    paintOp();
+  };
+  $('fcOpStopHb').onclick = () => {
+    if (!hbStopped) {
+      hbStopped = true; missed = 0; hold = false;
+      $('fcOpLog').innerHTML = '<b class="warn">Heartbeat stopped:</b> counting 1 s beats toward 3-beat HOLD timeout…';
+      paintOp();
+    } else {
+      hbStopped = false; missed = 0; hold = false;
+      $('fcOpLog').textContent = 'Operator reset: heartbeat restored (1 s UInt32 counter). OPC UA monitors and alarms; TapPermit remains hardwired 24 V.';
+      paintOp();
+    }
+  };
+  const opTabs = [...s.querySelectorAll('[data-optab]')], opPanes = [...s.querySelectorAll('[data-oppane]')];
+  function showOpTab(i) {
+    opTabs.forEach((b) => b.classList.toggle('pri', +b.dataset.optab === i));
+    opPanes.forEach((p) => { p.hidden = +p.dataset.oppane !== i; });
+  }
+  opTabs.forEach((b) => { b.onclick = () => showOpTab(+b.dataset.optab); });
+  s._enter = () => {
+    lastCmd = null; stopTimer(); hbSeq = 0; missed = 0; hbStopped = false; hold = false; gate1 = false;
+    showOpTab(0); showNode('WindSpeed');
+    $('fcOpLog').textContent = '500 ms publishing (A); alarms sent as events with the trigger value. Tap permit stays a hardwired 24 V line.';
+    paintOp(); startTimer();
+  };
+  showOpTab(0); showNode('WindSpeed'); paintOp();
+})();
+
+// 11–13 Localization (Drone Frame Chain)
+(() => {
+  const s1 = S('s-loc1'), s2 = S('s-loc2'), s3 = S('s-loc3');
+  const d = (x) => x * Math.PI / 180, c = Math.cos, s = Math.sin;
+  const mul = (A, B) => A.map((r) => B[0].map((_, j) => r.reduce((t, v, k) => t + v * B[k][j], 0)));
+  const mv = (A, v) => A.map((r) => r.reduce((t, x, k) => t + x * v[k], 0));
+  const Rz = (a) => [[c(a), -s(a), 0], [s(a), c(a), 0], [0, 0, 1]];
+  const Ry = (a) => [[c(a), 0, s(a)], [0, 1, 0], [-s(a), 0, c(a)]];
+  const Rx = (a) => [[1, 0, 0], [0, c(a), -s(a)], [0, s(a), c(a)]];
+  const Rne = (m, l) => [[-s(m) * c(l), -s(l), -c(m) * c(l)], [-s(m) * s(l), c(l), -c(m) * s(l)], [c(m), 0, -s(m)]];
+  const f = (x, n) => { const v = Math.abs(x) < 0.5 * Math.pow(10, -n) ? 0 : x; return (v < 0 ? '−' : '') + Math.abs(v).toFixed(n); };
+  const norm = (v) => Math.hypot(...v);
+  function mat(M, cols, rows, col) {
+    let h = '<div class="fc-mx" style="--n:' + M[0].length + ';--fc-c:' + col + '"><span></span>' + cols.map((x) => '<span class="fc-h">' + x + '</span>').join('');
+    M.forEach((r, i) => { h += '<span class="fc-r">' + rows[i] + '</span>' + r.map((x) => '<span class="fc-v">' + f(x, 4) + '</span>').join(''); });
+    return h + '</div>';
+  }
+  function vec(v, name, rows, n) {
+    let h = '<div class="fc-vname">' + name + '</div><div class="fc-mx fc-vec" style="--n:1"><span></span><span class="fc-h">&nbsp;</span>';
+    v.forEach((x, i) => { h += '<span class="fc-r">' + rows[i] + '</span><span class="fc-v">' + f(x, n) + '</span>'; });
+    return h + '</div>';
+  }
+  const DEF = { spd: 2, yaw: 30, pit: 5, rol: 0, lat: 1.35, lon: 103.8 };
+  const ID_MAP = { spd: 'fcSpd', yaw: 'fcYaw', pit: 'fcPit', rol: 'fcRol', lat: 'fcLat', lon: 'fcLon' };
+  const OUT_MAP = { spd: 'fcOSpd', yaw: 'fcOYaw', pit: 'fcOPit', rol: 'fcORol', lat: 'fcOLat', lon: 'fcOLon' };
+  const UNITS = { spd: ' m/s', yaw: '°', pit: '°', rol: '°', lat: '°', lon: '°' };
+  const KEYS = Object.keys(DEF);
+
+  const cv = $('fcDv'), cx2 = cv.getContext('2d');
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const cr = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const nrm = (a) => { const l = Math.hypot(...a); return a.map((x) => x / l); };
+  const az = d(215), el = d(38), cam = [c(el) * c(az), c(el) * s(az), -s(el)], fw = cam.map((x) => -x), rgt = nrm(cr(fw, [0, 0, -1])), sup = cr(rgt, fw);
+  const K = 74, OX = 196, OY = 116, P = (q) => [OX + K * dot(q, rgt), OY - K * dot(q, sup)];
+  function line(a, b, col, w, dash) {
+    const A = P(a), B = P(b); cx2.strokeStyle = col; cx2.lineWidth = w; cx2.setLineDash(dash || []);
+    cx2.beginPath(); cx2.moveTo(A[0], A[1]); cx2.lineTo(B[0], B[1]); cx2.stroke(); cx2.setLineDash([]);
+  }
+  function arrow(a, b, col, w, dash) {
+    line(a, b, col, w, dash); const A = P(a), B = P(b), an = Math.atan2(B[1] - A[1], B[0] - A[0]);
+    cx2.fillStyle = col; cx2.beginPath(); cx2.moveTo(B[0], B[1]);
+    cx2.lineTo(B[0] - 9 * Math.cos(an - 0.4), B[1] - 9 * Math.sin(an - 0.4));
+    cx2.lineTo(B[0] - 9 * Math.cos(an + 0.4), B[1] - 9 * Math.sin(an + 0.4));
+    cx2.closePath(); cx2.fill();
+  }
+  function label(q, txt, col, bold, dx, dy) {
+    const A = P(q); cx2.fillStyle = col; cx2.font = (bold ? '600 ' : '') + '12px Consolas, ui-monospace, monospace';
+    cx2.fillText(txt, A[0] + (dx == null ? 4 : dx), A[1] + (dy == null ? -4 : dy));
+  }
+  function drawDrone(yw, pt, rl) {
+    const cs = getComputedStyle(document.documentElement);
+    const cB = cs.getPropertyValue('--cyan').trim(), cN = cs.getPropertyValue('--violet').trim(), cL = cs.getPropertyValue('--line').trim(), cF = cs.getPropertyValue('--ink').trim();
+    cx2.setTransform(cv.width / 400, 0, 0, cv.height / 280, 0, 0); cx2.clearRect(0, 0, 400, 280);
+    const g0 = 1.6; for (let i = -2; i <= 2; i++) { line([i * 0.85, -1.7, g0], [i * 0.85, 1.7, g0], cL, 1); line([-1.7, i * 0.85, g0], [1.7, i * 0.85, g0], cL, 1); }
+    arrow([0, 0, 0], [2.3, 0, 0], cN, 1.5, [5, 4]); arrow([0, 0, 0], [0, 2.3, 0], cN, 1.5, [5, 4]); arrow([0, 0, 0], [0, 0, 1.5], cN, 1.5, [5, 4]);
+    label([2.35, 0, 0], 'N', cN, true, -6, -8); label([0, 2.35, 0], 'E', cN, true, 6, 4); label([0, 0, 1.5], 'D', cN, true, -18, 10);
+    const R = mul(mul(Rz(d(yw)), Ry(d(pt))), Rx(d(rl))), B = (v) => mv(R, v);
+    const rot = [[0.75, 0.75], [0.75, -0.75], [-0.75, 0.75], [-0.75, -0.75]];
+    rot.forEach(([x, y]) => {
+      line([0, 0, 0], B([x, y, 0]), cF, 2.5); cx2.fillStyle = cB + '33'; cx2.strokeStyle = cB; cx2.lineWidth = 1.2; cx2.beginPath();
+      for (let k = 0; k <= 24; k++) { const a = k / 24 * 2 * Math.PI, q = P(B([x + 0.38 * Math.cos(a), y + 0.38 * Math.sin(a), 0])); k ? cx2.lineTo(q[0], q[1]) : cx2.moveTo(q[0], q[1]); }
+      cx2.fill(); cx2.stroke();
+    });
+    cx2.fillStyle = cF; cx2.beginPath();
+    [[0.28, 0.18], [0.28, -0.18], [-0.28, -0.18], [-0.28, 0.18]].forEach(([x, y], k) => { const q = P(B([x, y, 0])); k ? cx2.lineTo(q[0], q[1]) : cx2.moveTo(q[0], q[1]); });
+    cx2.closePath(); cx2.fill();
+    arrow([0, 0, 0], B([1.7, 0, 0]), cB, 3); arrow([0, 0, 0], B([0, 1.25, 0]), cB, 2); arrow([0, 0, 0], B([0, 0, 1.0]), cB, 2);
+    label(B([1.75, 0, 0]), 'nose (col 1)', cB, true); label(B([0, 1.3, 0]), 'right (col 2)', cB, false, 6, 4); label(B([0, 0, 1.05]), 'belly (col 3)', cB, false, 8, 6);
+  }
+  let anim = null;
+  function stopAnim() { if (anim) { cancelAnimationFrame(anim); anim = null; } }
+  function getVals() { return Object.fromEntries(KEYS.map((k) => [k, parseFloat($(ID_MAP[k]).value)])); }
+  function upd() {
+    const g = getVals();
+    KEYS.forEach((k) => {
+      $(OUT_MAP[k]).textContent = k === 'lat' ? (Math.abs(g.lat).toFixed(2) + '° ' + (g.lat >= 0 ? 'N' : 'S')) :
+        k === 'lon' ? (Math.abs(g.lon).toFixed(1) + '° ' + (g.lon >= 0 ? 'E' : 'W')) :
+        (k === 'spd' ? g[k].toFixed(1) : f(g[k], 0)) + UNITS[k];
+    });
+    const R = mul(mul(Rz(d(g.yaw)), Ry(d(g.pit))), Rx(d(g.rol))), E = Rne(d(g.lat), d(g.lon));
+    document.querySelectorAll('[data-fc-o]').forEach((o) => { o.textContent = f(g[o.dataset.fcO], 0) + '°'; });
+    const cell = (M, ax, id) => {
+      $(id).innerHTML = M.map((r, i) => r.map((x, j) => {
+        const cls = (i === ax && j === ax) ? 'fc-one' : (i === ax || j === ax) ? 'fc-z' : 'fc-t';
+        return '<span class="' + cls + '">' + f(x, 4) + '</span>';
+      }).join('')).join('');
+    };
+    cell(Rz(d(g.yaw)), 2, 'fcSz'); cell(Ry(d(g.pit)), 1, 'fcSy'); cell(Rx(d(g.rol)), 0, 'fcSx');
+    if (!anim) drawDrone(g.yaw, g.pit, g.rol);
+    $('fcSr').innerHTML = mat(R, ['fwd', 'right', 'down'], ['N', 'E', 'D'], 'var(--cyan)');
+    const vb = [g.spd, 0, 0], vn = mv(R, vb), ve = mv(E, vn);
+    $('fcM1').innerHTML = mat(R, ['fwd', 'right', 'down'], ['N', 'E', 'D'], 'var(--cyan)');
+    $('fcM2').innerHTML = mat(E, ['north', 'east', 'down'], ['X', 'Y', 'Z'], 'var(--violet)');
+    $('fcVb').innerHTML = vec(vb, 'v body', ['x', 'y', 'z'], 2);
+    $('fcVn').innerHTML = vec(vn, 'v NED', ['N', 'E', 'D'], 2);
+    $('fcVn2').innerHTML = vec(vn, 'v NED', ['N', 'E', 'D'], 2);
+    $('fcVe').innerHTML = vec(ve, 'v ECEF', ['X', 'Y', 'Z'], 2);
+    const a = norm(vb), b = norm(vn), e = norm(ve), okb = Math.abs(a - b) < 1e-6, oke = Math.abs(a - e) < 1e-6;
+    $('fcCb').textContent = '|v| = ' + a.toFixed(2) + ' m/s';
+    const cn = $('fcCn'); cn.textContent = '|v| = ' + b.toFixed(2) + (okb ? ' ✓ same' : ''); cn.className = 'fc-chk' + (okb ? ' ok' : '');
+    const ce = $('fcCe'); ce.textContent = '|v| = ' + e.toFixed(2) + (oke ? ' ✓ same' : ''); ce.className = 'fc-chk' + (oke ? ' ok' : '');
+    const dir = (x, p, q) => Math.abs(x) < 0.005 ? '' : (f(Math.abs(x), 2) + ' ' + (x >= 0 ? p : q));
+    const parts = [dir(vn[0], 'north', 'south'), dir(vn[1], 'east', 'west'), Math.abs(vn[2]) < 0.005 ? 'level' : (vn[2] < 0 ? 'climbing ' : 'descending ') + f(Math.abs(vn[2]), 2)].filter(Boolean);
+    $('fcRn').textContent = parts.join(' · ') + ' m/s. A negative "down" means climbing.';
+  }
+  function resetAll() {
+    stopAnim();
+    KEYS.forEach((k) => document.querySelectorAll('[data-k="' + k + '"]').forEach((o) => { o.value = DEF[k]; }));
+    $('fcVstep').textContent = 'Dashed: fixed N, E, D. Solid: the drone\'s own axes.';
+    upd();
+  }
+  $('fcPlay').onclick = () => {
+    const g = getVals(), st = $('fcVstep');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { drawDrone(g.yaw, g.pit, g.rol); st.textContent = 'Yaw, then pitch, then roll applied.'; return; }
+    stopAnim(); const T = 900, t0 = performance.now();
+    const labels = ['1 · Yaw ' + f(g.yaw, 0) + '° (turn)', '2 · Pitch ' + f(g.pit, 0) + '° (nose up/down)', '3 · Roll ' + f(g.rol, 0) + '° (tilt)'];
+    const tick = (now) => {
+      if (slides[cur] !== s2) { stopAnim(); return; }
+      const ph = Math.min(3, (now - t0) / T), a = Math.min(1, ph), b = Math.min(1, Math.max(0, ph - 1)), cc = Math.min(1, Math.max(0, ph - 2));
+      drawDrone(g.yaw * a, g.pit * b, g.rol * cc);
+      st.textContent = ph < 3 ? labels[Math.floor(ph)] : 'Done: R = Rz · Ry · Rx';
+      if (ph < 3) anim = requestAnimationFrame(tick); else anim = null;
+    };
+    drawDrone(0, 0, 0); anim = requestAnimationFrame(tick);
+  };
+  document.querySelectorAll('.slide.fc [data-k]').forEach((el) => el.addEventListener('input', () => {
+    stopAnim();
+    document.querySelectorAll('.slide.fc [data-k="' + el.dataset.k + '"]').forEach((o) => { if (o !== el) o.value = el.value; });
+    upd();
+  }));
+  $('fcReset').onclick = resetAll;
+  s1._enter = () => { lastCmd = null; };
+  s2._enter = () => { lastCmd = null; resetAll(); };
+  s3._enter = () => { lastCmd = null; resetAll(); };
+  upd();
+})();
+
+// 17 Ranging: standoff + blocked-sky interactive check
+(() => {
+  const s = S('s-range');
+  function calc() {
+    const D = +$('fcRngD').value, h = +$('fcRngH').value;
+    $('fcRngDv').textContent = D.toFixed(1) + ' m';
+    $('fcRngHv').textContent = h === 0 ? '0 m (ground)' : h === 60 ? '60 m (roof)' : h + ' m';
+    const gsd = 1.32 * D / 15, gsdOk = gsd <= 1.5;
+    $('fcRngGsd').textContent = gsd.toFixed(2) + ' mm/px · ' + (gsdOk ? 'PASS (≤ 1.50)' : 'FAIL (> 1.50)');
+    $('fcRngGsd').className = 'fc-mono ' + (gsdOk ? 'ok' : 'bad');
+    const clrOk = D >= 5;
+    $('fcRngClr').textContent = clrOk ? ((D - 5).toFixed(1) + '–' + (D - 3).toFixed(1) + ' m spare vs 3–5 m min') : 'Inside 3–5 m min clearance';
+    $('fcRngClr').className = 'fc-mono ' + (clrOk ? 'ok' : 'bad');
+    const stopSpare = D - 0.9;
+    $('fcRngStop').textContent = (stopSpare >= 3 ? 'OK · ' : 'TIGHT · ') + stopSpare.toFixed(1) + ' m left after 0.9 m stop';
+    $('fcRngStop').className = 'fc-mono ' + (stopSpare >= 3 ? 'ok' : 'warn');
+    const elDeg = Math.atan((60 - h) / D) * 180 / Math.PI;
+    const azDeg = 2 * Math.atan(15 / D) * 180 / Math.PI;
+    const skyPct = (azDeg / 360) * Math.sin(elDeg * Math.PI / 180) * 100;
+    $('fcRngSky').textContent = elDeg.toFixed(1) + '° ahead · ~' + Math.round(skyPct) + '% sky blocked';
+    $('fcRngSay').textContent = !gsdOk ? ('At ' + D.toFixed(1) + ' m, GSD is ' + gsd.toFixed(2) + ' mm/px — fails BCA\'s 1.5 mm/px limit (17 m max).') :
+      !clrOk ? ('At ' + D.toFixed(1) + ' m, clearance drops into the 3–5 m minimum buffer.') :
+      ('At ' + D.toFixed(1) + ' m, GSD is ' + gsd.toFixed(2) + ' mm/px (pass) with ' + (D / 5).toFixed(1) + '× the 5 m clearance and ' + (D / 0.9).toFixed(0) + '× the 0.9 m stop.');
+  }
+  $('fcRngD').oninput = calc; $('fcRngH').oninput = calc;
+  s._enter = () => { lastCmd = null; $('fcRngD').value = 15; $('fcRngH').value = 0; calc(); };
+  calc();
+})();
+
+// 21 Forward & Inverse kinematics (SCARA)
+(() => {
+  const s = S('s-fk'), L1 = 0.35, L2 = 0.35;
+  const DEF = { t1: -7.693, t2: 105.385, d3: 42 };
+  const fSigned = (v, n) => (v < 0 ? '−' : '') + Math.abs(v).toFixed(n);
+  function renderFk(t1, t2, d3, exact) {
+    const r1 = t1 * Math.PI / 180, r12 = (t1 + t2) * Math.PI / 180;
+    const xe = L1 * Math.cos(r1), ye = L1 * Math.sin(r1);
+    const dx2 = L2 * Math.cos(r12), dy2 = L2 * Math.sin(r12);
+    const x = xe + dx2, y = ye + dy2, z = d3 / 1000;
+    const det = Math.abs(L1 * L2 * Math.sin(t2 * Math.PI / 180));
+    const dec = exact ? 3 : 1;
+    $('fcFkT1v').textContent = fSigned(t1, dec) + '°';
+    $('fcFkT2v').textContent = fSigned(t2, dec) + '°';
+    $('fcFkD3v').textContent = Math.round(d3) + ' mm';
+    $('fcFkS1').textContent = 'θ1 + θ2 = ' + fSigned(t1, dec) + '° + ' + fSigned(t2, dec) + '° = ' + fSigned(t1 + t2, dec) + '°';
+    $('fcFkS2').textContent = 'xe = ' + fSigned(xe, 3) + ' m · ye = ' + fSigned(ye, 3) + ' m';
+    $('fcFkS3').textContent = 'x = ' + fSigned(xe, 3) + (dx2 >= 0 ? ' + ' : ' − ') + Math.abs(dx2).toFixed(3) + ' = ' + fSigned(x, 3) + ' m';
+    $('fcFkS4').textContent = 'y = ' + fSigned(ye, 3) + (dy2 >= 0 ? ' + ' : ' − ') + Math.abs(dy2).toFixed(3) + ' = ' + fSigned(y, 3) + ' m';
+    $('fcFkS5').textContent = 'z = d3 = ' + Math.round(d3) + ' mm = ' + z.toFixed(3) + ' m (contact, ≤ 60 mm)';
+    $('fcFkRes').textContent = 'Hammer P = (' + fSigned(x, 3) + ', ' + fSigned(y, 3) + ', ' + z.toFixed(3) + ') m';
+    const ok = det >= 0.042 && Math.abs(t2) >= 25 && Math.abs(t2) <= 160;
+    $('fcFkDet').textContent = '|det J| = ' + det.toFixed(3) + ' m² ' + (ok ? '≥ 0.042 m²' : '< 0.042 m² · near singularity');
+    $('fcFkDet').className = 'fc-mono ' + (ok ? 'ok' : 'bad');
+  }
+  const onSlide = () => renderFk(+$('fcFkT1').value, +$('fcFkT2').value, +$('fcFkD3').value, false);
+  $('fcFkT1').oninput = onSlide; $('fcFkT2').oninput = onSlide; $('fcFkD3').oninput = onSlide;
+  const resetFk = () => { $('fcFkT1').value = -7.7; $('fcFkT2').value = 105.4; $('fcFkD3').value = 42; renderFk(DEF.t1, DEF.t2, DEF.d3, true); };
+  $('fcFkReset').onclick = resetFk;
+  s._enter = () => { lastCmd = null; resetFk(); };
+  resetFk();
+})();
 
 // 8 gate 1: façade map, 30 m x 60 m, at 8.6 px per metre
 (() => {
